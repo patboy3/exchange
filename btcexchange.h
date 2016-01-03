@@ -29,6 +29,7 @@ protected:
     struct OrderBookElement asks[5];
     struct OrderBookElement bids[5];
     QString apiKey;
+    QString secretKey;
 
 
 public slots :
