@@ -1,19 +1,22 @@
 #include "coinbase.h"
 #include <QDebug>
+#include <QMessageBox>
 
 CoinBase::CoinBase()
 {
-
+    orderBookAddr = "https://api.exchange.coinbase.com/products/BTC-CAD/book?level=2";
 }
 
 
-void CoinBase::lireJsonFinished(QNetworkReply* reply)
+void CoinBase::interpreterOrderBook(QNetworkReply* reply)
 {
 
     // Gestion des erreurs
     if(reply->error())
     {
-        qDebug() << "Erreur lors de la requête : " << reply->errorString();
+        QMessageBox msgBox;
+        msgBox.setText("Erreur lors de la requete : " + reply->errorString());
+        msgBox.exec();
         return;
     }
 
@@ -27,24 +30,6 @@ void CoinBase::lireJsonFinished(QNetworkReply* reply)
 
     qDebug() << jsonObject["date"].toString();
 
-}
-
-bool CoinBase::rafraichirJson()
-{
-
-    QNetworkAccessManager *networkManager = new QNetworkAccessManager();
-    QNetworkRequest *request = new QNetworkRequest();
-
-    // Url de la requete
-    request->setUrl(QUrl("http://time.jsontest.com"));
-
-    // Connecte le signal Finished du networkManaget au Slot lireJsonFinished
-    connect(networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(lireJsonFinished(QNetworkReply*)));
-
-    // Lance la requete pour obtenir la réponse
-    networkManager->get(*request);
-
-    return false;
 }
 
 
