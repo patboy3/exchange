@@ -9,7 +9,7 @@ public:
     explicit BTCexchange();
 
 private:
-   // virtual bool rafraichirJson() = 0;
+    virtual bool rafraichirJson() = 0;
 
 
 };

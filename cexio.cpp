@@ -8,10 +8,10 @@ CexIO::CexIO(QString adresseAPI)
 
 
 
-//bool CexIO::rafraichirJson(){
+bool CexIO::rafraichirJson(){
 
-//    return false;
-//}
+    return false;
+}
 
 
 
