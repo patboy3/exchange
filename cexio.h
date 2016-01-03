@@ -3,6 +3,8 @@
 
 #include "btcexchange.h"
 
+//just a commit test
+
 class CexIO : public BTCexchange
 {
 
