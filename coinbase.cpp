@@ -37,6 +37,7 @@ bool CoinBase::rafraichirJson()
 
     // Url de la requete
     request->setUrl(QUrl("http://time.jsontest.com"));
+    //request->setUrl(QUrl("https://www.cavirtex.com/api2/orderbook.json?currencypair=BTCCAD"));
 
     // Connecte le signal Finished du networkManaget au Slot lireJsonFinished
     connect(networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(lireJsonFinished(QNetworkReply*)));
