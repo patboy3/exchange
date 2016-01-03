@@ -9,10 +9,14 @@ class CexIO : public BTCexchange
 {
 
 public:
-    explicit CexIO();
-
+     explicit CexIO();
      bool rafraichirJson();
 
+private:
+
+public slots:
+
+private slots:
 
 };
 

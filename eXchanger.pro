@@ -18,13 +18,11 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     btcexchange.cpp \
     cexio.cpp \
-    test.cpp \
     coinbase.cpp
 
 HEADERS  += mainwindow.h \
     btcexchange.h \
     cexio.h \
-    test.h \
     coinbase.h
 
 FORMS    += mainwindow.ui

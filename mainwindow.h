@@ -6,7 +6,6 @@
 #include "btcexchange.h"
 #include "coinbase.h"
 
-
 namespace Ui {
 class MainWindow;
 }
@@ -21,6 +20,11 @@ public:
 
 private:
     Ui::MainWindow *ui;
+
+
+public slots:
+
+private slots:
 
 };
 
