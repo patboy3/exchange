@@ -27,9 +27,7 @@ void CoinBase::interpreterOrderBook(QNetworkReply* reply)
         msgBox.setText("Erreur lors de la requete : " + reply->errorString());
         msgBox.exec();
         return;
-        Clé d'API : SBH5GeIntChyxpax
-
-        Clé d'API secrète : G1WGo4vRMRleNVEkssfuhs8fDpT3UQ8T  }
+    }
 
     // Laleur de reply->readAll() se vide apres usage
     QString reponse = reply->readAll();
