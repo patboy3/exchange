@@ -8,8 +8,10 @@ class BTCexchange
 public:
     explicit BTCexchange();
 
-private:
+
     virtual bool rafraichirJson() = 0;
+
+private:
 
 
 };

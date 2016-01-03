@@ -5,6 +5,8 @@
 #-------------------------------------------------
 
 QT       += core gui
+QT       += network
+
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -16,11 +18,13 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     btcexchange.cpp \
     cexio.cpp \
-    test.cpp
+    test.cpp \
+    coinbase.cpp
 
 HEADERS  += mainwindow.h \
     btcexchange.h \
     cexio.h \
-    test.h
+    test.h \
+    coinbase.h
 
 FORMS    += mainwindow.ui

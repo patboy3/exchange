@@ -7,7 +7,7 @@ class CexIO : public BTCexchange
 {
 
 public:
-    explicit CexIO(QString adresseAPI);
+    explicit CexIO();
 
      bool rafraichirJson();
 

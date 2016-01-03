@@ -1,6 +1,7 @@
 #include "cexio.h"
+#include <QDebug>
 
-CexIO::CexIO(QString adresseAPI)
+CexIO::CexIO()
 {
 
 
@@ -8,8 +9,10 @@ CexIO::CexIO(QString adresseAPI)
 
 
 
-bool CexIO::rafraichirJson(){
+bool CexIO::rafraichirJson()
+{
 
+    qDebug() << "Rafraichir JSON CEX IO";
     return false;
 }
 
