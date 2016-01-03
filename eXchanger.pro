@@ -17,10 +17,12 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     btcexchange.cpp \
-    coinbase.cpp
+    coinbase.cpp \
+    quadriga.cpp
 
 HEADERS  += mainwindow.h \
     btcexchange.h \
-    coinbase.h
+    coinbase.h \
+    quadriga.h
 
 FORMS    += mainwindow.ui

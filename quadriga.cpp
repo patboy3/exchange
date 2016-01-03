@@ -1,7 +1,33 @@
 #include "quadriga.h"
+#include <QDebug>
+#include <QMessageBox>
 
 Quadriga::Quadriga()
 {
+    orderBookAddr = "https://api.quadrigacx.com/v2/order_book";
+}
 
+
+void Quadriga::interpreterOrderBook(QNetworkReply* reply)
+{
+
+    // Gestion des erreurs
+    if(reply->error())
+    {
+        QMessageBox msgBox;
+        msgBox.setText("Erreur lors de la requete : " + reply->errorString());
+        msgBox.exec();
+        return;
+    }
+
+    // Laleur de reply->readAll() se vide apres usage
+    QString reponse = reply->readAll();
+    qDebug() << reponse;
+
+    // Crée un object Json avec la réponse obtenure
+    QJsonDocument jsonDocument = QJsonDocument::fromJson(reponse.toUtf8());
+    QJsonObject jsonObject = jsonDocument.object();
+
+    qDebug() << jsonObject["date"].toString();
 
 }

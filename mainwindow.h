@@ -5,6 +5,7 @@
 
 #include "btcexchange.h"
 #include "coinbase.h"
+#include "quadriga.h"
 
 namespace Ui {
 class MainWindow;

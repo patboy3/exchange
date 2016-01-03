@@ -3,11 +3,20 @@
 
 #include "btcexchange.h"
 
+
 class Quadriga : public BTCexchange
 {
-public :
-    Quadriga();
-};
+    Q_OBJECT
 
+public:
+    explicit Quadriga();
+
+private:
+
+public slots:
+
+private slots :
+    void interpreterOrderBook(QNetworkReply* reply);
+};
 
 #endif // QUADRIGA_H
