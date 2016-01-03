@@ -1,41 +1,34 @@
 #include "coinbase.h"
 #include <QDebug>
 
-#include <QJsonDocument>
-
-#include <QNetworkReply>
-#include <QUrl>
-
 CoinBase::CoinBase()
 {
 
 }
 
 
+void CoinBase::lireJsonFinished(QNetworkReply* reply)
+{
+
+    QString reponse = reply->readAll();
+    qDebug() << reponse;
+
+    QJsonDocument test = QJsonDocument::fromJson(reponse.toUtf8());
+    QJsonObject array = test.object();
+
+    qDebug() << array["date"].toString();
+
+}
 
 bool CoinBase::rafraichirJson()
 {
 
-    qDebug("JSON COINBASE");
-
-
-    QNetworkAccessManager networkManager;
-
-   // QUrl url("https://api.quadrigacx.com/v2/transactions");
-    QUrl url("http://gdata.youtube.com/feeds/api/standardfeeds/most_popular?v=2&alt=json");
+    QNetworkAccessManager *networkManager = new QNetworkAccessManager();
+    QUrl url("http://time.jsontest.com");
     QNetworkRequest request;
     request.setUrl(url);
-
-    QNetworkReply* currentReply = networkManager.get(request);  // GET
-
-
-
-    //QTcpSocket *testSocket = new QTcpSocket();
-    //testSocket->connectToHost("https://api.quadrigacx.com/v2/transactions", 80);
-    //testSocket->waitForConnected(2000);
-    //testSocket->write("\r\n\r\n\r\n");
-   // testSocket->waitForReadyRead(3000);
-    qDebug() << currentReply->readAll();
+    connect(networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(lireJsonFinished(QNetworkReply*)));
+    networkManager->get(request);  // GET
 
     return false;
 }

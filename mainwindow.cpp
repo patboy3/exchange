@@ -6,6 +6,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+
+ BTCexchange *test = new CoinBase();
+    test->rafraichirJson();
 }
 
 MainWindow::~MainWindow()
