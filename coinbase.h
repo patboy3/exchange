@@ -4,20 +4,19 @@
 #include "btcexchange.h"
 
 
-class CoinBase : public QObject, public BTCexchange
+class CoinBase : public BTCexchange
 {
     Q_OBJECT
 
 public:
-    CoinBase();
-    bool rafraichirJson();
+    explicit CoinBase();
 
 private:
 
 public slots:
 
 private slots :
-    void lireJsonFinished(QNetworkReply* reply);
+    void interpreterOrderBook(QNetworkReply* reply);
 };
 
 #endif // COINBASE_H

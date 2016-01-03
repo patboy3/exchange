@@ -10,7 +10,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // Crée un test
     BTCexchange *test = new CoinBase();
-    test->rafraichirJson();
+    test->rafraichirOrderBook();
 }
 
 MainWindow::~MainWindow()

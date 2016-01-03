@@ -8,13 +8,31 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
-class BTCexchange
-{
-public:
-    explicit BTCexchange();
-    virtual bool rafraichirJson() = 0;
+struct OrderBookElement{
+    double nbBtc;
+    double prixVente;
+};
 
-private:
+class BTCexchange : public QObject
+{
+
+    Q_OBJECT
+
+public:
+
+    explicit BTCexchange();
+    bool rafraichirOrderBook();
+
+protected:
+    QString orderBookAddr;
+    struct OrderBookElement orderBooks[5];
+
+
+public slots :
+    virtual void interpreterOrderBook(QNetworkReply* reply) = 0;
+
+
+private slots:
 
 };
 
