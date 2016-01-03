@@ -2,6 +2,7 @@
 #define COINBASE_H
 
 #include "btcexchange.h"
+#include <QMessageBox>
 
 
 class CoinBase : public BTCexchange
@@ -10,13 +11,17 @@ class CoinBase : public BTCexchange
 
 public:
     explicit CoinBase();
+    bool authentifier();
 
 private:
+
+protected:
 
 public slots:
 
 private slots :
     void interpreterOrderBook(QNetworkReply* reply);
+
 };
 
 #endif // COINBASE_H

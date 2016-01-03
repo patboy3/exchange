@@ -1,12 +1,14 @@
 #include "quadriga.h"
-#include <QDebug>
-#include <QMessageBox>
 
 Quadriga::Quadriga()
 {
     orderBookAddr = "https://api.quadrigacx.com/v2/order_book";
 }
 
+bool Quadriga::authentifier()
+{
+    return false;
+}
 
 void Quadriga::interpreterOrderBook(QNetworkReply* reply)
 {

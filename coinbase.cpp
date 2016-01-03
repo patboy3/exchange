@@ -1,6 +1,4 @@
 #include "coinbase.h"
-#include <QDebug>
-#include <QMessageBox>
 
 
 /*
@@ -14,6 +12,12 @@
 CoinBase::CoinBase()
 {
     orderBookAddr = "https://api.exchange.coinbase.com/products/BTC-CAD/book?level=2";
+}
+
+
+bool CoinBase::authentifier()
+{
+    return false;
 }
 
 
