@@ -23,6 +23,7 @@ public:
     explicit BTCexchange();
     bool rafraichirOrderBook();
 
+    //TEst
 protected:
     QString orderBookAddr;
     struct OrderBookElement asks[5];
