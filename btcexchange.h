@@ -28,6 +28,7 @@ protected:
     QString orderBookAddr;
     struct OrderBookElement asks[5];
     struct OrderBookElement bids[5];
+    QString apiKey;
 
 
 public slots :
