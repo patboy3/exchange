@@ -24,7 +24,7 @@ public:
 private:
     Ui::MainWindow *ui;
     bool createConnection();
-    QList<BTCexchange*> site;
+    QList<BTCexchange*> m_sites;
 
 public slots:
 

@@ -50,13 +50,13 @@ bool MainWindow::createConnection()
 
         while (query.next()) {
             if (query.value(0).toString() == "quadriga")
-                site.append(new Quadriga(query.value(1).toString(),query.value(2).toString(),query.value(3).toString()));
+                m_sites.append(new Quadriga(query.value(1).toString(),query.value(2).toString(),query.value(3).toString()));
             else if (query.value(0).toString() == "coinbase")
-                site.append(new CoinBase(query.value(1).toString(),query.value(2).toString(),query.value(3).toString()));
+                m_sites.append(new CoinBase(query.value(1).toString(),query.value(2).toString(),query.value(3).toString()));
 
         }
 
-        foreach (BTCexchange* solo, site)
+        foreach (BTCexchange* solo, m_sites)
         {
             solo->rafraichirOrderBook();
         }
