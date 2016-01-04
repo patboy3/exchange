@@ -80,7 +80,23 @@ print r.json()
 
     // http://stackoverflow.com/questions/12487620/correct-format-for-http-post-using-qnetworkrequest
 
-    // Build your JSON string as usual
+//    timestamp = str(time.time())
+  //  message = timestamp + request.method + request.path_url + (request.body or '')
+    //hmac_key = base64.b64decode(self.secret_key)
+    //signature = hmac.new(hmac_key, message, hashlib.sha256)
+    //signature_b64 = signature.digest().encode('base64').rstrip('\n')
+
+
+    QString timeStamp = QDateTime::currentDateTime().toString();
+
+    QString message = timeStamp;
+
+QByteArray ba;
+ba.append(message);
+
+QString signature = ba.toBase64();
+
+// Build your JSON string as usual
     QByteArray jsonString = "{\"method\":\"AuthenticatePlain\",\"loginName\":\"username@domain.com\",\"password\":\"mypass\"}";
 
     // For your "Content-Length" header
@@ -92,7 +108,7 @@ print r.json()
 
     // Add the headers specifying their names and their values with the following method : void QNetworkRequest::setRawHeader(const QByteArray & headerName, const QByteArray & headerValue);
     request.setRawHeader("CB-ACCESS-SIGN", "My app name v0.1");
-    request.setRawHeader("CB-ACCESS-TIMESTAMP",  QDateTime::currentDateTime().toString().toLatin1());
+    request.setRawHeader("CB-ACCESS-TIMESTAMP",  timeStamp.toLatin1());
     request.setRawHeader("CB-ACCESS-KEY", apiKey.toLatin1());
     request.setRawHeader("CB-ACCESS-PASSPHRASE", postDataSize);
     request.setRawHeader("Content-Type", "application/json");
