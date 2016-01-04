@@ -2,8 +2,6 @@
 #define COINBASE_H
 
 #include "btcexchange.h"
-#include <QMessageBox>
-
 
 class CoinBase : public BTCexchange
 {

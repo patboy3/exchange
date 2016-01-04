@@ -7,6 +7,7 @@
 #include <QNetworkRequest>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QMessageBox>
 
 struct OrderBookElement{
     double nbBtc;
@@ -17,7 +18,6 @@ class BTCexchange : public QObject
 {
 
     Q_OBJECT
-
 
 public:
     explicit BTCexchange(QString currency, QString apiKey, QString secretKey);
@@ -31,9 +31,6 @@ protected:
     QString apiKey;
     QString secretKey;
     QString currentCurrency;
-
-
-
 
 
 public slots :

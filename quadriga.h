@@ -2,7 +2,6 @@
 #define QUADRIGA_H
 
 #include "btcexchange.h"
-#include <QMessageBox>
 
 
 class Quadriga : public BTCexchange
