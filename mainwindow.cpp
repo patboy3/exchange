@@ -9,37 +9,15 @@ MainWindow::MainWindow(QWidget *parent) :
 {
 
     ui->setupUi(this);
-    createConnection();
+    //add les sites ds m_sites
+    loadSite();
 }
 
-bool MainWindow::createConnection()
+bool MainWindow::loadSite()
 {
 
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName( "./exchange.db");
-
-    /**
-     * si db pas créé... faudrait la créé
-     *
-      CREATE TABLE exchange (
-      ID INT PRIMARY KEY      NOT NULL,
-      ID_Currency INT(11) NOT NULL,
-      Nom VARCHAR(255) NOT NULL,
-      apiKey VARCHAR(255) NOT NULL,
-      secretKey VARCHAR(255) NOT NULL,
-      CONSTRAINT FK_exchange_currency_ID FOREIGN KEY (ID_Currency)
-        REFERENCES currency(ID) ON DELETE RESTRICT ON UPDATE RESTRICT
-    );
-
-    CREATE TABLE currency(
-       ID INT PRIMARY KEY      NOT NULL,
-       currency           CHAR(50) NOT NULL
-    );
-
-
-
-     *
-     */
 
     if (!db.open()) {
         //si connect pas... add les site poru faire seulement un test direct
