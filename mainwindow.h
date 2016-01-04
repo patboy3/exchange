@@ -23,7 +23,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    bool loadSite();
+    void loadSite();
     QList<BTCexchange*> m_sites;
     void generateDB(QSqlQuery *query);
 

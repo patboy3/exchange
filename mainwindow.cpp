@@ -13,7 +13,7 @@ MainWindow::MainWindow(QWidget *parent) :
     loadSite();
 }
 
-bool MainWindow::loadSite()
+void MainWindow::loadSite()
 {
 
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
@@ -27,9 +27,7 @@ bool MainWindow::loadSite()
         //test->rafraichirOrderBook();
 
         BTCexchange *test2 = new Quadriga("CAD","","");
-        //test2->rafraichirOrderBook();
-
-        return false;
+        //test2->rafraichirOrderBook();        
     }
     else
     {
@@ -63,8 +61,6 @@ bool MainWindow::loadSite()
         {
             solo->rafraichirOrderBook();
         }
-
-        return false;
     }
 }
 
