@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include <QList>
-
+#include <QtSql>
 
 #include "btcexchange.h"
 #include "coinbase.h"
@@ -25,6 +25,7 @@ private:
     Ui::MainWindow *ui;
     bool createConnection();
     QList<BTCexchange*> m_sites;
+    void generateDB(QSqlQuery *query);
 
 public slots:
 
