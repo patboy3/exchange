@@ -10,7 +10,7 @@ class Quadriga : public BTCexchange
     Q_OBJECT
 
 public:
-    explicit Quadriga(QString currency);
+    explicit Quadriga(QString currency, QString apiKey, QString secretKey);
     bool authentifier();
 
 private:

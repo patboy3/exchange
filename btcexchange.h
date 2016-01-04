@@ -20,7 +20,7 @@ class BTCexchange : public QObject
 
 
 public:
-    explicit BTCexchange(QString currency);
+    explicit BTCexchange(QString currency, QString apiKey, QString secretKey);
     bool rafraichirOrderBook();
     virtual bool authentifier() = 0;
 

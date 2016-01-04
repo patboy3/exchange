@@ -9,7 +9,7 @@
 
  */
 
-CoinBase::CoinBase(QString currency) : BTCexchange(currency)
+CoinBase::CoinBase(QString currency, QString apiKey, QString secretKey) : BTCexchange(currency, apiKey, secretKey)
 {
     orderBookAddr = "https://api.exchange.coinbase.com/products/BTC-" + currentCurrency + "/book?level=2";
 }

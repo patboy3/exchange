@@ -1,6 +1,6 @@
 #include "quadriga.h"
 
-Quadriga::Quadriga(QString currency) : BTCexchange(currency)
+Quadriga::Quadriga(QString currency, QString apiKey, QString secretKey) : BTCexchange(currency, apiKey, secretKey)
 {
     orderBookAddr = "https://api.quadrigacx.com/v2/order_book?book=btc_" + currentCurrency.toLower();
 }

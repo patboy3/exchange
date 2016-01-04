@@ -1,7 +1,9 @@
 #include "btcexchange.h"
 
-BTCexchange::BTCexchange(QString currency)
+BTCexchange::BTCexchange(QString currency, QString apiKey, QString secretKey)
 {
+    this->apiKey = apiKey;
+    this->secretKey = secretKey;
     currentCurrency = currency;
 }
 
