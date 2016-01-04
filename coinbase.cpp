@@ -11,6 +11,7 @@
 
 CoinBase::CoinBase(QString currency) : BTCexchange(currency)
 {
+    currentCurrency = currency;
     orderBookAddr = "https://api.exchange.coinbase.com/products/BTC-" + currency + "/book?level=2";
 }
 
