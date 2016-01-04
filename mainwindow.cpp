@@ -17,12 +17,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->setupUi(this);
     createConnection();
-    // Crée un test
-    BTCexchange *test = new CoinBase("CAD", "SBH5GeIntChyxpax","G1WGo4vRMRleNVEkssfuhs8fDpT3UQ8T");
-    //test->rafraichirOrderBook();
-
-    BTCexchange *test2 = new Quadriga("CAD","","");
-    //test2->rafraichirOrderBook();
 }
 
 bool MainWindow::createConnection()
@@ -35,11 +29,39 @@ bool MainWindow::createConnection()
     db.setPassword("M8CxS\'*\\)jPp7yL>");
     if (!db.open()) {
         qDebug() << "erreur de connexion";
+
+        BTCexchange *test = new CoinBase("CAD", "SBH5GeIntChyxpax","G1WGo4vRMRleNVEkssfuhs8fDpT3UQ8T");
+        test->rafraichirOrderBook();
+
+        BTCexchange *test2 = new Quadriga("CAD","","");
+        test2->rafraichirOrderBook();
+
         return false;
     }
     else
     {
         qDebug() << "yeahhhhh";
+
+        QSqlQuery query;
+        query.exec("SELECT Nom, currency.currency, apiKey, secretKey FROM exchange left join currency on currency.ID = exchange.ID_Currency");
+
+        while (query.next()) {
+            /*QString name = query.value(0).toString();
+            qDebug() << "name:" << query.value(0).toString() << " - " << query.value(1).toString();*/
+
+
+            if (query.value(0).toString() == "quadriga")
+                site.append(new Quadriga(query.value(1).toString(),query.value(2).toString(),query.value(3).toString()));
+            else if (query.value(0).toString() == "coinbase")
+                site.append(new CoinBase(query.value(1).toString(),query.value(2).toString(),query.value(3).toString()));
+
+        }
+
+        foreach (BTCexchange* solo, site)
+        {
+            solo->rafraichirOrderBook();
+        }
+
         return false;
     }
 }

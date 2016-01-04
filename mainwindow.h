@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QList>
+
 
 #include "btcexchange.h"
 #include "coinbase.h"
@@ -22,7 +24,7 @@ public:
 private:
     Ui::MainWindow *ui;
     bool createConnection();
-
+    QList<BTCexchange*> site;
 
 public slots:
 
