@@ -68,4 +68,8 @@ bool MainWindow::createConnection()
 MainWindow::~MainWindow()
 {
     delete ui;
+    foreach (BTCexchange* solo, m_sites)
+    {
+        delete solo;
+    }
 }
