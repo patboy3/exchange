@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QtSql>
-#include <QtSql/QSqlDriver>
 //
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -15,23 +14,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
 bool MainWindow::createConnection()
 {
-    //Connection a une db mysql
-
-    /*
-     DATABASE HOST : charest.xyz:3390
-     DATABASE LOGIN : exchange
-     DATABASE PASS : M8CxS'*\)jPp7yL>
-     */
 
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-    //db.setConnectOptions("SSL_KEY=client-key.pem;SSL_CERT=client-cert.pem;SSL_CA=server-ca.pem");    
-    //db.setConnectOptions("CLIENT_SSL=1");
     db.setDatabaseName( "./exchange.db");
-    //db.setHostName("charest.xyz");
-    //db.setPort(3310);
-    //db.setDatabaseName("btcexchange");
-    //db.setUserName("exchange");
-    //db.setPassword("M8CxS\'*\\)jPp7yL>");
+
+
     if (!db.open()) {
         //si connect pas... add les site poru faire seulement un test direct
 
