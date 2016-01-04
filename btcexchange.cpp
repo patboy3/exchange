@@ -2,7 +2,7 @@
 
 BTCexchange::BTCexchange(QString currency)
 {
-
+    currentCurrency = currency;
 }
 
 bool BTCexchange::rafraichirOrderBook()
