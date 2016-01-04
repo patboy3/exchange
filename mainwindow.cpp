@@ -30,6 +30,7 @@ bool MainWindow::createConnection()
     QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
     db.setHostName("charest.xyz");
     db.setPort(3310);
+    db.setDatabaseName("btcexchange");
     db.setUserName("exchange");
     db.setPassword("M8CxS\'*\\)jPp7yL>");
     if (!db.open()) {
