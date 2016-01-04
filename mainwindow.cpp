@@ -50,7 +50,7 @@ bool MainWindow::loadSite()
         if (!tabledetection) //si db neuve.. créé les tables !
             generateDB(&query);
 
-        query.exec("SELECT Nom, currency.currency, apiKey, secretKey FROM exchange left join currency on currency.ID = exchange.ID_Currency;");
+        query.exec("SELECT sites.sitename, currency.currency, apiKey, secretKey FROM exchange left join currency on currency.ID = exchange.ID_Currency left outer join sites on sites.ID = exchange.ID_Sitename;");
 
         while (query.next()) {
             if (query.value(0).toString() == "quadriga")
@@ -72,10 +72,13 @@ void MainWindow::generateDB(QSqlQuery *query)
 {
     //créé les tables
     query->exec("CREATE TABLE `currency` ( `ID`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,`currency`	CHAR(50) NOT NULL);");
-    query->exec("CREATE TABLE `exchange` ( `ID`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, `ID_Currency`	INT(11) NOT NULL, `Nom`	VARCHAR(255) NOT NULL, `apiKey`	VARCHAR(255) NOT NULL,	`secretKey`	VARCHAR(255) NOT NULL,	`clientID`	INTEGER, FOREIGN KEY(`ID_Currency`) REFERENCES currency ( ID ) ON DELETE RESTRICT ON UPDATE RESTRICT);");
+    query->exec("CREATE TABLE exchange (ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, ID_Currency INT(11) NOT NULL, ID_Sitename INT(11) NOT NULL, apiKey VARCHAR(255) DEFAULT NULL, secretKey VARCHAR(255) DEFAULT NULL, CONSTRAINT FK_exchange_currency_ID FOREIGN KEY (ID_Currency) REFERENCES currency(ID) ON DELETE RESTRICT ON UPDATE RESTRICT, CONSTRAINT FK_exchange_sites_ID FOREIGN KEY (ID_Sitename) REFERENCES sites(ID) ON DELETE RESTRICT ON UPDATE RESTRICT);");
+    query->exec("CREATE TABLE `sites` ( `ID`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, `sitename`	TEXT NOT NULL);");
 
     //add 3 currency de bases
+    query->exec("INSERT INTO sites (sitename) VALUES ('quadriga'), ('coinbase');");
     query->exec("INSERT INTO currency (currency) VALUES ('CAD'), ('USD'), ('EURO');");
+    query->exec("INSERT INTO exchange (ID_Currency, ID_Sitename) VALUES ( (SELECT ID from currency WHERE currency='CAD'),     (SELECT ID from sites WHERE sitename='coinbase') ), ( (SELECT ID from currency WHERE currency='CAD'),     (SELECT ID from sites WHERE sitename='quadriga') );");
 }
 
 MainWindow::~MainWindow()
