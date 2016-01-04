@@ -92,11 +92,13 @@ print r.json()
 
     // Add the headers specifying their names and their values with the following method : void QNetworkRequest::setRawHeader(const QByteArray & headerName, const QByteArray & headerValue);
     request.setRawHeader("CB-ACCESS-SIGN", "My app name v0.1");
-    request.setRawHeader("CB-ACCESS-TIMESTAMP", "My app name v0.1");
-    request.setRawHeader("CB-ACCESS-KEY", apiKey);
+    request.setRawHeader("CB-ACCESS-TIMESTAMP",  QDateTime::currentDateTime().toString().toLatin1());
+    request.setRawHeader("CB-ACCESS-KEY", apiKey.toLatin1());
     request.setRawHeader("CB-ACCESS-PASSPHRASE", postDataSize);
     request.setRawHeader("Content-Type", "application/json");
 
+
+   // qDebug() << request;
 
     // Use QNetworkReply * QNetworkAccessManager::post(const QNetworkRequest & request, const QByteArray & data); to send your request. Qt will rearrange everything correctly.
     // QNetworkReply * reply = m_qnam->post(request, jsonString);
