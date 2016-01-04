@@ -1,8 +1,8 @@
 #include "quadriga.h"
 
-Quadriga::Quadriga()
+Quadriga::Quadriga(QString currency) : BTCexchange(currency)
 {
-    orderBookAddr = "https://api.quadrigacx.com/v2/order_book";
+    orderBookAddr = "https://api.quadrigacx.com/v2/order_book?book=btc_" + currency.toLower();
 }
 
 bool Quadriga::authentifier()

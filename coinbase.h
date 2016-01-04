@@ -10,7 +10,7 @@ class CoinBase : public BTCexchange
     Q_OBJECT
 
 public:
-    explicit CoinBase();
+    explicit CoinBase(QString currency);
     bool authentifier();
 
 private:

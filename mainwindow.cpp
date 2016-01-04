@@ -9,10 +9,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     // Crée un test
-    BTCexchange *test = new CoinBase();
+    BTCexchange *test = new CoinBase("CAD");
     test->rafraichirOrderBook();
 
-    BTCexchange *test2 = new Quadriga();
+    BTCexchange *test2 = new Quadriga("CAD");
     test2->rafraichirOrderBook();
 }
 

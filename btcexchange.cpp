@@ -1,6 +1,6 @@
 #include "btcexchange.h"
 
-BTCexchange::BTCexchange()
+BTCexchange::BTCexchange(QString currency)
 {
 
 }

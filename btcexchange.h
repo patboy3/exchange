@@ -18,8 +18,9 @@ class BTCexchange : public QObject
 
     Q_OBJECT
 
+
 public:
-    explicit BTCexchange();
+    explicit BTCexchange(QString currency);
     bool rafraichirOrderBook();
     virtual bool authentifier() = 0;
 
@@ -29,6 +30,9 @@ protected:
     struct OrderBookElement bids[5];
     QString apiKey;
     QString secretKey;
+    QString currentCurrency;
+
+
 
 
 
