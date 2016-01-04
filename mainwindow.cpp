@@ -28,8 +28,8 @@ MainWindow::MainWindow(QWidget *parent) :
 bool MainWindow::createConnection()
 {
     QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
-    db.setHostName("192.168.1.101");
-    db.setPort(3306);
+    db.setHostName("charest.xyz");
+    db.setPort(3310);
     db.setUserName("exchange");
     db.setPassword("M8CxS\'*\\)jPp7yL>");
     if (!db.open()) {
