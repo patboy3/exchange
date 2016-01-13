@@ -62,7 +62,8 @@ void MainWindow::loadSite()
 
         foreach (BTCexchange* solo, m_sites)
         {
-            solo->rafraichirOrderBook();
+            //solo->rafraichirOrderBook();
+            solo->loadBalance();
         }
     }
 }

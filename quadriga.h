@@ -9,8 +9,9 @@ class Quadriga : public BTCexchange
     Q_OBJECT
 
 public:
-    explicit Quadriga(QString currency, QString apiKey, QString secretKey);
+    explicit Quadriga(QString currency, QString liveApiKey, QString liveSecretKey);
     bool authentifier();
+    void loadBalance();
 
 private:
 

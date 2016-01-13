@@ -2,22 +2,16 @@
 
 
 
-BTCexchange::BTCexchange(QString currency, QString apiKey, QString secretKey)
+BTCexchange::BTCexchange(QString currency, QString liveApiKey, QString liveSecretKey)
 {
-    this->apiKey = apiKey;
-    this->secretKey = secretKey;
+    apiKey = liveApiKey;
+    secretKey = liveSecretKey;
     currentCurrency = currency;
+}
 
+void BTCexchange::loadBalance()
+{
 
-    const char  *key = "230664ae53cbe5a07c6c389910540729";
-    const char  *message = "13916834993JJHlXeDcFM";
-    char    digest[BUFSIZ];
-
-    memset( digest, 0x00, BUFSIZ );
-    hmac_sha256( message, strlen(message), key, strlen(key), digest );
-
-    qDebug() << base64_encode((unsigned char*)digest, strlen(digest));
-    qDebug() << hex_encode((unsigned char*)digest, strlen(digest));
 }
 
 void BTCexchange::hmac_sha256(
