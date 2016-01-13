@@ -22,11 +22,14 @@ void Quadriga::loadBalance()
     memset( digest, 0x00, BUFSIZ );
     hmac_sha256( message, strlen(message), key, strlen(key), digest );
 
-    qDebug() << message;
-    qDebug() << time;
+    qDebug() << "apikey" <<apiKey;
+    qDebug() << "secret" <<secretKey;
 
-    qDebug() << base64_encode((unsigned char*)digest, strlen(digest));
-    qDebug() << hex_encode((unsigned char*)digest, strlen(digest));
+    qDebug() << "message" << message;
+    qDebug() << "time/nonce" << time;
+
+    qDebug() << "base64_encode" <<base64_encode((unsigned char*)digest, strlen(digest));
+    qDebug() << "hex" << hex_encode((unsigned char*)digest, strlen(digest));
 }
 
 bool Quadriga::authentifier()
