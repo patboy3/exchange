@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QtSql>
+
 //
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -27,7 +28,9 @@ void MainWindow::loadSite()
         //test->rafraichirOrderBook();
 
         BTCexchange *test2 = new Quadriga("CAD","","");
-        //test2->rafraichirOrderBook();        
+        //test2->rafraichirOrderBook();
+
+
     }
     else
     {

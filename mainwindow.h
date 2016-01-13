@@ -1,9 +1,11 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+
 #include <QMainWindow>
 #include <QList>
 #include <QtSql>
+
 
 #include "btcexchange.h"
 #include "coinbase.h"
@@ -26,7 +28,10 @@ private:
     void loadSite();
     QList<BTCexchange*> m_sites;
     void generateDB(QSqlQuery *query);
-
+    void Hmac256(const unsigned char *text,      /* pointer to data stream        */
+                 int                 text_len,   /* length of data stream         */
+                 const unsigned char *key,       /* pointer to authentication key */
+                 int                 key_len    /* length of authentication key  */, void *digest);
 public slots:
 
 private slots:

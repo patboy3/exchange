@@ -10,6 +10,8 @@ QT       += sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
+INCLUDEPATH += C:/OpenSSL-Win32/include
+LIBS += -L"C:/OpenSSL-Win32/lib" -llibeay32
 
 TARGET = eXchanger
 TEMPLATE = app
