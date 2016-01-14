@@ -26,16 +26,59 @@ void Quadriga::loadBalance()
     char digest[BUFSIZ];
 
     memset( digest, 0x00, BUFSIZ );
+    //memset( digest, '-', BUFSIZ );
     hmac_sha256( message, strlen(message), key, strlen(key), digest );
 
-    qDebug() << "apikey" <<apiKey;
-    qDebug() << "secret" <<secretKey;
-
+    /*
     qDebug() << "message" << message;
+    qDebug() << "apikey" << apiKey;
+    qDebug() << "secret" << secretKey;
+
+
     qDebug() << "time/nonce" << QString::number(timeStamp);
 
     qDebug() << "base64_encode" <<base64_encode((unsigned char*)digest, strlen(digest));
     qDebug() << "hex" << hex_encode((unsigned char*)digest, strlen(digest));
+    */
+    //
+    //
+    QNetworkAccessManager *networkManager = new QNetworkAccessManager();
+    QNetworkRequest *request = new QNetworkRequest();
+
+    QByteArray jsonString = "key="+apiKey.toLatin1()+"&nonce="+QString::number(timeStamp).toLatin1() +"&signature="+hex_encode((unsigned char*)digest, strlen(digest)).toLatin1()+"";
+
+    // Url de la requete
+    request->setUrl(QUrl("https://api.quadrigacx.com/v2/balance"));
+
+    // Connecte le signal Finished du networkManaget au Slot lireJsonFinished
+    connect(networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(interpreterLoadBalance(QNetworkReply*)));
+
+    // Lance la requete pour obtenir la réponse
+    networkManager->post(*request, jsonString);
+}
+
+void Quadriga::interpreterLoadBalance(QNetworkReply* reply)
+{
+
+    // Gestion des erreurs
+    if(reply->error())
+    {
+        QMessageBox msgBox;
+        msgBox.setText("Erreur lors de la requete : " + reply->errorString());
+        msgBox.exec();
+        return;
+    }
+
+    // Laleur de reply->readAll() se vide apres usage
+    QString reponse = reply->readAll();
+    qDebug() << reponse;
+
+    // Crée un object Json avec la réponse obtenure
+    QJsonDocument jsonDocument = QJsonDocument::fromJson(reponse.toUtf8());
+    QJsonObject jsonObject = jsonDocument.object();
+
+    qDebug() << jsonObject["date"].toString();
+
 }
 
 void Quadriga::interpreterOrderBook(QNetworkReply* reply)
