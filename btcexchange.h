@@ -26,14 +26,6 @@ class BTCexchange : public QObject
 public:
     explicit BTCexchange(QString currency, QString liveApiKey, QString liveSecretKey);
     bool rafraichirOrderBook();
-    void hmac_sha256(
-        const char *text,      /* pointer to data stream        */
-        int                 text_len,   /* length of data stream         */
-        const char *key,       /* pointer to authentication key */
-        int                 key_len,    /* length of authentication key  */
-        void                *digest);
-    QString base64_encode(unsigned char const* bytes_to_encode, unsigned int in_len);
-    QString hex_encode(unsigned char const* bytes_to_encode, unsigned int in_len);
 
 protected:
     QString orderBookAddr;
@@ -43,6 +35,14 @@ protected:
     QString secretKey;
     QString currentCurrency;
     virtual void signerHeaders(QNetworkRequest*) = 0;
+    void hmac_sha256(
+        const char *text,      /* pointer to data stream        */
+        int                 text_len,   /* length of data stream         */
+        const char *key,       /* pointer to authentication key */
+        int                 key_len,    /* length of authentication key  */
+        void                *digest);
+    QString base64_encode(unsigned char const* bytes_to_encode, unsigned int in_len);
+    QString hex_encode(unsigned char const* bytes_to_encode, unsigned int in_len);
 
 
 private :
