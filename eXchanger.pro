@@ -19,8 +19,6 @@ LIBS += -L "$$PWD/includes/OsX/openssl/lib/" -lcrypto -lssl
 }
 
 win32{
-#INCLUDEPATH += C:/OpenSSL-Win32/include
-#LIBS += -L"C:/OpenSSL-Win32/lib" -llibeay32
 INCLUDEPATH += $$PWD/includes/WIN/openssl/include
 LIBS += -L"$$PWD/includes/WIN/openssl/lib" -llibeay32
 }
