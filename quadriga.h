@@ -11,9 +11,9 @@ class Quadriga : public BTCexchange
 public:
     explicit Quadriga(QString currency, QString liveApiKey, QString liveSecretKey, int ident);
     void loadBalance();
-
+    ~Quadriga();
 private:
-    int m_ident;
+    int *m_ident;
 
 protected:
     void signerHeaders(QNetworkRequest *);
