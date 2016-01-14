@@ -10,6 +10,7 @@ class CoinBase : public BTCexchange
 public:
     explicit CoinBase(QString currency, QString apiKey, QString secretKey);
     bool authentifier();
+    void loadBalance();
 
 private:
 
@@ -18,6 +19,7 @@ protected:
 public slots:
 
 private slots :
+    void handleNetworkData(QNetworkReply*);
     void interpreterOrderBook(QNetworkReply* reply);
 
 };
