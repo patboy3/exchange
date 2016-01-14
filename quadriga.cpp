@@ -1,9 +1,9 @@
 #include "quadriga.h"
 
-Quadriga::Quadriga(QString currency, QString liveApiKey, QString liveSecretKey) : BTCexchange(currency, liveApiKey, liveSecretKey)
+Quadriga::Quadriga(QString currency, QString liveApiKey, QString liveSecretKey, int ident) : BTCexchange(currency, liveApiKey, liveSecretKey)
 {
     orderBookAddr = "https://api.quadrigacx.com/v2/order_book?book=btc_" + currentCurrency.toLower();
-
+    m_ident = ident;
 }
 
 void Quadriga::signerHeaders(QNetworkRequest *requete)
@@ -21,7 +21,7 @@ void Quadriga::loadBalance()
     qint64 timeStamp = QDateTime::currentDateTime().toMSecsSinceEpoch();
 
     const char *key= secretKey.toLatin1();
-    const char *message= (QString::number(timeStamp) + "36566" + apiKey).toLatin1();
+    const char *message= (QString::number(timeStamp) + QString::number(m_ident) + apiKey).toLatin1();
 
     char digest[BUFSIZ];
 
