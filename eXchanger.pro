@@ -18,9 +18,10 @@ INCLUDEPATH += /usr/local/Cellar/openssl/1.0.2e_1/include
 LIBS += -L "/usr/local/Cellar/openssl/1.0.2e_1/lib/" -lcrypto -lssl
 }
 
-
-#INCLUDEPATH += C:/OpenSSL-Win32/include
-#LIBS += -L"C:/OpenSSL-Win32/lib" -llibeay32
+win32{
+INCLUDEPATH += C:/OpenSSL-Win32/include
+LIBS += -L"C:/OpenSSL-Win32/lib" -llibeay32
+}
 
 TARGET = eXchanger
 TEMPLATE = app
