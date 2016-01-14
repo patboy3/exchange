@@ -9,13 +9,15 @@ CoinBase::CoinBase(QString currency, QString apiKey, QString secretKey) : BTCexc
 
 void CoinBase::signerHeaders(QNetworkRequest *requete){
 
-    QString timeStamp = QDateTime::currentDateTime().toString();
+   qint64 time =  QDateTime::currentMSecsSinceEpoch();
+
+    qDebug() << "TIMESTAMP : " << time;
 
     // Add the headers specifying their names and their values with the following method : void QNetworkRequest::setRawHeader(const QByteArray & headerName, const QByteArray & headerValue);
     requete->setRawHeader("CB-ACCESS-KEY", apiKey.toLatin1());
     requete->setRawHeader("CB-ACCESS-SIGN", "My app name v0.1");
-    requete->setRawHeader("CB-ACCESS-TIMESTAMP",  timeStamp.toLatin1());
-    requete->setRawHeader("CB-ACCESS-PASSPHRASE", 0);
+    requete->setRawHeader("CB-ACCESS-TIMESTAMP",  QString::number(time).toLatin1());
+    requete->setRawHeader("CB-ACCESS-PASSPHRASE", secretKey.toLatin1());
 
 }
 
