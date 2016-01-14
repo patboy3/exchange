@@ -14,8 +14,8 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 macx{
 #PKGCONFIG += openssl
 #ICON = qrc/imgs/icon.icns
-INCLUDEPATH += /usr/local/Cellar/openssl/1.0.2e_1/include
-LIBS += -L "/usr/local/Cellar/openssl/1.0.2e_1/lib/" -lcrypto -lssl
+INCLUDEPATH += $$PWD/includes/OsX/openssl/include
+LIBS += -L "$$PWD/includes/OsX/openssl/lib/" -lcrypto -lssl
 }
 
 win32{
