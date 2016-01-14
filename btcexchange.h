@@ -50,8 +50,6 @@ private :
 
 
 public slots :
-    //virtual void interpreterOrderBook(QNetworkReply* reply) = 0;
-
 
 
 private slots:

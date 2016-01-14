@@ -20,31 +20,23 @@ void CoinBase::signerHeaders(QNetworkRequest *requete){
 }
 
 
-void CoinBase::loadBalance(){
+void CoinBase::interpreterLoadBalance(QNetworkReply *reply)
+{
+    QString reponse = reply->readAll();
 
-    qDebug() << "Load";
-    if(1 == 1){
-
-        //------------QString reponse = reply->readAll();
-
-
-        // Gestion des erreurs
-        //--------------if(reply->error())
-        {
-            //-----------qDebug() << reply->errorString();
-            //QMessageBox msgBox;
-            //msgBox.setText("Erreur lors de la requete : " + reponse->errorString());
-            //msgBox.exec();
-            //return;
-        }
-
-
-    //-----------qDebug() << reponse;
-
-
-        return;
+    if(reply->error())
+    {
+        qDebug() << reply->errorString();
+        //QMessageBox msgBox;
+        //msgBox.setText("Erreur lors de la requete : " + reponse->errorString());
+        //msgBox.exec();
+        //return;
     }
 
+    qDebug() << reponse;
+
+}
+void CoinBase::loadBalance(){
 
     QUrl serviceURL("https://api.exchange.coinbase.com/accounts");
     QNetworkRequest request(serviceURL);
@@ -53,7 +45,7 @@ void CoinBase::loadBalance(){
 
     QNetworkAccessManager *m_qnam = new QNetworkAccessManager();
     connect(m_qnam, SIGNAL(finished(QNetworkReply*)),
-                     this, SLOT(loadBalance(QNetworkReply*)));
+                     this, SLOT(interpreterLoadBalance(QNetworkReply*)));
 
     m_qnam->get(request);
 
