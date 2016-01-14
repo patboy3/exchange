@@ -157,3 +157,5 @@ bool BTCexchange::rafraichirOrderBook()
     return false;
 }
 
+void BTCexchange::loadBalance()
+{}

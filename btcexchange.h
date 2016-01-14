@@ -26,6 +26,7 @@ class BTCexchange : public QObject
 public:
     explicit BTCexchange(QString currency, QString liveApiKey, QString liveSecretKey);
     bool rafraichirOrderBook();
+    virtual void loadBalance();
 
 protected:
     QString orderBookAddr;
@@ -50,7 +51,7 @@ private :
 
 public slots :
     virtual void interpreterOrderBook(QNetworkReply* reply) = 0;
-    virtual void loadBalance(QNetworkReply* reply = 0) = 0;
+
 
 
 private slots:
