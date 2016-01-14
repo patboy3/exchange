@@ -9,13 +9,14 @@ class CoinBase : public BTCexchange
 
 public:
     explicit CoinBase(QString currency, QString apiKey, QString secretKey);
-    bool authentifier();
 
 private:
 
 protected:
+    void signerHeaders(QNetworkRequest*);
 
 public slots:
+    void loadBalance(QNetworkReply* reply = 0);
 
 private slots :
     void interpreterOrderBook(QNetworkReply* reply);

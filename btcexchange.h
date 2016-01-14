@@ -26,8 +26,6 @@ class BTCexchange : public QObject
 public:
     explicit BTCexchange(QString currency, QString liveApiKey, QString liveSecretKey);
     bool rafraichirOrderBook();
-    virtual bool authentifier() = 0;
-    virtual void loadBalance();
     void hmac_sha256(
         const char *text,      /* pointer to data stream        */
         int                 text_len,   /* length of data stream         */
@@ -44,11 +42,15 @@ protected:
     QString apiKey;
     QString secretKey;
     QString currentCurrency;
+    virtual void signerHeaders(QNetworkRequest*) = 0;
+
+
 private :
 
 
 public slots :
     virtual void interpreterOrderBook(QNetworkReply* reply) = 0;
+    virtual void loadBalance(QNetworkReply* reply = 0) = 0;
 
 
 private slots:

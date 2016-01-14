@@ -6,7 +6,13 @@ Quadriga::Quadriga(QString currency, QString liveApiKey, QString liveSecretKey) 
 
 }
 
-void Quadriga::loadBalance()
+void Quadriga::signerHeaders(QNetworkRequest *requete)
+{
+
+}
+
+
+void Quadriga::loadBalance(QNetworkReply* reply)
 {
     //qint64 time =  QDateTime::currentMSecsSinceEpoch();
     //QString test(QString::number(time).toStdString().c_str());
@@ -30,11 +36,6 @@ void Quadriga::loadBalance()
 
     qDebug() << "base64_encode" <<base64_encode((unsigned char*)digest, strlen(digest));
     qDebug() << "hex" << hex_encode((unsigned char*)digest, strlen(digest));
-}
-
-bool Quadriga::authentifier()
-{
-    return false;
 }
 
 void Quadriga::interpreterOrderBook(QNetworkReply* reply)
