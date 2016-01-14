@@ -12,7 +12,7 @@ void Quadriga::signerHeaders(QNetworkRequest *requete)
 }
 
 
-void Quadriga::loadBalance(QNetworkReply* reply)
+void Quadriga::loadBalance()
 {
     //qint64 time =  QDateTime::currentMSecsSinceEpoch();
     //QString test(QString::number(time).toStdString().c_str());

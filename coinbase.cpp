@@ -20,18 +20,18 @@ void CoinBase::signerHeaders(QNetworkRequest *requete){
 }
 
 
-void CoinBase::loadBalance(QNetworkReply * reply){
+void CoinBase::loadBalance(){
 
     qDebug() << "Load";
-    if(reply != 0){
+    if(1 == 1){
 
-        QString reponse = reply->readAll();
+        //------------QString reponse = reply->readAll();
 
 
         // Gestion des erreurs
-        if(reply->error())
+        //--------------if(reply->error())
         {
-            qDebug() << reply->errorString();
+            //-----------qDebug() << reply->errorString();
             //QMessageBox msgBox;
             //msgBox.setText("Erreur lors de la requete : " + reponse->errorString());
             //msgBox.exec();
@@ -39,7 +39,7 @@ void CoinBase::loadBalance(QNetworkReply * reply){
         }
 
 
-    qDebug() << reponse;
+    //-----------qDebug() << reponse;
 
 
         return;
