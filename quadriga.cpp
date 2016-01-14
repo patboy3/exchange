@@ -20,8 +20,8 @@ void Quadriga::loadBalance()
 
     qint64 timeStamp = QDateTime::currentDateTime().toMSecsSinceEpoch();
 
-    const char *key= secretKey.toStdString().c_str();
-    const char *message= (QString::number(timeStamp) + "36566" + apiKey).toStdString().c_str();
+    const char *key= secretKey.toLatin1();
+    const char *message= (QString::number(timeStamp) + "36566" + apiKey).toLatin1();
 
     char digest[BUFSIZ];
 
@@ -49,6 +49,7 @@ void Quadriga::loadBalance()
 
     // Url de la requete
     request->setUrl(QUrl("https://api.quadrigacx.com/v2/balance"));
+    request->setRawHeader("Content-Type", "application/x-www-form-urlencoded");
 
     // Connecte le signal Finished du networkManaget au Slot lireJsonFinished
     connect(networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(interpreterLoadBalance(QNetworkReply*)));
