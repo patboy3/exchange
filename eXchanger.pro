@@ -10,8 +10,17 @@ QT       += sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-INCLUDEPATH += C:/OpenSSL-Win32/include
-LIBS += -L"C:/OpenSSL-Win32/lib" -llibeay32
+
+macx{
+#PKGCONFIG += openssl
+#ICON = qrc/imgs/icon.icns
+INCLUDEPATH += /usr/local/Cellar/openssl/1.0.2e_1/include
+LIBS += -L "/usr/local/Cellar/openssl/1.0.2e_1/lib/" -lcrypto -lssl
+}
+
+
+#INCLUDEPATH += C:/OpenSSL-Win32/include
+#LIBS += -L"C:/OpenSSL-Win32/lib" -llibeay32
 
 TARGET = eXchanger
 TEMPLATE = app
