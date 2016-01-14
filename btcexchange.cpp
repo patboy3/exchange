@@ -9,10 +9,7 @@ BTCexchange::BTCexchange(QString currency, QString liveApiKey, QString liveSecre
     currentCurrency = currency;
 }
 
-void BTCexchange::loadBalance()
-{
 
-}
 
 void BTCexchange::hmac_sha256(
     const char *text,      /* pointer to data stream        */

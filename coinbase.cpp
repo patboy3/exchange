@@ -14,73 +14,67 @@ CoinBase::CoinBase(QString currency, QString apiKey, QString secretKey) : BTCexc
 }
 
 
+void CoinBase::signerHeaders(QNetworkRequest *requete){
 
+    QString timeStamp = QDateTime::currentDateTime().toString();
+
+    // Add the headers specifying their names and their values with the following method : void QNetworkRequest::setRawHeader(const QByteArray & headerName, const QByteArray & headerValue);
+    requete->setRawHeader("CB-ACCESS-KEY", "SBH5GeIntChyxpax");
+    requete->setRawHeader("CB-ACCESS-SIGN", "My app name v0.1");
+    requete->setRawHeader("CB-ACCESS-TIMESTAMP",  timeStamp.toLatin1());
+    requete->setRawHeader("CB-ACCESS-PASSPHRASE", 0);
+
+}
 
 bool CoinBase::authentifier()
 {
 
-
-
-    QString timeStamp = QDateTime::currentDateTime().toString();
-
-    QString message = timeStamp;
-
-    // For your "Content-Length" header
-    //QByteArray postDataSize = QByteArray::number(j);
-
-    // Time for building your request
-    QUrl serviceURL("https://api.exchange.coinbase.com/accounts");
-    QNetworkRequest request(serviceURL);
-
-    // Add the headers specifying their names and their values with the following method : void QNetworkRequest::setRawHeader(const QByteArray & headerName, const QByteArray & headerValue);
-    request.setRawHeader("CB-ACCESS-KEY", "SBH5GeIntChyxpax");
-    request.setRawHeader("CB-ACCESS-SIGN", "My app name v0.1");
-    request.setRawHeader("CB-ACCESS-TIMESTAMP",  timeStamp.toLatin1());
-    request.setRawHeader("CB-ACCESS-PASSPHRASE", 0);
-    //request.setRawHeader("Content-Type", "application/json");
-
-    qDebug() << "TEST : " << request.rawHeader("CB-ACCESS-KEY");
-
-    QNetworkAccessManager *m_qnam = new QNetworkAccessManager();
-    connect(m_qnam, SIGNAL(finished(QNetworkReply*)),
-                     this, SLOT(handleNetworkData(QNetworkReply*)));
-
-    QNetworkReply * reply = m_qnam->get(request);
-
-
-
-    qDebug() << reply->readAll();
-
-    return false;
 }
 
 
 
-void CoinBase::handleNetworkData(QNetworkReply* reponse){
-    qDebug(" ");
-    qDebug(" ");
-    qDebug("CoinBASE DEBUG ");
-    qDebug(" ");
 
 
-    // Gestion des erreurs
-    if(reponse->error())
-    {
-        qDebug() << reponse->errorString();
-        //QMessageBox msgBox;
-        //msgBox.setText("Erreur lors de la requete : " + reponse->errorString());
-        //msgBox.exec();
-        //return;
+
+void CoinBase::loadBalance(QNetworkReply * reply){
+
+    qDebug() << "Load";
+    if(reply != 0){
+
+        QString reponse = reply->readAll();
+
+
+        // Gestion des erreurs
+        if(reply->error())
+        {
+            qDebug() << reply->errorString();
+            //QMessageBox msgBox;
+            //msgBox.setText("Erreur lors de la requete : " + reponse->errorString());
+            //msgBox.exec();
+            //return;
+        }
+
+
+    qDebug() << reponse;
+
+
+        return;
     }
 
 
-qDebug() << reponse->readAll();
-}
+    QUrl serviceURL("https://api.exchange.coinbase.com/accounts");
+    QNetworkRequest request(serviceURL);
+
+    signerHeaders(&request);
+
+    QNetworkAccessManager *m_qnam = new QNetworkAccessManager();
+    connect(m_qnam, SIGNAL(finished(QNetworkReply*)),
+                     this, SLOT(loadBalance(QNetworkReply*)));
+
+    m_qnam->get(request);
 
 
-void CoinBase::loadBalance(){
-
-    authentifier();
+   authentifier();
 }
 
 
