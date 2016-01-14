@@ -1,12 +1,5 @@
 #include "coinbase.h"
 
-/*
-
-    lacroix.david1@gmail.com
-    Clé d'API : SBH5GeIntChyxpax
-    Clé d'API secrète : G1WGo4vRMRleNVEkssfuhs8fDpT3UQ8T
-
- */
 
 CoinBase::CoinBase(QString currency, QString apiKey, QString secretKey) : BTCexchange(currency, apiKey, secretKey)
 {
@@ -19,7 +12,7 @@ void CoinBase::signerHeaders(QNetworkRequest *requete){
     QString timeStamp = QDateTime::currentDateTime().toString();
 
     // Add the headers specifying their names and their values with the following method : void QNetworkRequest::setRawHeader(const QByteArray & headerName, const QByteArray & headerValue);
-    requete->setRawHeader("CB-ACCESS-KEY", "SBH5GeIntChyxpax");
+    requete->setRawHeader("CB-ACCESS-KEY", apiKey.toLatin1());
     requete->setRawHeader("CB-ACCESS-SIGN", "My app name v0.1");
     requete->setRawHeader("CB-ACCESS-TIMESTAMP",  timeStamp.toLatin1());
     requete->setRawHeader("CB-ACCESS-PASSPHRASE", 0);
