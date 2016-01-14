@@ -9,7 +9,6 @@ class CoinBase : public BTCexchange
 
 public:
     explicit CoinBase(QString currency, QString apiKey, QString secretKey);
-    bool authentifier();
 
 private:
 

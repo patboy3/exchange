@@ -26,7 +26,6 @@ class BTCexchange : public QObject
 public:
     explicit BTCexchange(QString currency, QString liveApiKey, QString liveSecretKey);
     bool rafraichirOrderBook();
-    virtual bool authentifier() = 0;
     void hmac_sha256(
         const char *text,      /* pointer to data stream        */
         int                 text_len,   /* length of data stream         */

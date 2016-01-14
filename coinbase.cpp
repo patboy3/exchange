@@ -26,15 +26,6 @@ void CoinBase::signerHeaders(QNetworkRequest *requete){
 
 }
 
-bool CoinBase::authentifier()
-{
-
-}
-
-
-
-
-
 
 void CoinBase::loadBalance(QNetworkReply * reply){
 
@@ -73,8 +64,6 @@ void CoinBase::loadBalance(QNetworkReply * reply){
 
     m_qnam->get(request);
 
-
-   authentifier();
 }
 
 

@@ -38,11 +38,6 @@ void Quadriga::loadBalance(QNetworkReply* reply)
     qDebug() << "hex" << hex_encode((unsigned char*)digest, strlen(digest));
 }
 
-bool Quadriga::authentifier()
-{
-    return false;
-}
-
 void Quadriga::interpreterOrderBook(QNetworkReply* reply)
 {
 

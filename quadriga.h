@@ -10,7 +10,6 @@ class Quadriga : public BTCexchange
 
 public:
     explicit Quadriga(QString currency, QString liveApiKey, QString liveSecretKey);
-    bool authentifier();
 
 
 private:
