@@ -1,6 +1,5 @@
 #include "coinbase.h"
 
-
 /*
 
     lacroix.david1@gmail.com
@@ -26,34 +25,31 @@ bool CoinBase::authentifier()
 
     QString message = timeStamp;
 
-
-
-// Build your JSON string as usual
-    QByteArray jsonString = "{\"method\":\"AuthenticatePlain\",\"loginName\":\"lacroix.david1@gmail.com\",\"password\":\"mypass\"}";
-
     // For your "Content-Length" header
-    QByteArray postDataSize = QByteArray::number(jsonString.size());
+    //QByteArray postDataSize = QByteArray::number(j);
 
     // Time for building your request
-    QUrl serviceURL("https://api.exchange.coinbase.com/accounts/<account-id>");
+    QUrl serviceURL("https://api.exchange.coinbase.com/accounts");
     QNetworkRequest request(serviceURL);
 
     // Add the headers specifying their names and their values with the following method : void QNetworkRequest::setRawHeader(const QByteArray & headerName, const QByteArray & headerValue);
+    request.setRawHeader("CB-ACCESS-KEY", "SBH5GeIntChyxpax");
     request.setRawHeader("CB-ACCESS-SIGN", "My app name v0.1");
     request.setRawHeader("CB-ACCESS-TIMESTAMP",  timeStamp.toLatin1());
-    request.setRawHeader("CB-ACCESS-KEY", apiKey.toLatin1());
-    request.setRawHeader("CB-ACCESS-PASSPHRASE", postDataSize);
-    request.setRawHeader("Content-Type", "application/json");
+    request.setRawHeader("CB-ACCESS-PASSPHRASE", 0);
+    //request.setRawHeader("Content-Type", "application/json");
 
+    qDebug() << "TEST : " << request.rawHeader("CB-ACCESS-KEY");
 
-QNetworkAccessManager *m_qnam = new QNetworkAccessManager();
+    QNetworkAccessManager *m_qnam = new QNetworkAccessManager();
     connect(m_qnam, SIGNAL(finished(QNetworkReply*)),
                      this, SLOT(handleNetworkData(QNetworkReply*)));
 
-        QNetworkReply * reply = m_qnam->post(request, jsonString);
+    QNetworkReply * reply = m_qnam->get(request);
 
 
-//qDebug() << reply;
+
+    qDebug() << reply->readAll();
 
     return false;
 }
@@ -65,6 +61,19 @@ void CoinBase::handleNetworkData(QNetworkReply* reponse){
     qDebug(" ");
     qDebug("CoinBASE DEBUG ");
     qDebug(" ");
+
+
+    // Gestion des erreurs
+    if(reponse->error())
+    {
+        qDebug() << reponse->errorString();
+        //QMessageBox msgBox;
+        //msgBox.setText("Erreur lors de la requete : " + reponse->errorString());
+        //msgBox.exec();
+        //return;
+    }
+
+
 qDebug() << reponse->readAll();
 }
 
