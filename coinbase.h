@@ -13,7 +13,7 @@ public:
     void buyOrder(double amount, double price);
     void sellOrder(double amount, double price);
     void cancelOrder(QString orderID);
-
+    void viewOpenOrder();
 
 private:
 

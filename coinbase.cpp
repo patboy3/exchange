@@ -78,6 +78,9 @@ void CoinBase::interpreterOrderBook(QNetworkReply* reply)
 
 }
 
+void CoinBase::viewOpenOrder()
+{}
+
 
 void CoinBase::buyOrder(double amount, double price)
 {}
