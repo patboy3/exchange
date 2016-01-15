@@ -156,18 +156,3 @@ bool BTCexchange::rafraichirOrderBook()
 
     return false;
 }
-
-void BTCexchange::loadBalance()
-{}
-
-void BTCexchange::buyOrder(double amount, double price)
-{}
-
-void BTCexchange::sellOrder(double amount, double price)
-{}
-
-void BTCexchange::cancelOrder(QString orderID)
-{}
-
-void BTCexchange::viewOpenOrder()
-{}

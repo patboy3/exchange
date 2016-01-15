@@ -9,13 +9,9 @@ CoinBase::CoinBase(QString currency, QString apiKey, QString secretKey) : BTCexc
 
 void CoinBase::signerHeaders(QNetworkRequest *requete){
 
-   qint64 time =  QDateTime::currentMSecsSinceEpoch() / 1000;
-
-    qDebug() << "TIMESTAMP : " << time;
-
     requete->setRawHeader("CB-ACCESS-KEY", apiKey.toLatin1());
     requete->setRawHeader("CB-ACCESS-SIGN", "My app name v0.1");
-    requete->setRawHeader("CB-ACCESS-TIMESTAMP",  QString::number(time).toLatin1());
+    requete->setRawHeader("CB-ACCESS-TIMESTAMP",  QString::number(QDateTime::currentMSecsSinceEpoch() / 1000).toLatin1());
     requete->setRawHeader("CB-ACCESS-PASSPHRASE", secretKey.toLatin1());
 
 }
@@ -24,6 +20,7 @@ void CoinBase::signerHeaders(QNetworkRequest *requete){
 void CoinBase::interpreterLoadBalance(QNetworkReply *reply)
 {
     QString reponse = reply->readAll();
+    qDebug("ICI");
 
     if(reply->error())
     {
@@ -41,6 +38,7 @@ void CoinBase::interpreterLoadBalance(QNetworkReply *reply)
 
 void CoinBase::loadBalance(){
 
+    qDebug("ICI");
     QNetworkRequest request(QUrl("https://api.exchange.coinbase.com/accounts"));
 
     signerHeaders(&request);
