@@ -66,6 +66,7 @@ void MainWindow::loadSite()
             solo->loadBalance();
             //solo->sellOrder(0.005);
             //solo->buyOrder(0.005,572);
+            //solo->cancelOrder("46253z1wphey4nm8pv5elgm6dmek9siezlk2klz93e771ugqpl5b1rhfdwznpi1p");
         }
     }
 }

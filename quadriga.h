@@ -19,6 +19,7 @@ public:
     void loadBalance();
     void buyOrder(double amount, double price = 0);
     void sellOrder(double amount, double price = 0);
+    virtual void cancelOrder(QString orderID);
     ~Quadriga();
 private:
     int *m_ident;
