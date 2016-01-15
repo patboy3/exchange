@@ -10,10 +10,6 @@ class CoinBase : public BTCexchange
 public:
     explicit CoinBase(QString currency, QString apiKey, QString secretKey);
     void loadBalance();
-    void buyOrder(double amount, double price);
-    void sellOrder(double amount, double price);
-    void cancelOrder(QString orderID);
-
 
 private:
 

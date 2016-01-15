@@ -37,11 +37,10 @@ void CoinBase::interpreterLoadBalance(QNetworkReply *reply)
     qDebug() << reponse;
 
 }
-
-
 void CoinBase::loadBalance(){
 
-    QNetworkRequest request(QUrl("https://api.exchange.coinbase.com/accounts"));
+    QUrl serviceURL("https://api.exchange.coinbase.com/accounts");
+    QNetworkRequest request(serviceURL);
 
     signerHeaders(&request);
 
@@ -79,11 +78,3 @@ void CoinBase::interpreterOrderBook(QNetworkReply* reply)
 }
 
 
-void CoinBase::buyOrder(double amount, double price)
-{}
-
-void CoinBase::sellOrder(double amount, double price)
-{}
-
-void CoinBase::cancelOrder(QString orderID)
-{}
