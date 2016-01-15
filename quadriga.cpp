@@ -78,7 +78,12 @@ void Quadriga::buyOrder(double amount, double price)
     QNetworkAccessManager *networkManager = new QNetworkAccessManager();
     QNetworkRequest *request = new QNetworkRequest();
 
-    QByteArray jsonString = "key="+apiKey.toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"&amount="+QString::number(amount).toLatin1()+"&price="+QString::number(price).toLatin1()+"&book=btc_" + currentCurrency.toLower().toLatin1();
+    QByteArray jsonString;
+
+    if (price != 0)
+        jsonString = "key="+apiKey.toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"&amount="+QString::number(amount).toLatin1()+"&price="+QString::number(price).toLatin1()+"&book=btc_" + currentCurrency.toLower().toLatin1();
+    else
+        jsonString = "key="+apiKey.toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"&amount="+QString::number(amount).toLatin1()+"&book=btc_" + currentCurrency.toLower().toLatin1();
 
     // Url de la requete
     request->setUrl(QUrl("https://api.quadrigacx.com/v2/buy"));
@@ -98,7 +103,12 @@ void Quadriga::sellOrder(double amount, double price)
     QNetworkAccessManager *networkManager = new QNetworkAccessManager();
     QNetworkRequest *request = new QNetworkRequest();
 
-    QByteArray jsonString = "key="+apiKey.toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"&amount="+QString::number(amount).toLatin1()+"&price="+QString::number(price).toLatin1()+"&book=btc_" + currentCurrency.toLower().toLatin1();
+    QByteArray jsonString;
+
+    if (price != 0)
+        jsonString = "key="+apiKey.toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"&amount="+QString::number(amount).toLatin1()+"&price="+QString::number(price).toLatin1()+"&book=btc_" + currentCurrency.toLower().toLatin1();
+    else
+        jsonString = "key="+apiKey.toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"&amount="+QString::number(amount).toLatin1()+"&book=btc_" + currentCurrency.toLower().toLatin1();
 
     // Url de la requete
     request->setUrl(QUrl("https://api.quadrigacx.com/v2/sell"));

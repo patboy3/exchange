@@ -64,8 +64,8 @@ void MainWindow::loadSite()
         {
             //solo->rafraichirOrderBook();
             solo->loadBalance();
-            //solo->sellOrder(0.005,800);
-            //solo->buyOrder(0.005,500);
+            //solo->sellOrder(0.005);
+            //solo->buyOrder(0.005,572);
         }
     }
 }
