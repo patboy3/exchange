@@ -71,14 +71,14 @@ void Quadriga::loadBalance()
     networkManager->post(*request, jsonString);
 }
 
-void Quadriga::buyOrder()
+void Quadriga::buyOrder(double amount, double price)
 {
     signature *sign = getSignature();
 
     QNetworkAccessManager *networkManager = new QNetworkAccessManager();
     QNetworkRequest *request = new QNetworkRequest();
 
-    QByteArray jsonString = "key="+apiKey.toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"";
+    QByteArray jsonString = "key="+apiKey.toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"&amount="+QString::number(amount).toLatin1()+"&price="+QString::number(price).toLatin1()+"&book=btc_" + currentCurrency.toLower().toLatin1();
 
     // Url de la requete
     request->setUrl(QUrl("https://api.quadrigacx.com/v2/buy"));
@@ -88,7 +88,7 @@ void Quadriga::buyOrder()
     connect(networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(interpreterLoadBalance(QNetworkReply*)));
 
     // Lance la requete pour obtenir la réponse
-    //networkManager->post(*request, jsonString);
+    networkManager->post(*request, jsonString);
 }
 
 void Quadriga::sellOrder(double amount, double price)
@@ -98,7 +98,7 @@ void Quadriga::sellOrder(double amount, double price)
     QNetworkAccessManager *networkManager = new QNetworkAccessManager();
     QNetworkRequest *request = new QNetworkRequest();
 
-    QByteArray jsonString = "key="+apiKey.toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"&amount="+QString::number(amount).toLatin1()+"&price="+QString::number(price).toLatin1()+"";
+    QByteArray jsonString = "key="+apiKey.toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"&amount="+QString::number(amount).toLatin1()+"&price="+QString::number(price).toLatin1()+"&book=btc_" + currentCurrency.toLower().toLatin1();
 
     // Url de la requete
     request->setUrl(QUrl("https://api.quadrigacx.com/v2/sell"));
