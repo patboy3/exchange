@@ -159,3 +159,9 @@ bool BTCexchange::rafraichirOrderBook()
 
 void BTCexchange::loadBalance()
 {}
+
+void BTCexchange::buyOrder()
+{}
+
+void BTCexchange::sellOrder(double amount, double price)
+{}

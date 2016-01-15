@@ -27,6 +27,8 @@ public:
     explicit BTCexchange(QString currency, QString liveApiKey, QString liveSecretKey);
     bool rafraichirOrderBook();
     virtual void loadBalance();
+    virtual void buyOrder();
+    virtual void sellOrder(double amount, double price);
 
 protected:
     QString orderBookAddr;

@@ -4,16 +4,25 @@
 #include "btcexchange.h"
 
 
+struct signature{
+    qint64 time;
+    QString hmac256;
+};
+
 class Quadriga : public BTCexchange
 {
     Q_OBJECT
 
 public:
+    explicit Quadriga();
     explicit Quadriga(QString currency, QString liveApiKey, QString liveSecretKey, int ident);
     void loadBalance();
+    void buyOrder();
+    void sellOrder(double amount, double price);
     ~Quadriga();
 private:
     int *m_ident;
+    signature *getSignature();
 
 protected:
     void signerHeaders(QNetworkRequest *);
