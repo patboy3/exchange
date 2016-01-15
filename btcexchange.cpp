@@ -168,3 +168,6 @@ void BTCexchange::sellOrder(double amount, double price)
 
 void BTCexchange::cancelOrder(QString orderID)
 {}
+
+void BTCexchange::viewOpenOrder()
+{}

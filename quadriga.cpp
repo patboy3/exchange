@@ -91,6 +91,26 @@ void Quadriga::cancelOrder(QString orderID)
     networkManager->post(*request, jsonString);
 }
 
+void Quadriga::viewOpenOrder()
+{
+    signature *sign = getSignature();
+
+    QNetworkAccessManager *networkManager = new QNetworkAccessManager();
+    QNetworkRequest *request = new QNetworkRequest();
+
+    QByteArray jsonString = "key="+apiKey.toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"&book=btc_" + currentCurrency.toLower().toLatin1();
+
+    // Url de la requete
+    request->setUrl(QUrl("https://api.quadrigacx.com/v2/open_orders"));
+    request->setRawHeader("Content-Type", "application/x-www-form-urlencoded");
+
+    // Connecte le signal Finished du networkManaget au Slot lireJsonFinished
+    connect(networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(interpreterLoadBalance(QNetworkReply*)));
+
+    // Lance la requete pour obtenir la réponse
+    networkManager->post(*request, jsonString);
+}
+
 
 void Quadriga::buyOrder(double amount, double price)
 {

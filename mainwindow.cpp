@@ -62,11 +62,12 @@ void MainWindow::loadSite()
 
         foreach (BTCexchange* solo, m_sites)
         {
+            //solo->viewOpenOrder();
             //solo->rafraichirOrderBook();
             solo->loadBalance();
             //solo->sellOrder(0.005);
             //solo->buyOrder(0.005,572);
-            //solo->cancelOrder("46253z1wphey4nm8pv5elgm6dmek9siezlk2klz93e771ugqpl5b1rhfdwznpi1p");
+            //solo->cancelOrder("i1xgbuxud9qikqod8rbt065gp6i7of07gxnrskm6ucoe3csc3354abkzh276h8dy");
         }
     }
 }
