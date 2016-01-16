@@ -14,6 +14,7 @@ public:
     void sellOrder(double amount, double price);
     void cancelOrder(QString orderID);
     void viewOpenOrder();
+    void lookOrder(QString orderID);
 
 private:
 

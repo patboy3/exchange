@@ -88,3 +88,6 @@ void CoinBase::sellOrder(double amount, double price)
 
 void CoinBase::cancelOrder(QString orderID)
 {}
+
+void CoinBase::lookOrder(QString orderID)
+{}

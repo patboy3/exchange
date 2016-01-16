@@ -21,6 +21,7 @@ public:
     void sellOrder(double amount, double price = 0);
     void cancelOrder(QString orderID);
     void viewOpenOrder();
+    void lookOrder(QString orderID);
     ~Quadriga();
 private:
     int *m_ident;
