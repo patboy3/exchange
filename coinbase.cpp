@@ -68,10 +68,10 @@ void CoinBase::buyOrder(double amount, double price)
 
 void CoinBase::sellOrder(double amount, double price)
 {
-    QByteArray jsonString = "{\"product_id\": \"BTC-CAD\""
+    QByteArray jsonString = "{\"product_id\": \"BTC-"+currentCurrency.toLatin1()+"\""
             ", \"size\": " + QString::number(amount).toLatin1() + ""
             ", \"price\": " + QString::number(price).toLatin1() + ""
-            ",\"side\": \"sell\"}";
+            " ,\"side\": \"sell\"}";
 
 
     QString urlPath = "/orders";
