@@ -9,14 +9,14 @@ CoinBase::CoinBase(QString currency, QString apiKey, QString secretKey, QString 
 }
 
 
-void CoinBase::signerHeaders(QNetworkRequest *requete, QString *timeStamp, QString *method, QString *requestPath){
+void CoinBase::signerHeaders(QNetworkRequest *requete, QString timeStamp, QString method, QString *requestPath){
 
 
-    QByteArray message = (*timeStamp + *method + *requestPath).toLatin1();
+    QByteArray message = (timeStamp +method + *requestPath).toLatin1();
 
     requete->setRawHeader("CB-ACCESS-KEY", apiKey.toLatin1());
     requete->setRawHeader("CB-ACCESS-SIGN", (*hmacSignature(&message,QCryptographicHash::Sha256,true)).toBase64());
-    requete->setRawHeader("CB-ACCESS-TIMESTAMP",  (*timeStamp).toLatin1());
+    requete->setRawHeader("CB-ACCESS-TIMESTAMP",  (timeStamp).toLatin1());
     requete->setRawHeader("CB-ACCESS-PASSPHRASE", m_passphrase.toLatin1());
 
 }
@@ -45,7 +45,7 @@ void CoinBase::loadBalance(){
     QString urlPath = "/accounts";
     QNetworkRequest request(QUrl(m_apiUrl + urlPath));
 
-    signerHeaders(&request, new QString(QString::number(QDateTime::currentMSecsSinceEpoch() / 1000)), new QString("GET"), &urlPath);
+    signerHeaders(&request, QString(QString::number(QDateTime::currentMSecsSinceEpoch() / 1000)), QString("GET"), &urlPath);
 
     QNetworkAccessManager *m_qnam = new QNetworkAccessManager();
     connect(m_qnam, SIGNAL(finished(QNetworkReply*)),

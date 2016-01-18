@@ -19,7 +19,7 @@ public:
 private:
     QByteArray m_secret;
     QString m_passphrase;
-    void signerHeaders(QNetworkRequest* requete, QString *timeStamp, QString *method, QString *requestPath);
+    void signerHeaders(QNetworkRequest* requete, QString timeStamp, QString method, QString *requestPath);
 protected:
 
 
