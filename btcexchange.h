@@ -41,6 +41,7 @@ protected:
     QString apiKey;
     QString secretKey;
     QString currentCurrency;
+    QString m_apiUrl;
 
     double m_minAmountBTC;
     double m_minAmouterFiat;

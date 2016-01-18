@@ -8,6 +8,7 @@ Quadriga::Quadriga() : BTCexchange("", "liveApiKey", "liveSecretKey")
 
 Quadriga::Quadriga(QString currency, QString liveApiKey, QString liveSecretKey, int ident) : BTCexchange(currency, liveApiKey, liveSecretKey)
 {
+    m_apiUrl = "https://api.quadrigacx.com/v2";
     orderBookAddr = "https://api.quadrigacx.com/v2/order_book?book=btc_" + currentCurrency.toLower();
     m_ident = ident;
 }
@@ -52,7 +53,7 @@ void Quadriga::loadBalance()
     QByteArray jsonString = "key="+apiKey.toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"";
 
     // Url de la requete
-    request->setUrl(QUrl("https://api.quadrigacx.com/v2/balance"));
+    request->setUrl(QUrl(m_apiUrl + "/balance"));
     request->setRawHeader("Content-Type", "application/x-www-form-urlencoded");
 
     // Connecte le signal Finished du networkManaget au Slot lireJsonFinished
@@ -78,7 +79,7 @@ void Quadriga::lookOrder(QString orderID)
     QByteArray jsonString = "key="+apiKey.toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"&id="+orderID.toLatin1();
 
     // Url de la requete
-    request->setUrl(QUrl("https://api.quadrigacx.com/v2/lookup_order"));
+    request->setUrl(QUrl(m_apiUrl + "/lookup_order"));
     request->setRawHeader("Content-Type", "application/x-www-form-urlencoded");
 
     // Connecte le signal Finished du networkManaget au Slot lireJsonFinished
@@ -101,7 +102,7 @@ void Quadriga::cancelOrder(QString orderID)
     QByteArray jsonString = "key="+apiKey.toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"&id="+orderID.toLatin1();
 
     // Url de la requete
-    request->setUrl(QUrl("https://api.quadrigacx.com/v2/cancel_order"));
+    request->setUrl(QUrl(m_apiUrl + "/cancel_order"));
     request->setRawHeader("Content-Type", "application/x-www-form-urlencoded");
 
     // Connecte le signal Finished du networkManaget au Slot lireJsonFinished
@@ -124,7 +125,7 @@ void Quadriga::viewOpenOrder()
     QByteArray jsonString = "key="+apiKey.toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"&book=btc_" + currentCurrency.toLower().toLatin1();
 
     // Url de la requete
-    request->setUrl(QUrl("https://api.quadrigacx.com/v2/open_orders"));
+    request->setUrl(QUrl(m_apiUrl + "/open_orders"));
     request->setRawHeader("Content-Type", "application/x-www-form-urlencoded");
 
     // Connecte le signal Finished du networkManaget au Slot lireJsonFinished
@@ -152,7 +153,7 @@ void Quadriga::buyOrder(double amount, double price)
         jsonString = "key="+apiKey.toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"&amount="+QString::number(amount).toLatin1()+"&book=btc_" + currentCurrency.toLower().toLatin1();
 
     // Url de la requete
-    request->setUrl(QUrl("https://api.quadrigacx.com/v2/buy"));
+    request->setUrl(QUrl(m_apiUrl + "/buy"));
     request->setRawHeader("Content-Type", "application/x-www-form-urlencoded");
 
     // Connecte le signal Finished du networkManaget au Slot lireJsonFinished
@@ -180,7 +181,7 @@ void Quadriga::sellOrder(double amount, double price)
         jsonString = "key="+apiKey.toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"&amount="+QString::number(amount).toLatin1()+"&book=btc_" + currentCurrency.toLower().toLatin1();
 
     // Url de la requete
-    request->setUrl(QUrl("https://api.quadrigacx.com/v2/sell"));
+    request->setUrl(QUrl(m_apiUrl + "/sell"));
     request->setRawHeader("Content-Type", "application/x-www-form-urlencoded");
 
     // Connecte le signal Finished du networkManaget au Slot lireJsonFinished

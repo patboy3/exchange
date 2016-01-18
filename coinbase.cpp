@@ -3,7 +3,8 @@
 
 CoinBase::CoinBase(QString currency, QString apiKey, QString secretKey, QString passphrase) : BTCexchange(currency, apiKey, secretKey)
 {
-    orderBookAddr = "https://api.exchange.coinbase.com/products/BTC-" + currentCurrency + "/book?level=2";
+    m_apiUrl = "https://api.exchange.coinbase.com";
+    orderBookAddr = m_apiUrl + "/products/BTC-" + currentCurrency + "/book?level=2";
     m_passphrase = passphrase;
 }
 
@@ -41,12 +42,10 @@ void CoinBase::interpreterLoadBalance(QNetworkReply *reply)
 
 void CoinBase::loadBalance(){
 
-    QNetworkRequest request(QUrl("https://api.exchange.coinbase.com/accounts"));
+    QString urlPath = "/accounts";
+    QNetworkRequest request(QUrl(m_apiUrl + urlPath));
 
-
-    //QByteArray message = (QString::number(timeStamp) + QString::number(*m_ident) + apiKey).toLatin1();
-
-    signerHeaders(&request, new QString(QString::number(QDateTime::currentMSecsSinceEpoch() / 1000)), new QString("GET"), new QString("/accounts"));
+    signerHeaders(&request, new QString(QString::number(QDateTime::currentMSecsSinceEpoch() / 1000)), new QString("GET"), &urlPath);
 
     QNetworkAccessManager *m_qnam = new QNetworkAccessManager();
     connect(m_qnam, SIGNAL(finished(QNetworkReply*)),
