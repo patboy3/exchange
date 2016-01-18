@@ -56,7 +56,7 @@ void MainWindow::loadSite()
         while (query.next()) {
             if (query.value(0).toString() == "quadriga")
             {
-                //m_sites.append(new Quadriga(query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toInt()));
+                m_sites.append(new Quadriga(query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toInt()));
             }
             else if (query.value(0).toString() == "coinbase")
                 m_sites.append(new CoinBase(query.value(1).toString(),query.value(2).toString(),query.value(3).toString(), query.value(5).toString()));

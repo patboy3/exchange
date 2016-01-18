@@ -9,14 +9,14 @@ Quadriga::Quadriga() : BTCexchange("", "liveApiKey", "liveSecretKey")
 Quadriga::Quadriga(QString currency, QString liveApiKey, QString liveSecretKey, int ident) : BTCexchange(currency, liveApiKey, liveSecretKey)
 {
     orderBookAddr = "https://api.quadrigacx.com/v2/order_book?book=btc_" + currentCurrency.toLower();
-    m_ident = new int(ident);
+    m_ident = ident;
 }
 
 void Quadriga::getSignature(signature *sign)
 {
      qint64 timeStamp = QDateTime::currentDateTime().toMSecsSinceEpoch();
 
-     QByteArray message = (QString::number(timeStamp) + QString::number(*m_ident) + apiKey).toLatin1();
+     QByteArray message = (QString::number(timeStamp) + QString::number(m_ident) + apiKey).toLatin1();
 
      sign->time = timeStamp;
      sign->hmac256 = (*hmacSignature(&message, QCryptographicHash::Sha256)).toHex();
@@ -247,5 +247,5 @@ void Quadriga::interpreterOrderBook(QNetworkReply* reply)
 
 Quadriga::~Quadriga()
 {
-    delete m_ident;
+
 }

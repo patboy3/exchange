@@ -25,7 +25,7 @@ public:
     void lookOrder(QString orderID);
     ~Quadriga();
 private:
-    int *m_ident;
+    int m_ident;
     void getSignature(signature *sign);
 
 protected:
