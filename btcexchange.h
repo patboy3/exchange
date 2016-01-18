@@ -8,9 +8,6 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QMessageBox>
-#include <openssl/hmac.h>
-#include <openssl/sha.h>
-#include <openssl/x509.h>
 #include <iostream>
 #include <QMessageAuthenticationCode>
 
@@ -44,14 +41,7 @@ protected:
     QString apiKey;
     QString secretKey;
     QString currentCurrency;
-    void hmac_sha256(
-        const char *text,      /* pointer to data stream        */
-        int                 text_len,   /* length of data stream         */
-        const char *key,       /* pointer to authentication key */
-        int                 key_len,    /* length of authentication key  */
-        void                *digest);
-    QString base64_encode(unsigned char const* bytes_to_encode, unsigned int in_len);
-    QString hex_encode(unsigned char const* bytes_to_encode, unsigned int in_len);
+
     double m_minAmountBTC;
     double m_minAmouterFiat;
     double m_feeTaker;
