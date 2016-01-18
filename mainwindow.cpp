@@ -56,7 +56,7 @@ void MainWindow::loadSite()
         while (query.next()) {
             if (query.value(0).toString() == "quadriga")
             {
-                m_sites.append(new Quadriga(query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toInt()));
+                //m_sites.append(new Quadriga(query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toInt()));
             }
             else if (query.value(0).toString() == "coinbase")
                 m_sites.append(new CoinBase(query.value(1).toString(),query.value(2).toString(),query.value(3).toString(), query.value(5).toString()));
@@ -69,7 +69,7 @@ void MainWindow::loadSite()
                 //solo->viewOpenOrder();
                 //solo->rafraichirOrderBook();
                 solo->loadBalance();
-                //solo->sellOrder(0.005);
+                //solo->sellOrder(0.01, 800);
                 //solo->buyOrder(0.005,572);
                 //solo->cancelOrder("i1xgbuxud9qikqod8rbt065gp6i7of07gxnrskm6ucoe3csc3354abkzh276h8dy");
                 //solo->lookOrder("vsvzw7e67s3kio5izcffecg3em3x1gax86x5dcck4f5n4a54nlj1xz5bm89oojlx");

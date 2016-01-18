@@ -9,10 +9,12 @@ CoinBase::CoinBase(QString currency, QString apiKey, QString secretKey, QString 
 }
 
 
-void CoinBase::signerHeaders(QNetworkRequest *requete, QString timeStamp, QString method, QString *requestPath){
+void CoinBase::signerHeaders(QNetworkRequest *requete, QString timeStamp, QString method, QString *requestPath, QByteArray *parameters){
 
 
-    QByteArray message = (timeStamp +method + *requestPath).toLatin1();
+    QByteArray message = (timeStamp + method + *requestPath + QString(*parameters)).toLatin1();
+
+    requete->setRawHeader("content-type", "application/json");
 
     requete->setRawHeader("CB-ACCESS-KEY", apiKey.toLatin1());
     requete->setRawHeader("CB-ACCESS-SIGN", (*hmacSignature(&message,QCryptographicHash::Sha256,true)).toBase64());
@@ -45,7 +47,9 @@ void CoinBase::loadBalance(){
     QString urlPath = "/accounts";
     QNetworkRequest request(QUrl(m_apiUrl + urlPath));
 
-    signerHeaders(&request, QString(QString::number(QDateTime::currentMSecsSinceEpoch() / 1000)), QString("GET"), &urlPath);
+    QByteArray jsonString = "";
+
+    signerHeaders(&request, QString(QString::number(QDateTime::currentMSecsSinceEpoch() / 1000)), QString("GET"), &urlPath, &jsonString);
 
     QNetworkAccessManager *m_qnam = new QNetworkAccessManager();
     connect(m_qnam, SIGNAL(finished(QNetworkReply*)),
@@ -54,6 +58,41 @@ void CoinBase::loadBalance(){
     m_qnam->get(request);
 
 }
+
+void CoinBase::viewOpenOrder()
+{}
+
+
+void CoinBase::buyOrder(double amount, double price)
+{}
+
+void CoinBase::sellOrder(double amount, double price)
+{
+    QByteArray jsonString = "{\"product_id\": \"BTC-CAD\""
+            ", \"size\": " + QString::number(amount).toLatin1() + ""
+            ", \"price\": " + QString::number(price).toLatin1() + ""
+            ",\"side\": \"sell\"}";
+
+
+    QString urlPath = "/orders";
+    QNetworkRequest request(QUrl(m_apiUrl + urlPath));
+
+    signerHeaders(&request, QString(QString::number(QDateTime::currentMSecsSinceEpoch() / 1000)), QString("POST"), &urlPath, &jsonString);
+
+    QNetworkAccessManager *m_qnam = new QNetworkAccessManager();
+    connect(m_qnam, SIGNAL(finished(QNetworkReply*)),
+                     this, SLOT(interpreterLoadBalance(QNetworkReply*)));
+
+    m_qnam->post(request, jsonString);
+
+}
+
+void CoinBase::cancelOrder(QString orderID)
+{}
+
+void CoinBase::lookOrder(QString orderID)
+{}
+
 
 
 void CoinBase::interpreterOrderBook(QNetworkReply* reply)
@@ -79,19 +118,3 @@ void CoinBase::interpreterOrderBook(QNetworkReply* reply)
     qDebug() << jsonObject["date"].toString();
 
 }
-
-void CoinBase::viewOpenOrder()
-{}
-
-
-void CoinBase::buyOrder(double amount, double price)
-{}
-
-void CoinBase::sellOrder(double amount, double price)
-{}
-
-void CoinBase::cancelOrder(QString orderID)
-{}
-
-void CoinBase::lookOrder(QString orderID)
-{}

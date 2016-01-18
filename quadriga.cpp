@@ -9,7 +9,7 @@ Quadriga::Quadriga() : BTCexchange("", "liveApiKey", "liveSecretKey")
 Quadriga::Quadriga(QString currency, QString liveApiKey, QString liveSecretKey, int ident) : BTCexchange(currency, liveApiKey, liveSecretKey)
 {
     m_apiUrl = "https://api.quadrigacx.com/v2";
-    orderBookAddr = "https://api.quadrigacx.com/v2/order_book?book=btc_" + currentCurrency.toLower();
+    orderBookAddr = m_apiUrl + "/order_book?book=btc_" + currentCurrency.toLower();
     m_ident = ident;
 }
 
