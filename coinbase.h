@@ -8,7 +8,7 @@ class CoinBase : public BTCexchange
     Q_OBJECT
 
 public:
-    explicit CoinBase(QString currency, QString apiKey, QString secretKey);
+    explicit CoinBase(QString currency, QString apiKey, QString secretKey, QString passphrase);
     void loadBalance();
     void buyOrder(double amount, double price);
     void sellOrder(double amount, double price);
@@ -17,9 +17,11 @@ public:
     void lookOrder(QString orderID);
 
 private:
-
+    QByteArray m_secret;
+    QString m_passphrase;
+    void signerHeaders(QNetworkRequest* requete, QString *timeStamp, QString *method, QString *requestPath);
 protected:
-    void signerHeaders(QNetworkRequest*);
+
 
 
 public slots:

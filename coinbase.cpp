@@ -1,18 +1,22 @@
 #include "coinbase.h"
 
 
-CoinBase::CoinBase(QString currency, QString apiKey, QString secretKey) : BTCexchange(currency, apiKey, secretKey)
+CoinBase::CoinBase(QString currency, QString apiKey, QString secretKey, QString passphrase) : BTCexchange(currency, apiKey, secretKey)
 {
     orderBookAddr = "https://api.exchange.coinbase.com/products/BTC-" + currentCurrency + "/book?level=2";
+    m_passphrase = passphrase;
 }
 
 
-void CoinBase::signerHeaders(QNetworkRequest *requete){
+void CoinBase::signerHeaders(QNetworkRequest *requete, QString *timeStamp, QString *method, QString *requestPath){
+
+
+    QByteArray message = (*timeStamp + *method + *requestPath).toLatin1();
 
     requete->setRawHeader("CB-ACCESS-KEY", apiKey.toLatin1());
-    requete->setRawHeader("CB-ACCESS-SIGN", "My app name v0.1");
-    requete->setRawHeader("CB-ACCESS-TIMESTAMP",  QString::number(QDateTime::currentMSecsSinceEpoch() / 1000).toLatin1());
-    requete->setRawHeader("CB-ACCESS-PASSPHRASE", secretKey.toLatin1());
+    requete->setRawHeader("CB-ACCESS-SIGN", (*hmacSignature(&message,QCryptographicHash::Sha256,true)).toBase64());
+    requete->setRawHeader("CB-ACCESS-TIMESTAMP",  (*timeStamp).toLatin1());
+    requete->setRawHeader("CB-ACCESS-PASSPHRASE", m_passphrase.toLatin1());
 
 }
 
@@ -20,7 +24,6 @@ void CoinBase::signerHeaders(QNetworkRequest *requete){
 void CoinBase::interpreterLoadBalance(QNetworkReply *reply)
 {
     QString reponse = reply->readAll();
-    qDebug("ICI");
 
     if(reply->error())
     {
@@ -38,10 +41,12 @@ void CoinBase::interpreterLoadBalance(QNetworkReply *reply)
 
 void CoinBase::loadBalance(){
 
-    qDebug("ICI");
     QNetworkRequest request(QUrl("https://api.exchange.coinbase.com/accounts"));
 
-    signerHeaders(&request);
+
+    //QByteArray message = (QString::number(timeStamp) + QString::number(*m_ident) + apiKey).toLatin1();
+
+    signerHeaders(&request, new QString(QString::number(QDateTime::currentMSecsSinceEpoch() / 1000)), new QString("GET"), new QString("/accounts"));
 
     QNetworkAccessManager *m_qnam = new QNetworkAccessManager();
     connect(m_qnam, SIGNAL(finished(QNetworkReply*)),

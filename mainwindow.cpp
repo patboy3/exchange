@@ -24,7 +24,7 @@ void MainWindow::loadSite()
         //si connect pas... add les site poru faire seulement un test direct
 
         qDebug() << "erreur de connexion :" << db.lastError();
-        BTCexchange *test = new CoinBase("CAD", "SBH5GeIntChyxpax","G1WGo4vRMRleNVEkssfuhs8fDpT3UQ8T");
+        BTCexchange *test = new CoinBase("CAD", "SBH5GeIntChyxpax","G1WGo4vRMRleNVEkssfuhs8fDpT3UQ8T","tt");
         //test->rafraichirOrderBook();
 
         BTCexchange *test2 = new Quadriga("CAD","","",1);
@@ -51,13 +51,15 @@ void MainWindow::loadSite()
         if (!tabledetection) //si db neuve.. créé les tables !
             generateDB(&query);
 
-        query.exec("SELECT sites.sitename, currency.currency, apiKey, secretKey, sites.ident FROM exchange left join currency on currency.ID = exchange.ID_Currency left outer join sites on sites.ID = exchange.ID_Sitename;");
+        query.exec("SELECT sites.sitename, currency.currency, apiKey, secretKey, sites.ident, sites.passphrase FROM exchange left join currency on currency.ID = exchange.ID_Currency left outer join sites on sites.ID = exchange.ID_Sitename;");
 
         while (query.next()) {
             if (query.value(0).toString() == "quadriga")
-                m_sites.append(new Quadriga(query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toInt()));
+            {
+                //m_sites.append(new Quadriga(query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toInt()));
+            }
             else if (query.value(0).toString() == "coinbase")
-                m_sites.append(new CoinBase(query.value(1).toString(),query.value(2).toString(),query.value(3).toString()));
+                m_sites.append(new CoinBase(query.value(1).toString(),query.value(2).toString(),query.value(3).toString(), query.value(5).toString()));
         }
 
         foreach (BTCexchange* solo, m_sites)
@@ -81,7 +83,7 @@ void MainWindow::generateDB(QSqlQuery *query)
     //créé les tables
     query->exec("CREATE TABLE `currency` ( `ID`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,`currency`	CHAR(50) NOT NULL);");
     query->exec("CREATE TABLE exchange (ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, ID_Currency INT(11) NOT NULL, ID_Sitename INT(11) NOT NULL, apiKey VARCHAR(255) DEFAULT NULL, secretKey VARCHAR(255) DEFAULT NULL, CONSTRAINT FK_exchange_currency_ID FOREIGN KEY (ID_Currency) REFERENCES currency(ID) ON DELETE RESTRICT ON UPDATE RESTRICT, CONSTRAINT FK_exchange_sites_ID FOREIGN KEY (ID_Sitename) REFERENCES sites(ID) ON DELETE RESTRICT ON UPDATE RESTRICT);");
-    query->exec("CREATE TABLE `sites` ( `ID`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, `sitename`	TEXT NOT NULL, `ident`	INTEGER);");
+    query->exec("CREATE TABLE `sites` ( `ID`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, `sitename`	TEXT NOT NULL, `ident`	INTEGER, `passphrase`	TEXT);");
 
     //add 3 currency de bases
     query->exec("INSERT INTO sites (sitename) VALUES ('quadriga'), ('coinbase');");

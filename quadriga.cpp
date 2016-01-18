@@ -12,11 +12,6 @@ Quadriga::Quadriga(QString currency, QString liveApiKey, QString liveSecretKey, 
     m_ident = new int(ident);
 }
 
-void Quadriga::signerHeaders(QNetworkRequest *requete)
-{
-
-}
-
 void Quadriga::getSignature(signature *sign)
 {
      qint64 timeStamp = QDateTime::currentDateTime().toMSecsSinceEpoch();

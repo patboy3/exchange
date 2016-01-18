@@ -44,7 +44,6 @@ protected:
     QString apiKey;
     QString secretKey;
     QString currentCurrency;
-    virtual void signerHeaders(QNetworkRequest*) = 0;
     void hmac_sha256(
         const char *text,      /* pointer to data stream        */
         int                 text_len,   /* length of data stream         */
@@ -57,7 +56,7 @@ protected:
     double m_minAmouterFiat;
     double m_feeTaker;
     double m_feeMaker;
-    QByteArray *hmacSignature(QByteArray *message, QCryptographicHash::Algorithm method);
+    QByteArray *hmacSignature(QByteArray *message, QCryptographicHash::Algorithm method, bool secretKeyIsBase64 = false);
 
 
 private :

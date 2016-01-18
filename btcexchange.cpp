@@ -9,9 +9,19 @@ BTCexchange::BTCexchange(QString currency, QString liveApiKey, QString liveSecre
     currentCurrency = currency;
 }
 
-QByteArray* BTCexchange::hmacSignature(QByteArray *message, QCryptographicHash::Algorithm method)
+QByteArray* BTCexchange::hmacSignature(QByteArray *message, QCryptographicHash::Algorithm method, bool secretKeyIsBase64)
 {
-    QByteArray key = secretKey.toLatin1();
+    QByteArray key;
+
+    if (!secretKeyIsBase64)
+        key = secretKey.toLatin1();
+    else
+    {
+        QByteArray ba;
+        ba.append(secretKey);
+
+        key = QByteArray::fromBase64(ba);
+    }
 
     QMessageAuthenticationCode code(method);
     code.setKey(key);

@@ -29,8 +29,6 @@ private:
     void getSignature(signature *sign);
 
 protected:
-    void signerHeaders(QNetworkRequest *);
-
 
 public slots:
 
