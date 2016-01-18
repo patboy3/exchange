@@ -12,6 +12,7 @@
 #include <openssl/sha.h>
 #include <openssl/x509.h>
 #include <iostream>
+#include <QMessageAuthenticationCode>
 
 struct OrderBookElement{
     double nbBtc;
@@ -56,6 +57,7 @@ protected:
     double m_minAmouterFiat;
     double m_feeTaker;
     double m_feeMaker;
+    QString *hmacSignature(QByteArray *message, QCryptographicHash::Algorithm method);
 
 
 private :

@@ -9,7 +9,16 @@ BTCexchange::BTCexchange(QString currency, QString liveApiKey, QString liveSecre
     currentCurrency = new QString(currency);
 }
 
+QString* BTCexchange::hmacSignature(QByteArray *message, QCryptographicHash::Algorithm method)
+{
+    QByteArray key = (*secretKey).toLatin1();
 
+    QMessageAuthenticationCode code(method);
+    code.setKey(key);
+    code.addData(*message);
+
+    return new QString(code.result().toHex());
+}
 
 void BTCexchange::hmac_sha256(
     const char *text,      /* pointer to data stream        */

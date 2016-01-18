@@ -21,16 +21,10 @@ void Quadriga::getSignature(signature *sign)
 {
      qint64 timeStamp = QDateTime::currentDateTime().toMSecsSinceEpoch();
 
-     const char *key= (*secretKey).toLatin1();
-     const char *message= (QString::number(timeStamp) + QString::number(*m_ident) + *apiKey).toLatin1();
-
-     char digest[BUFSIZ];
-
-     memset( digest, 0x00, BUFSIZ );
-     hmac_sha256( message, strlen(message), key, strlen(key), digest );
+     QByteArray message = (QString::number(timeStamp) + QString::number(*m_ident) + *apiKey).toLatin1();
 
      sign->time = timeStamp;
-     sign->hmac256 = hex_encode((unsigned char*)digest, strlen(digest));
+     sign->hmac256 = *hmacSignature(&message, QCryptographicHash::Sha256);
 
 
      /*
@@ -45,8 +39,8 @@ void Quadriga::getSignature(signature *sign)
      qDebug() << "hex" << hex_encode((unsigned char*)digest, strlen(digest));
      */
 
-     delete message;
-     delete key;
+     //delete message;
+     //delete key;
 
      //return sign;
 }

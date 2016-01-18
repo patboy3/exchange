@@ -67,8 +67,6 @@ void MainWindow::loadSite()
                 //solo->viewOpenOrder();
                 //solo->rafraichirOrderBook();
                 solo->loadBalance();
-                QThread::sleep(5);
-                solo->loadBalance();
                 //solo->sellOrder(0.005);
                 //solo->buyOrder(0.005,572);
                 //solo->cancelOrder("i1xgbuxud9qikqod8rbt065gp6i7of07gxnrskm6ucoe3csc3354abkzh276h8dy");
