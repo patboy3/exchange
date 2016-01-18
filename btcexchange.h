@@ -26,15 +26,16 @@ class BTCexchange : public QObject
 public:
     explicit BTCexchange(QString currency, QString liveApiKey, QString liveSecretKey);
     bool rafraichirOrderBook();
+    QString* get_apiKey();
 
     virtual void viewOpenOrder() = 0;
     virtual void loadBalance() = 0;
     virtual void buyOrder(double amount, double price = 0) = 0; //pour acheter des btc amount en btc... si price = 0... argent en fiat !
     virtual void sellOrder(double amount, double price = 0) = 0; //Pour vendre des btc amount en btc
     virtual void cancelOrder(QString orderID) = 0;
-    virtual void lookOrder(QString orderID) = 0;
+    virtual void lookOrder(QString orderID) = 0;    
 
-protected:
+protected:    
     QString orderBookAddr;
     struct OrderBookElement *asks[5];
     struct OrderBookElement *bids[5];
@@ -50,6 +51,10 @@ protected:
         void                *digest);
     QString base64_encode(unsigned char const* bytes_to_encode, unsigned int in_len);
     QString hex_encode(unsigned char const* bytes_to_encode, unsigned int in_len);
+    double m_minAmountBTC;
+    double m_minAmouterFiat;
+    double m_feeTaker;
+    double m_feeMaker;
 
 
 private :

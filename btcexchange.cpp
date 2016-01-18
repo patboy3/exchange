@@ -129,6 +129,12 @@ QString BTCexchange::base64_encode(unsigned char const* bytes_to_encode, unsigne
 
 }
 
+QString* BTCexchange::get_apiKey()
+{
+    return &apiKey;
+}
+
+
 QString BTCexchange::hex_encode(unsigned char const* bytes_to_encode, unsigned int in_len) {
 
     QString b64(base64_encode(bytes_to_encode, in_len));

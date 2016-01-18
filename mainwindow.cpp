@@ -62,13 +62,16 @@ void MainWindow::loadSite()
 
         foreach (BTCexchange* solo, m_sites)
         {
-            //solo->viewOpenOrder();
-            //solo->rafraichirOrderBook();
-            solo->loadBalance();
-            //solo->sellOrder(0.005);
-            //solo->buyOrder(0.005,572);
-            //solo->cancelOrder("i1xgbuxud9qikqod8rbt065gp6i7of07gxnrskm6ucoe3csc3354abkzh276h8dy");
-            //solo->lookOrder("vsvzw7e67s3kio5izcffecg3em3x1gax86x5dcck4f5n4a54nlj1xz5bm89oojlx");
+            if (*solo->get_apiKey() != "")
+            {
+                //solo->viewOpenOrder();
+                //solo->rafraichirOrderBook();
+                solo->loadBalance();
+                //solo->sellOrder(0.005);
+                //solo->buyOrder(0.005,572);
+                //solo->cancelOrder("i1xgbuxud9qikqod8rbt065gp6i7of07gxnrskm6ucoe3csc3354abkzh276h8dy");
+                //solo->lookOrder("vsvzw7e67s3kio5izcffecg3em3x1gax86x5dcck4f5n4a54nlj1xz5bm89oojlx");
+            }
         }
     }
 }
