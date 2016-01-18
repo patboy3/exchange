@@ -47,6 +47,9 @@ signature* Quadriga::getSignature()
      qDebug() << "hex" << hex_encode((unsigned char*)digest, strlen(digest));
      */
 
+     delete message;
+     delete key;
+
      return sign;
 }
 
@@ -69,6 +72,8 @@ void Quadriga::loadBalance()
 
     // Lance la requete pour obtenir la réponse
     networkManager->post(*request, jsonString);
+
+    delete sign;
 }
 
 void Quadriga::lookOrder(QString orderID)
@@ -89,6 +94,8 @@ void Quadriga::lookOrder(QString orderID)
 
     // Lance la requete pour obtenir la réponse
     networkManager->post(*request, jsonString);
+
+    delete sign;
 }
 
 void Quadriga::cancelOrder(QString orderID)
@@ -109,6 +116,8 @@ void Quadriga::cancelOrder(QString orderID)
 
     // Lance la requete pour obtenir la réponse
     networkManager->post(*request, jsonString);
+
+    delete sign;
 }
 
 void Quadriga::viewOpenOrder()
@@ -129,6 +138,8 @@ void Quadriga::viewOpenOrder()
 
     // Lance la requete pour obtenir la réponse
     networkManager->post(*request, jsonString);
+
+    delete sign;
 }
 
 
@@ -155,6 +166,8 @@ void Quadriga::buyOrder(double amount, double price)
 
     // Lance la requete pour obtenir la réponse
     networkManager->post(*request, jsonString);
+
+    delete sign;
 }
 
 void Quadriga::sellOrder(double amount, double price)
@@ -180,6 +193,8 @@ void Quadriga::sellOrder(double amount, double price)
 
     // Lance la requete pour obtenir la réponse
     networkManager->post(*request, jsonString);
+
+    delete sign;
 }
 
 void Quadriga::interpreterLoadBalance(QNetworkReply* reply)
