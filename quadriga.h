@@ -25,7 +25,7 @@ public:
     ~Quadriga();
 private:
     int *m_ident;
-    signature *getSignature();
+    void getSignature(signature *sign);
 
 protected:
     void signerHeaders(QNetworkRequest *);

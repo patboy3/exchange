@@ -17,10 +17,8 @@ void Quadriga::signerHeaders(QNetworkRequest *requete)
 
 }
 
-signature* Quadriga::getSignature()
+void Quadriga::getSignature(signature *sign)
 {
-     signature *sign = new signature;
-
      qint64 timeStamp = QDateTime::currentDateTime().toMSecsSinceEpoch();
 
      const char *key= secretKey.toLatin1();
@@ -50,13 +48,14 @@ signature* Quadriga::getSignature()
      delete message;
      delete key;
 
-     return sign;
+     //return sign;
 }
 
 
 void Quadriga::loadBalance()
 {
-    signature *sign = getSignature();
+    signature *sign = new signature;
+    getSignature(sign);
 
     QNetworkAccessManager *networkManager = new QNetworkAccessManager();
     QNetworkRequest *request = new QNetworkRequest();
@@ -78,7 +77,11 @@ void Quadriga::loadBalance()
 
 void Quadriga::lookOrder(QString orderID)
 {
-    signature *sign = getSignature();
+    signature *sign = new signature;
+    getSignature(sign);
+
+    getSignature(sign);
+
 
     QNetworkAccessManager *networkManager = new QNetworkAccessManager();
     QNetworkRequest *request = new QNetworkRequest();
@@ -100,7 +103,8 @@ void Quadriga::lookOrder(QString orderID)
 
 void Quadriga::cancelOrder(QString orderID)
 {
-    signature *sign = getSignature();
+    signature *sign = new signature;
+    getSignature(sign);
 
     QNetworkAccessManager *networkManager = new QNetworkAccessManager();
     QNetworkRequest *request = new QNetworkRequest();
@@ -122,7 +126,8 @@ void Quadriga::cancelOrder(QString orderID)
 
 void Quadriga::viewOpenOrder()
 {
-    signature *sign = getSignature();
+    signature *sign = new signature;
+    getSignature(sign);
 
     QNetworkAccessManager *networkManager = new QNetworkAccessManager();
     QNetworkRequest *request = new QNetworkRequest();
@@ -142,10 +147,10 @@ void Quadriga::viewOpenOrder()
     delete sign;
 }
 
-
 void Quadriga::buyOrder(double amount, double price)
 {
-    signature *sign = getSignature();
+    signature *sign = new signature;
+    getSignature(sign);
 
     QNetworkAccessManager *networkManager = new QNetworkAccessManager();
     QNetworkRequest *request = new QNetworkRequest();
@@ -172,7 +177,8 @@ void Quadriga::buyOrder(double amount, double price)
 
 void Quadriga::sellOrder(double amount, double price)
 {
-    signature *sign = getSignature();
+    signature *sign = new signature;
+    getSignature(sign);
 
     QNetworkAccessManager *networkManager = new QNetworkAccessManager();
     QNetworkRequest *request = new QNetworkRequest();
