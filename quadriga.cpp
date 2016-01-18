@@ -24,7 +24,7 @@ void Quadriga::getSignature(signature *sign)
      QByteArray message = (QString::number(timeStamp) + QString::number(*m_ident) + *apiKey).toLatin1();
 
      sign->time = timeStamp;
-     sign->hmac256 = *hmacSignature(&message, QCryptographicHash::Sha256);
+     sign->hmac256 = (*hmacSignature(&message, QCryptographicHash::Sha256)).toHex();
 
 
      /*

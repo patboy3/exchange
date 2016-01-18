@@ -57,7 +57,7 @@ protected:
     double m_minAmouterFiat;
     double m_feeTaker;
     double m_feeMaker;
-    QString *hmacSignature(QByteArray *message, QCryptographicHash::Algorithm method);
+    QByteArray *hmacSignature(QByteArray *message, QCryptographicHash::Algorithm method);
 
 
 private :
