@@ -3,16 +3,16 @@
 
 CoinBase::CoinBase(QString currency, QString apiKey, QString secretKey) : BTCexchange(currency, apiKey, secretKey)
 {
-    orderBookAddr = "https://api.exchange.coinbase.com/products/BTC-" + currentCurrency + "/book?level=2";
+    orderBookAddr = "https://api.exchange.coinbase.com/products/BTC-" + *currentCurrency + "/book?level=2";
 }
 
 
 void CoinBase::signerHeaders(QNetworkRequest *requete){
 
-    requete->setRawHeader("CB-ACCESS-KEY", apiKey.toLatin1());
+    requete->setRawHeader("CB-ACCESS-KEY", (*apiKey).toLatin1());
     requete->setRawHeader("CB-ACCESS-SIGN", "My app name v0.1");
     requete->setRawHeader("CB-ACCESS-TIMESTAMP",  QString::number(QDateTime::currentMSecsSinceEpoch() / 1000).toLatin1());
-    requete->setRawHeader("CB-ACCESS-PASSPHRASE", secretKey.toLatin1());
+    requete->setRawHeader("CB-ACCESS-PASSPHRASE", (*secretKey).toLatin1());
 
 }
 

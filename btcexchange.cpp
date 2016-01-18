@@ -4,9 +4,9 @@
 
 BTCexchange::BTCexchange(QString currency, QString liveApiKey, QString liveSecretKey)
 {
-    apiKey = liveApiKey;
-    secretKey = liveSecretKey;
-    currentCurrency = currency;
+    apiKey = new QString(liveApiKey);
+    secretKey = new QString(liveSecretKey);
+    currentCurrency = new QString(currency);
 }
 
 
@@ -131,7 +131,7 @@ QString BTCexchange::base64_encode(unsigned char const* bytes_to_encode, unsigne
 
 QString* BTCexchange::get_apiKey()
 {
-    return &apiKey;
+    return apiKey;
 }
 
 
@@ -161,4 +161,11 @@ bool BTCexchange::rafraichirOrderBook()
     networkManager->get(*request);
 
     return false;
+}
+
+BTCexchange::~BTCexchange()
+{
+    delete apiKey;
+    delete secretKey;
+    delete currentCurrency;
 }

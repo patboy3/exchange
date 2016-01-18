@@ -8,7 +8,7 @@ Quadriga::Quadriga() : BTCexchange("", "liveApiKey", "liveSecretKey")
 
 Quadriga::Quadriga(QString currency, QString liveApiKey, QString liveSecretKey, int ident) : BTCexchange(currency, liveApiKey, liveSecretKey)
 {
-    orderBookAddr = "https://api.quadrigacx.com/v2/order_book?book=btc_" + currentCurrency.toLower();
+    orderBookAddr = "https://api.quadrigacx.com/v2/order_book?book=btc_" + (*currentCurrency).toLower();
     m_ident = new int(ident);
 }
 
@@ -21,8 +21,8 @@ void Quadriga::getSignature(signature *sign)
 {
      qint64 timeStamp = QDateTime::currentDateTime().toMSecsSinceEpoch();
 
-     const char *key= secretKey.toLatin1();
-     const char *message= (QString::number(timeStamp) + QString::number(*m_ident) + apiKey).toLatin1();
+     const char *key= (*secretKey).toLatin1();
+     const char *message= (QString::number(timeStamp) + QString::number(*m_ident) + *apiKey).toLatin1();
 
      char digest[BUFSIZ];
 
@@ -60,7 +60,7 @@ void Quadriga::loadBalance()
     QNetworkAccessManager *networkManager = new QNetworkAccessManager();
     QNetworkRequest *request = new QNetworkRequest();
 
-    QByteArray jsonString = "key="+apiKey.toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"";
+    QByteArray jsonString = "key="+(*apiKey).toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"";
 
     // Url de la requete
     request->setUrl(QUrl("https://api.quadrigacx.com/v2/balance"));
@@ -86,7 +86,7 @@ void Quadriga::lookOrder(QString orderID)
     QNetworkAccessManager *networkManager = new QNetworkAccessManager();
     QNetworkRequest *request = new QNetworkRequest();
 
-    QByteArray jsonString = "key="+apiKey.toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"&id="+orderID.toLatin1();
+    QByteArray jsonString = "key="+(*apiKey).toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"&id="+orderID.toLatin1();
 
     // Url de la requete
     request->setUrl(QUrl("https://api.quadrigacx.com/v2/lookup_order"));
@@ -109,7 +109,7 @@ void Quadriga::cancelOrder(QString orderID)
     QNetworkAccessManager *networkManager = new QNetworkAccessManager();
     QNetworkRequest *request = new QNetworkRequest();
 
-    QByteArray jsonString = "key="+apiKey.toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"&id="+orderID.toLatin1();
+    QByteArray jsonString = "key="+(*apiKey).toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"&id="+orderID.toLatin1();
 
     // Url de la requete
     request->setUrl(QUrl("https://api.quadrigacx.com/v2/cancel_order"));
@@ -132,7 +132,7 @@ void Quadriga::viewOpenOrder()
     QNetworkAccessManager *networkManager = new QNetworkAccessManager();
     QNetworkRequest *request = new QNetworkRequest();
 
-    QByteArray jsonString = "key="+apiKey.toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"&book=btc_" + currentCurrency.toLower().toLatin1();
+    QByteArray jsonString = "key="+(*apiKey).toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"&book=btc_" + (*currentCurrency).toLower().toLatin1();
 
     // Url de la requete
     request->setUrl(QUrl("https://api.quadrigacx.com/v2/open_orders"));
@@ -158,9 +158,9 @@ void Quadriga::buyOrder(double amount, double price)
     QByteArray jsonString;
 
     if (price != 0)
-        jsonString = "key="+apiKey.toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"&amount="+QString::number(amount).toLatin1()+"&price="+QString::number(price).toLatin1()+"&book=btc_" + currentCurrency.toLower().toLatin1();
+        jsonString = "key="+(*apiKey).toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"&amount="+QString::number(amount).toLatin1()+"&price="+QString::number(price).toLatin1()+"&book=btc_" + (*currentCurrency).toLower().toLatin1();
     else
-        jsonString = "key="+apiKey.toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"&amount="+QString::number(amount).toLatin1()+"&book=btc_" + currentCurrency.toLower().toLatin1();
+        jsonString = "key="+(*apiKey).toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"&amount="+QString::number(amount).toLatin1()+"&book=btc_" + (*currentCurrency).toLower().toLatin1();
 
     // Url de la requete
     request->setUrl(QUrl("https://api.quadrigacx.com/v2/buy"));
@@ -186,9 +186,9 @@ void Quadriga::sellOrder(double amount, double price)
     QByteArray jsonString;
 
     if (price != 0)
-        jsonString = "key="+apiKey.toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"&amount="+QString::number(amount).toLatin1()+"&price="+QString::number(price).toLatin1()+"&book=btc_" + currentCurrency.toLower().toLatin1();
+        jsonString = "key="+(*apiKey).toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"&amount="+QString::number(amount).toLatin1()+"&price="+QString::number(price).toLatin1()+"&book=btc_" + (*currentCurrency).toLower().toLatin1();
     else
-        jsonString = "key="+apiKey.toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"&amount="+QString::number(amount).toLatin1()+"&book=btc_" + currentCurrency.toLower().toLatin1();
+        jsonString = "key="+(*apiKey).toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"&amount="+QString::number(amount).toLatin1()+"&book=btc_" + (*currentCurrency).toLower().toLatin1();
 
     // Url de la requete
     request->setUrl(QUrl("https://api.quadrigacx.com/v2/sell"));
@@ -225,6 +225,9 @@ void Quadriga::interpreterLoadBalance(QNetworkReply* reply)
 
     qDebug() << jsonObject["date"].toString();
 
+    delete reply;
+
+
 }
 
 void Quadriga::interpreterOrderBook(QNetworkReply* reply)
@@ -248,6 +251,8 @@ void Quadriga::interpreterOrderBook(QNetworkReply* reply)
     QJsonObject jsonObject = jsonDocument.object();
 
     qDebug() << jsonObject["date"].toString();
+
+    delete reply;
 
 }
 

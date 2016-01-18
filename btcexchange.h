@@ -35,13 +35,14 @@ public:
     virtual void cancelOrder(QString orderID) = 0;
     virtual void lookOrder(QString orderID) = 0;    
 
+    ~BTCexchange();
 protected:    
     QString orderBookAddr;
     struct OrderBookElement *asks[5];
     struct OrderBookElement *bids[5];
-    QString apiKey;
-    QString secretKey;
-    QString currentCurrency;
+    QString *apiKey;
+    QString *secretKey;
+    QString *currentCurrency;
     virtual void signerHeaders(QNetworkRequest*) = 0;
     void hmac_sha256(
         const char *text,      /* pointer to data stream        */
