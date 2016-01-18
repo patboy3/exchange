@@ -4,14 +4,14 @@
 
 BTCexchange::BTCexchange(QString currency, QString liveApiKey, QString liveSecretKey)
 {
-    apiKey = new QString(liveApiKey);
-    secretKey = new QString(liveSecretKey);
-    currentCurrency = new QString(currency);
+    apiKey = liveApiKey;
+    secretKey = liveSecretKey;
+    currentCurrency = currency;
 }
 
 QByteArray* BTCexchange::hmacSignature(QByteArray *message, QCryptographicHash::Algorithm method)
 {
-    QByteArray key = (*secretKey).toLatin1();
+    QByteArray key = secretKey.toLatin1();
 
     QMessageAuthenticationCode code(method);
     code.setKey(key);
@@ -140,7 +140,7 @@ QString BTCexchange::base64_encode(unsigned char const* bytes_to_encode, unsigne
 
 QString* BTCexchange::get_apiKey()
 {
-    return apiKey;
+    return &apiKey;
 }
 
 
@@ -174,7 +174,5 @@ bool BTCexchange::rafraichirOrderBook()
 
 BTCexchange::~BTCexchange()
 {
-    delete apiKey;
-    delete secretKey;
-    delete currentCurrency;
+
 }
