@@ -42,7 +42,7 @@ public:
     ~BTCexchange();
 protected:
     QByteArray *hmacSignature(QByteArray *message, QCryptographicHash::Algorithm method, bool secretKeyIsBase64 = false);
-
+    bool errorRequete(QNetworkReply* reply);
     QString orderBookAddr;
     struct OrderBookElement *asks[5];
     struct OrderBookElement *bids[5];

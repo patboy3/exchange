@@ -61,7 +61,20 @@ double* BTCexchange::get_balance_btcHold()
     return &m_balance_btcHold;
 }
 
+bool BTCexchange::errorRequete(QNetworkReply* reply)
+{
+    if(reply->error())
+    {
+        QMessageBox msgBox;
+        msgBox.setText("Erreur lors de la requete : " + reply->errorString());
+        msgBox.exec();
 
+        delete reply;
+        return true;
+    }
+
+    return false;
+}
 
 bool BTCexchange::rafraichirOrderBook()
 {

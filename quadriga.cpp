@@ -177,15 +177,9 @@ void Quadriga::sellOrder(double amount, double price)
 
 void Quadriga::interpreterLoadBalance(QNetworkReply* reply)
 {
-
     // Gestion des erreurs
-    if(reply->error())
-    {
-        QMessageBox msgBox;
-        msgBox.setText("Erreur lors de la requete : " + reply->errorString());
-        msgBox.exec();
+    if (errorRequete(reply))
         return;
-    }
 
     // Laleur de reply->readAll() se vide apres usage
     QString reponse = reply->readAll();
