@@ -189,13 +189,20 @@ void Quadriga::interpreterLoadBalance(QNetworkReply* reply)
 
     // Laleur de reply->readAll() se vide apres usage
     QString reponse = reply->readAll();
-    qDebug() << reponse;
 
     // Crée un object Json avec la réponse obtenure
     QJsonDocument jsonDocument = QJsonDocument::fromJson(reponse.toUtf8());
     QJsonObject jsonObject = jsonDocument.object();
 
-    qDebug() << jsonObject["date"].toString();
+    m_balance_btc = jsonObject.value("btc_available").toString().replace(',','.').toDouble();
+    m_balance_btcHold = jsonObject.value("btc_reserved").toString().replace(',','.').toDouble();
+    m_balance_fiat = jsonObject.value(currentCurrency.toLower() + "_available").toString().replace(',','.').toDouble();
+    m_balance_fiatHold = jsonObject.value(currentCurrency.toLower() + "_reserved").toString().replace(',','.').toDouble();
+
+    qDebug() << "btc" << m_balance_btc;
+    qDebug() << "btcHold"  << m_balance_btcHold;
+    qDebug() << "fiat"  << m_balance_fiat;
+    qDebug() << "fiatHold"  << m_balance_fiatHold;
 
     delete reply;
 

@@ -4,10 +4,10 @@
 
 BTCexchange::BTCexchange(QString currency, QString liveApiKey, QString liveSecretKey)
 {
-    balance_fiat = 0;
-    balance_fiatHold = 0;
-    balance_btc = 0;
-    balance_btcHold = 0;
+    m_balance_fiat = 0;
+    m_balance_fiatHold = 0;
+    m_balance_btc = 0;
+    m_balance_btcHold = 0;
 
     apiKey = liveApiKey;
     secretKey = liveSecretKey;
@@ -43,22 +43,22 @@ QString* BTCexchange::get_apiKey()
 
 double* BTCexchange::get_balance_fiat()
 {
-    return &balance_fiat;
+    return &m_balance_fiat;
 }
 
 double* BTCexchange::get_balance_fiatHold()
 {
-    return &balance_fiatHold;
+    return &m_balance_fiatHold;
 }
 
 double* BTCexchange::get_balance_btc()
 {
-    return &balance_btc;
+    return &m_balance_btc;
 }
 
 double* BTCexchange::get_balance_btcHold()
 {
-    return &balance_btcHold;
+    return &m_balance_btcHold;
 }
 
 

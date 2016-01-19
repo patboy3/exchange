@@ -56,10 +56,10 @@ protected:
     double m_feeTaker;
     double m_feeMaker;
 
-    double balance_fiat;
-    double balance_fiatHold;
-    double balance_btc;
-    double balance_btcHold;
+    double m_balance_fiat;
+    double m_balance_fiatHold;
+    double m_balance_btc;
+    double m_balance_btcHold;
 
 private :
 
