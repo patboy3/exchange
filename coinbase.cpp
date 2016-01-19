@@ -170,7 +170,7 @@ void CoinBase::interpreterLoadBalance(QNetworkReply *reply)
     }
 
     qDebug() << reponse;
-
+    delete reply;
 }
 
 void CoinBase::interpreterOrderBook(QNetworkReply* reply)
@@ -195,4 +195,5 @@ void CoinBase::interpreterOrderBook(QNetworkReply* reply)
 
     qDebug() << jsonObject["date"].toString();
 
+    delete reply;
 }

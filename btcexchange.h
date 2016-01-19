@@ -24,7 +24,13 @@ class BTCexchange : public QObject
 public:
     explicit BTCexchange(QString currency, QString liveApiKey, QString liveSecretKey);
     bool rafraichirOrderBook();
+
     QString* get_apiKey();
+    double* get_balance_fiat();
+    double* get_balance_fiatHold();
+    double* get_balance_btc();
+    double* get_balance_btcHold();
+
 
     virtual void viewOpenOrder() = 0;
     virtual void loadBalance() = 0;
@@ -34,7 +40,9 @@ public:
     virtual void lookOrder(QString orderID) = 0;    
 
     ~BTCexchange();
-protected:    
+protected:
+    QByteArray *hmacSignature(QByteArray *message, QCryptographicHash::Algorithm method, bool secretKeyIsBase64 = false);
+
     QString orderBookAddr;
     struct OrderBookElement *asks[5];
     struct OrderBookElement *bids[5];
@@ -47,8 +55,11 @@ protected:
     double m_minAmouterFiat;
     double m_feeTaker;
     double m_feeMaker;
-    QByteArray *hmacSignature(QByteArray *message, QCryptographicHash::Algorithm method, bool secretKeyIsBase64 = false);
 
+    double balance_fiat;
+    double balance_fiatHold;
+    double balance_btc;
+    double balance_btcHold;
 
 private :
 

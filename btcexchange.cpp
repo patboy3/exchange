@@ -4,6 +4,11 @@
 
 BTCexchange::BTCexchange(QString currency, QString liveApiKey, QString liveSecretKey)
 {
+    balance_fiat = 0;
+    balance_fiatHold = 0;
+    balance_btc = 0;
+    balance_btcHold = 0;
+
     apiKey = liveApiKey;
     secretKey = liveSecretKey;
     currentCurrency = currency;
@@ -35,6 +40,27 @@ QString* BTCexchange::get_apiKey()
 {
     return &apiKey;
 }
+
+double* BTCexchange::get_balance_fiat()
+{
+    return &balance_fiat;
+}
+
+double* BTCexchange::get_balance_fiatHold()
+{
+    return &balance_fiatHold;
+}
+
+double* BTCexchange::get_balance_btc()
+{
+    return &balance_btc;
+}
+
+double* BTCexchange::get_balance_btcHold()
+{
+    return &balance_btcHold;
+}
+
 
 
 bool BTCexchange::rafraichirOrderBook()

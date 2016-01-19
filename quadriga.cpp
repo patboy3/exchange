@@ -21,24 +21,6 @@ void Quadriga::getSignature(signature *sign)
 
      sign->time = timeStamp;
      sign->hmac256 = (*hmacSignature(&message, QCryptographicHash::Sha256)).toHex();
-
-
-     /*
-     qDebug() << "message" << message;
-     qDebug() << "apikey" << apiKey;
-     qDebug() << "secret" << secretKey;
-
-
-     qDebug() << "time/nonce" << QString::number(timeStamp);
-
-     qDebug() << "base64_encode" <<base64_encode((unsigned char*)digest, strlen(digest));
-     qDebug() << "hex" << hex_encode((unsigned char*)digest, strlen(digest));
-     */
-
-     //delete message;
-     //delete key;
-
-     //return sign;
 }
 
 
@@ -216,7 +198,6 @@ void Quadriga::interpreterLoadBalance(QNetworkReply* reply)
     qDebug() << jsonObject["date"].toString();
 
     delete reply;
-
 
 }
 
