@@ -193,10 +193,13 @@ void Quadriga::interpreterLoadBalance(QNetworkReply* reply)
     m_balance_fiat = jsonObject.value(currentCurrency.toLower() + "_available").toString().replace(',','.').toDouble();
     m_balance_fiatHold = jsonObject.value(currentCurrency.toLower() + "_reserved").toString().replace(',','.').toDouble();
 
+
+    qDebug() << "QuadrigaCX";
     qDebug() << "btc" << m_balance_btc;
     qDebug() << "btcHold"  << m_balance_btcHold;
     qDebug() << "fiat"  << m_balance_fiat;
     qDebug() << "fiatHold"  << m_balance_fiatHold;
+
 
     delete reply;
 

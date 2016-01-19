@@ -51,7 +51,7 @@ void CoinBase::viewOpenOrder()
 
     QNetworkAccessManager *m_qnam = new QNetworkAccessManager();
     connect(m_qnam, SIGNAL(finished(QNetworkReply*)),
-                     this, SLOT(interpreterLoadBalance(QNetworkReply*)));
+                     this, SLOT(interpreterOrderBook(QNetworkReply*)));
 
     m_qnam->get(request);
 }
@@ -84,7 +84,7 @@ void CoinBase::buyOrder(double amount, double price)
 
     QNetworkAccessManager *m_qnam = new QNetworkAccessManager();
     connect(m_qnam, SIGNAL(finished(QNetworkReply*)),
-                     this, SLOT(interpreterLoadBalance(QNetworkReply*)));
+                     this, SLOT(interpreterOrderBook(QNetworkReply*)));
 
     m_qnam->post(request, jsonString);
 
@@ -117,7 +117,7 @@ void CoinBase::sellOrder(double amount, double price)
 
     QNetworkAccessManager *m_qnam = new QNetworkAccessManager();
     connect(m_qnam, SIGNAL(finished(QNetworkReply*)),
-                     this, SLOT(interpreterLoadBalance(QNetworkReply*)));
+                     this, SLOT(interpreterOrderBook(QNetworkReply*)));
 
     m_qnam->post(request, jsonString);
 
@@ -134,7 +134,7 @@ void CoinBase::cancelOrder(QString orderID)
 
     QNetworkAccessManager *m_qnam = new QNetworkAccessManager();
     connect(m_qnam, SIGNAL(finished(QNetworkReply*)),
-                     this, SLOT(interpreterLoadBalance(QNetworkReply*)));
+                     this, SLOT(interpreterOrderBook(QNetworkReply*)));
 
     m_qnam->deleteResource(request);
 }
@@ -150,7 +150,7 @@ void CoinBase::lookOrder(QString orderID)
 
     QNetworkAccessManager *m_qnam = new QNetworkAccessManager();
     connect(m_qnam, SIGNAL(finished(QNetworkReply*)),
-                     this, SLOT(interpreterLoadBalance(QNetworkReply*)));
+                     this, SLOT(interpreterOrderBook(QNetworkReply*)));
 
     m_qnam->get(request);
 }
@@ -158,18 +158,40 @@ void CoinBase::lookOrder(QString orderID)
 
 void CoinBase::interpreterLoadBalance(QNetworkReply *reply)
 {
+    // Gestion des erreurs
+    if (errorRequete(reply))
+        return;
+
+    // Laleur de reply->readAll() se vide apres usage
     QString reponse = reply->readAll();
 
-    if(reply->error())
+    // Crée un object Json avec la réponse obtenure
+    QJsonDocument jsonDocument = QJsonDocument::fromJson(reponse.toUtf8());
+
+    QJsonArray json_array = jsonDocument.array();
+    foreach (const QJsonValue &value, json_array)
     {
-        qDebug() << reply->errorString();
-        //QMessageBox msgBox;
-        //msgBox.setText("Erreur lors de la requete : " + reponse->errorString());
-        //msgBox.exec();
-        //return;
+       QJsonObject json_obj = value.toObject();
+
+       if (json_obj["currency"].toString() == currentCurrency)
+       {
+           m_balance_fiat = json_obj["available"].toString().replace(',','.').toDouble();
+           m_balance_fiatHold = json_obj["hold"].toString().replace(',','.').toDouble();
+        }
+        else if (json_obj["currency"].toString() == "BTC")
+        {
+           m_balance_btc = json_obj["available"].toString().replace(',','.').toDouble();
+           m_balance_btcHold = json_obj["hold"].toString().replace(',','.').toDouble();
+        }
     }
 
-    qDebug() << reponse;
+    qDebug() << "CoinBase";
+    qDebug() << "btc" << m_balance_btc;
+    qDebug() << "btcHold"  << m_balance_btcHold;
+    qDebug() << "fiat"  << m_balance_fiat;
+    qDebug() << "fiatHold"  << m_balance_fiatHold;
+
+
     delete reply;
 }
 

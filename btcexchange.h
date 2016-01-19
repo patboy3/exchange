@@ -6,6 +6,8 @@
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QJsonDocument>
+#include <QJsonValue>
+#include <QJsonArray>
 #include <QJsonObject>
 #include <QMessageBox>
 #include <iostream>
