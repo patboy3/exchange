@@ -71,9 +71,9 @@ void MainWindow::loadSite()
                 //solo->viewOpenOrder();
                 //solo->rafraichirOrderBook();
                 solo->loadBalance();
-                //solo->sellOrder(0.01);
+                //solo->sellOrder(0.01,800);
                 //solo->buyOrder(5.545);
-                //solo->cancelOrder("eedd5065-fdf9-4da1-b23a-6f51b79dc32a");
+                //solo->cancelOrder("nt6zdoesbt9t8x5dlght7lkmudjb2vsppzo3n3vyw5s42xine0hll18gfsrhoj7d");
                 //solo->lookOrder("eedd5065-fdf9-4da1-b23a-6f51b79dc32a");
             }
         }

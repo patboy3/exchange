@@ -65,7 +65,7 @@ void Quadriga::lookOrder(QString orderID)
     request->setRawHeader("Content-Type", "application/x-www-form-urlencoded");
 
     // Connecte le signal Finished du networkManaget au Slot lireJsonFinished
-    connect(networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(interpreterLoadBalance(QNetworkReply*)));
+    connect(networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(interpreterOrderBook(QNetworkReply*)));
 
     // Lance la requete pour obtenir la réponse
     networkManager->post(*request, jsonString);
@@ -88,7 +88,7 @@ void Quadriga::cancelOrder(QString orderID)
     request->setRawHeader("Content-Type", "application/x-www-form-urlencoded");
 
     // Connecte le signal Finished du networkManaget au Slot lireJsonFinished
-    connect(networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(interpreterLoadBalance(QNetworkReply*)));
+    connect(networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(interpreterOrderBook(QNetworkReply*)));
 
     // Lance la requete pour obtenir la réponse
     networkManager->post(*request, jsonString);
@@ -111,7 +111,7 @@ void Quadriga::viewOpenOrder()
     request->setRawHeader("Content-Type", "application/x-www-form-urlencoded");
 
     // Connecte le signal Finished du networkManaget au Slot lireJsonFinished
-    connect(networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(interpreterLoadBalance(QNetworkReply*)));
+    connect(networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(interpreterOrderBook(QNetworkReply*)));
 
     // Lance la requete pour obtenir la réponse
     networkManager->post(*request, jsonString);
@@ -139,7 +139,7 @@ void Quadriga::buyOrder(double amount, double price)
     request->setRawHeader("Content-Type", "application/x-www-form-urlencoded");
 
     // Connecte le signal Finished du networkManaget au Slot lireJsonFinished
-    connect(networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(interpreterLoadBalance(QNetworkReply*)));
+    connect(networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(interpreterOrderBook(QNetworkReply*)));
 
     // Lance la requete pour obtenir la réponse
     networkManager->post(*request, jsonString);
@@ -167,7 +167,7 @@ void Quadriga::sellOrder(double amount, double price)
     request->setRawHeader("Content-Type", "application/x-www-form-urlencoded");
 
     // Connecte le signal Finished du networkManaget au Slot lireJsonFinished
-    connect(networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(interpreterLoadBalance(QNetworkReply*)));
+    connect(networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(interpreterOrderBook(QNetworkReply*)));
 
     // Lance la requete pour obtenir la réponse
     networkManager->post(*request, jsonString);
