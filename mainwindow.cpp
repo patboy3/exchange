@@ -51,12 +51,12 @@ void MainWindow::loadSite()
         if (!tabledetection) //si db neuve.. créé les tables !
             generateDB(&query);
 
-        query.exec("SELECT sites.sitename, currency.currency, apiKey, secretKey, sites.ident, sites.passphrase FROM exchange left join currency on currency.ID = exchange.ID_Currency left outer join sites on sites.ID = exchange.ID_Sitename;");
+        query.exec("SELECT sites.sitename, currency.currency, sites.apiKey, sites.secretKey, sites.ident, sites.passphrase FROM exchange left join currency on currency.ID = exchange.ID_Currency left outer join sites on sites.ID = exchange.ID_Sitename;");
 
         while (query.next()) {
             if (query.value(0).toString() == "quadriga")
             {
-                //m_sites.append(new Quadriga(query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toInt()));
+                m_sites.append(new Quadriga(query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toInt()));
             }
             else if (query.value(0).toString() == "coinbase")
                 m_sites.append(new CoinBase(query.value(1).toString(),query.value(2).toString(),query.value(3).toString(), query.value(5).toString()));
@@ -68,9 +68,9 @@ void MainWindow::loadSite()
             {
                 //solo->viewOpenOrder();
                 //solo->rafraichirOrderBook();
-                //solo->loadBalance();
+                solo->loadBalance();
                 //solo->sellOrder(0.01);
-                solo->buyOrder(5.545);
+                //solo->buyOrder(5.545);
                 //solo->cancelOrder("eedd5065-fdf9-4da1-b23a-6f51b79dc32a");
                 //solo->lookOrder("eedd5065-fdf9-4da1-b23a-6f51b79dc32a");
             }
@@ -82,8 +82,8 @@ void MainWindow::generateDB(QSqlQuery *query)
 {
     //créé les tables
     query->exec("CREATE TABLE `currency` ( `ID`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,`currency`	CHAR(50) NOT NULL);");
-    query->exec("CREATE TABLE exchange (ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, ID_Currency INT(11) NOT NULL, ID_Sitename INT(11) NOT NULL, apiKey VARCHAR(255) DEFAULT NULL, secretKey VARCHAR(255) DEFAULT NULL, CONSTRAINT FK_exchange_currency_ID FOREIGN KEY (ID_Currency) REFERENCES currency(ID) ON DELETE RESTRICT ON UPDATE RESTRICT, CONSTRAINT FK_exchange_sites_ID FOREIGN KEY (ID_Sitename) REFERENCES sites(ID) ON DELETE RESTRICT ON UPDATE RESTRICT);");
-    query->exec("CREATE TABLE `sites` ( `ID`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, `sitename`	TEXT NOT NULL, `ident`	INTEGER, `passphrase`	TEXT);");
+    query->exec("CREATE TABLE exchange (ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, ID_Currency INT(11) NOT NULL, ID_Sitename INT(11) NOT NULL, CONSTRAINT FK_exchange_currency_ID FOREIGN KEY (ID_Currency) REFERENCES currency(ID) ON DELETE RESTRICT ON UPDATE RESTRICT, CONSTRAINT FK_exchange_sites_ID FOREIGN KEY (ID_Sitename) REFERENCES sites(ID) ON DELETE RESTRICT ON UPDATE RESTRICT);");
+    query->exec("CREATE TABLE `sites` ( `ID`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, `sitename`	TEXT NOT NULL, apiKey VARCHAR(255) DEFAULT NULL, secretKey VARCHAR(255) DEFAULT NULL, `ident`	INTEGER, `passphrase`	TEXT);");
 
     //add 3 currency de bases
     query->exec("INSERT INTO sites (sitename) VALUES ('quadriga'), ('coinbase');");
