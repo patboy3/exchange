@@ -12,6 +12,7 @@
 #include <QMessageBox>
 #include <iostream>
 #include <QMessageAuthenticationCode>
+#include <QEventLoop>
 
 struct OrderBookElement{
     double nbBtc;

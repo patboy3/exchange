@@ -36,7 +36,7 @@ public slots:
 private slots :
     void interpreterCrap(QNetworkReply* reply);
     void interpreterLoadBalance(QNetworkReply* reply);
-
+    void interpreterOrders(QNetworkReply* reply, double *amount);
 };
 
 #endif // QUADRIGA_H
