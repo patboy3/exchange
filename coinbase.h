@@ -28,7 +28,7 @@ public slots:
 
 
 private slots :
-    void interpreterOrderBook(QNetworkReply* reply);
+    void interpreterCrap(QNetworkReply* reply);
     void interpreterLoadBalance(QNetworkReply* reply);
 
 };

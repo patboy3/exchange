@@ -76,6 +76,58 @@ bool BTCexchange::errorRequete(QNetworkReply* reply)
     return false;
 }
 
+void BTCexchange::interpreterOrderBook(QNetworkReply* reply)
+{
+    // Gestion des erreurs
+    if (errorRequete(reply))
+        return;
+
+    // Laleur de reply->readAll() se vide apres usage
+    QString reponse = reply->readAll();
+
+    // Crée un object Json avec la réponse obtenure
+    QJsonDocument jsonDocument = QJsonDocument::fromJson(reponse.toUtf8());
+
+    QJsonObject jsonObject = jsonDocument.object();
+
+    QJsonArray asks = jsonObject["asks"].toArray();
+    m_asks.clear();;
+    foreach (const QJsonValue & value, asks)
+    {
+        OrderBookElement now;
+        now.nbBtc = value.toArray()[1].toString().replace(',','.').toDouble();
+        now.prixVente = value.toArray()[0].toString().replace(',','.').toDouble();
+
+        m_asks.append(now);
+    }
+
+    QJsonArray bids = jsonObject["bids"].toArray();
+    m_bids.clear();
+    foreach (const QJsonValue & value, bids)
+    {
+        OrderBookElement now;
+        now.nbBtc = value.toArray()[1].toString().replace(',','.').toDouble();
+        now.prixVente = value.toArray()[0].toString().replace(',','.').toDouble();
+
+        m_bids.append(now);
+    }
+
+    foreach (OrderBookElement solo, m_bids)
+    {
+        qDebug() << "bids - btc : "  << solo.nbBtc;
+        qDebug() << "bids - price : "  << solo.prixVente;
+    }
+
+    foreach (OrderBookElement solo, m_asks)
+    {
+        qDebug() << "asks - btc : "  << solo.nbBtc;
+        qDebug() << "asks - price : "  << solo.prixVente;
+    }
+
+    delete reply;
+
+}
+
 bool BTCexchange::rafraichirOrderBook()
 {
 

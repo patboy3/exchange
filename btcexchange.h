@@ -65,6 +65,8 @@ protected:
 
 private :
 
+protected slots:
+    virtual void interpreterOrderBook(QNetworkReply* reply);
 
 public slots :
 

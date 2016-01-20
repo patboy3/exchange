@@ -51,7 +51,7 @@ void CoinBase::viewOpenOrder()
 
     QNetworkAccessManager *m_qnam = new QNetworkAccessManager();
     connect(m_qnam, SIGNAL(finished(QNetworkReply*)),
-                     this, SLOT(interpreterOrderBook(QNetworkReply*)));
+                     this, SLOT(interpreterCrap(QNetworkReply*)));
 
     m_qnam->get(request);
 }
@@ -84,7 +84,7 @@ void CoinBase::buyOrder(double amount, double price)
 
     QNetworkAccessManager *m_qnam = new QNetworkAccessManager();
     connect(m_qnam, SIGNAL(finished(QNetworkReply*)),
-                     this, SLOT(interpreterOrderBook(QNetworkReply*)));
+                     this, SLOT(interpreterCrap(QNetworkReply*)));
 
     m_qnam->post(request, jsonString);
 
@@ -117,7 +117,7 @@ void CoinBase::sellOrder(double amount, double price)
 
     QNetworkAccessManager *m_qnam = new QNetworkAccessManager();
     connect(m_qnam, SIGNAL(finished(QNetworkReply*)),
-                     this, SLOT(interpreterOrderBook(QNetworkReply*)));
+                     this, SLOT(interpreterCrap(QNetworkReply*)));
 
     m_qnam->post(request, jsonString);
 
@@ -134,7 +134,7 @@ void CoinBase::cancelOrder(QString orderID)
 
     QNetworkAccessManager *m_qnam = new QNetworkAccessManager();
     connect(m_qnam, SIGNAL(finished(QNetworkReply*)),
-                     this, SLOT(interpreterOrderBook(QNetworkReply*)));
+                     this, SLOT(interpreterCrap(QNetworkReply*)));
 
     m_qnam->deleteResource(request);
 }
@@ -150,7 +150,7 @@ void CoinBase::lookOrder(QString orderID)
 
     QNetworkAccessManager *m_qnam = new QNetworkAccessManager();
     connect(m_qnam, SIGNAL(finished(QNetworkReply*)),
-                     this, SLOT(interpreterOrderBook(QNetworkReply*)));
+                     this, SLOT(interpreterCrap(QNetworkReply*)));
 
     m_qnam->get(request);
 }
@@ -195,9 +195,8 @@ void CoinBase::interpreterLoadBalance(QNetworkReply *reply)
     delete reply;
 }
 
-void CoinBase::interpreterOrderBook(QNetworkReply* reply)
+void CoinBase::interpreterCrap(QNetworkReply* reply)
 {
-
     // Gestion des erreurs
     if(reply->error())
     {
