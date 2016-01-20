@@ -211,15 +211,24 @@ void Quadriga::sellOrder(double amount, double price)
         }
         else
         {
-            QJsonDocument jsonDocument = QJsonDocument::fromJson(reply->readAll());
-            QJsonObject jsonObject = jsonDocument.object();
+            if (price != 0)
+            {
+                QJsonDocument jsonDocument = QJsonDocument::fromJson(reply->readAll());
+                QJsonObject jsonObject = jsonDocument.object();
 
-            orders current;
-            current.amount = amount;
-            current.price = price;
-            current.order_id = jsonObject.value("id").toString();
+                orders current;
+                current.amount = amount;
+                current.price = price;
+                current.order_id = jsonObject.value("id").toString();
 
-            m_orderSell.append(current);
+                m_orderSell.append(current);
+            }
+            else
+            {
+                //trade direct .. faudrait le noté !
+
+            }
+
             delete reply;
         }
 

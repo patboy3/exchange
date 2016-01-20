@@ -73,7 +73,7 @@ void MainWindow::loadSite()
                 //solo->loadBalance();
                 //solo->sellOrder(0.01,800);
                 //solo->buyOrder(5.545);
-                solo->cancelOrder("fdc11zs2hzw2d6pfilgssibcf3ybnmt306515x3nxzpa6eqp07htqt55w4hkqaor");
+                //solo->cancelOrder("fdc11zs2hzw2d6pfilgssibcf3ybnmt306515x3nxzpa6eqp07htqt55w4hkqaor");
                 //solo->lookOrder("eedd5065-fdf9-4da1-b23a-6f51b79dc32a");
             }
         }
