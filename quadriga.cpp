@@ -223,37 +223,37 @@ void Quadriga::interpreterOrderBook(QNetworkReply* reply)
     qDebug() << jsonObject.keys();
 
     QJsonArray asks = jsonObject["asks"].toArray();
-    deleteOrderBook(&m_asks);
+    m_asks.clear();;
     foreach (const QJsonValue & value, asks)
     {
-        OrderBookElement* now = new OrderBookElement;
-        now->nbBtc = value.toArray()[1].toString().replace(',','.').toDouble();
-        now->prixVente = value.toArray()[0].toString().replace(',','.').toDouble();
+        OrderBookElement now;
+        now.nbBtc = value.toArray()[1].toString().replace(',','.').toDouble();
+        now.prixVente = value.toArray()[0].toString().replace(',','.').toDouble();
 
         m_asks.append(now);
     }
 
     QJsonArray bids = jsonObject["bids"].toArray();
-    deleteOrderBook(&m_bids);
+    m_bids.clear();
     foreach (const QJsonValue & value, bids)
     {
-        OrderBookElement* now = new OrderBookElement;
-        now->nbBtc = value.toArray()[1].toString().replace(',','.').toDouble();
-        now->prixVente = value.toArray()[0].toString().replace(',','.').toDouble();
+        OrderBookElement now;
+        now.nbBtc = value.toArray()[1].toString().replace(',','.').toDouble();
+        now.prixVente = value.toArray()[0].toString().replace(',','.').toDouble();
 
         m_bids.append(now);
     }
 
-    foreach (OrderBookElement *solo, m_bids)
+    foreach (OrderBookElement solo, m_bids)
     {
-        qDebug() << "bids - btc : "  << solo->nbBtc;
-        qDebug() << "bids - price : "  << solo->prixVente;
+        qDebug() << "bids - btc : "  << solo.nbBtc;
+        qDebug() << "bids - price : "  << solo.prixVente;
     }
 
-    foreach (OrderBookElement *solo, m_asks)
+    foreach (OrderBookElement solo, m_asks)
     {
-        qDebug() << "asks - btc : "  << solo->nbBtc;
-        qDebug() << "asks - price : "  << solo->prixVente;
+        qDebug() << "asks - btc : "  << solo.nbBtc;
+        qDebug() << "asks - price : "  << solo.prixVente;
     }
 
     delete reply;

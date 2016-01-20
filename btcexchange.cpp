@@ -76,16 +76,6 @@ bool BTCexchange::errorRequete(QNetworkReply* reply)
     return false;
 }
 
-void BTCexchange::deleteOrderBook(QList<OrderBookElement *> *list)
-{
-    foreach (OrderBookElement *solo, *list)
-    {
-        delete solo;
-    }
-
-    list->clear();
-}
-
 bool BTCexchange::rafraichirOrderBook()
 {
 
