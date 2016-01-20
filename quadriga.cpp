@@ -119,7 +119,7 @@ void Quadriga::viewOpenOrder()
     delete sign;
 }
 
-void Quadriga::buyOrder(double amount, double price)
+bool Quadriga::buyOrder(double amount, double price)
 {
     signature *sign = new signature;
     getSignature(sign);
@@ -145,9 +145,11 @@ void Quadriga::buyOrder(double amount, double price)
     networkManager->post(*request, jsonString);
 
     delete sign;
+
+    return true;
 }
 
-void Quadriga::sellOrder(double amount, double price)
+bool Quadriga::sellOrder(double amount, double price)
 {
     /*
     signature *sign = new signature;
@@ -207,7 +209,7 @@ void Quadriga::sellOrder(double amount, double price)
         if (errorRequete(reply))
         {
             delete reply;
-            return;
+            return false;
         }
         else
         {
@@ -238,6 +240,8 @@ void Quadriga::sellOrder(double amount, double price)
             qDebug() << "sell - price : "  << solo.price;
             qDebug() << "sell - amount : "  << solo.amount;
         }
+
+        return true;
 }
 
 void Quadriga::interpreterOrders(QNetworkReply* reply, double *amount)

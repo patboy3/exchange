@@ -57,7 +57,7 @@ void CoinBase::viewOpenOrder()
 }
 
 
-void CoinBase::buyOrder(double amount, double price)
+bool CoinBase::buyOrder(double amount, double price)
 {
     QByteArray jsonString;
 
@@ -88,9 +88,10 @@ void CoinBase::buyOrder(double amount, double price)
 
     m_qnam->post(request, jsonString);
 
+    return true;
 }
 
-void CoinBase::sellOrder(double amount, double price)
+bool CoinBase::sellOrder(double amount, double price)
 {
     QByteArray jsonString;
 
@@ -121,6 +122,7 @@ void CoinBase::sellOrder(double amount, double price)
 
     m_qnam->post(request, jsonString);
 
+    return true;
 }
 
 void CoinBase::cancelOrder(QString orderID)

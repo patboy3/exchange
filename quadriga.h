@@ -18,8 +18,8 @@ public:
     explicit Quadriga();
     explicit Quadriga(QString currency, QString liveApiKey, QString liveSecretKey, int ident);
     void loadBalance();
-    void buyOrder(double amount, double price = 0);
-    void sellOrder(double amount, double price = 0);
+    bool buyOrder(double amount, double price = 0);
+    bool sellOrder(double amount, double price = 0);
     void cancelOrder(QString orderID);
     void viewOpenOrder();
     void lookOrder(QString orderID);
