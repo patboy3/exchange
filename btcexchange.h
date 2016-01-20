@@ -18,6 +18,12 @@ struct OrderBookElement{
     double prixVente;
 };
 
+struct orders{
+    QString order_id;
+    double amount;
+    double price;
+};
+
 class BTCexchange : public QObject
 {
 
@@ -46,6 +52,8 @@ protected:
     QByteArray *hmacSignature(QByteArray *message, QCryptographicHash::Algorithm method, bool secretKeyIsBase64 = false);
     bool errorRequete(QNetworkReply* reply);
     QString orderBookAddr;
+    QList<orders> m_orderBuy;
+    QList<orders> m_orderSell;
     QList<OrderBookElement> m_asks;
     QList<OrderBookElement> m_bids;
     QString apiKey;
