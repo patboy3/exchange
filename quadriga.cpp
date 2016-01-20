@@ -252,8 +252,8 @@ void Quadriga::interpreterOrderBook(QNetworkReply* reply)
 
     foreach (OrderBookElement *solo, m_asks)
     {
-        qDebug() << "bids - btc : "  << solo->nbBtc;
-        qDebug() << "bids - price : "  << solo->prixVente;
+        qDebug() << "asks - btc : "  << solo->nbBtc;
+        qDebug() << "asks - price : "  << solo->prixVente;
     }
 
     delete reply;
