@@ -60,7 +60,7 @@ void MainWindow::loadSite()
             }
             else if (query.value(0).toString() == "coinbase")
             {
-                m_sites.append(new CoinBase(query.value(1).toString(),query.value(2).toString(),query.value(3).toString(), query.value(5).toString()));
+                //m_sites.append(new CoinBase(query.value(1).toString(),query.value(2).toString(),query.value(3).toString(), query.value(5).toString()));
             }
         }
 
@@ -69,8 +69,8 @@ void MainWindow::loadSite()
             if (*solo->get_apiKey() != "")
             {
                 //solo->viewOpenOrder();
-                //solo->rafraichirOrderBook();
-                solo->loadBalance();
+                solo->rafraichirOrderBook();
+                //solo->loadBalance();
                 //solo->sellOrder(0.01,800);
                 //solo->buyOrder(5.545);
                 //solo->cancelOrder("nt6zdoesbt9t8x5dlght7lkmudjb2vsppzo3n3vyw5s42xine0hll18gfsrhoj7d");

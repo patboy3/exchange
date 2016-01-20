@@ -65,7 +65,7 @@ void Quadriga::lookOrder(QString orderID)
     request->setRawHeader("Content-Type", "application/x-www-form-urlencoded");
 
     // Connecte le signal Finished du networkManaget au Slot lireJsonFinished
-    connect(networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(interpreterOrderBook(QNetworkReply*)));
+    connect(networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(interpreterCrap(QNetworkReply*)));
 
     // Lance la requete pour obtenir la réponse
     networkManager->post(*request, jsonString);
@@ -88,7 +88,7 @@ void Quadriga::cancelOrder(QString orderID)
     request->setRawHeader("Content-Type", "application/x-www-form-urlencoded");
 
     // Connecte le signal Finished du networkManaget au Slot lireJsonFinished
-    connect(networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(interpreterOrderBook(QNetworkReply*)));
+    connect(networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(interpreterCrap(QNetworkReply*)));
 
     // Lance la requete pour obtenir la réponse
     networkManager->post(*request, jsonString);
@@ -111,7 +111,7 @@ void Quadriga::viewOpenOrder()
     request->setRawHeader("Content-Type", "application/x-www-form-urlencoded");
 
     // Connecte le signal Finished du networkManaget au Slot lireJsonFinished
-    connect(networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(interpreterOrderBook(QNetworkReply*)));
+    connect(networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(interpreterCrap(QNetworkReply*)));
 
     // Lance la requete pour obtenir la réponse
     networkManager->post(*request, jsonString);
@@ -139,7 +139,7 @@ void Quadriga::buyOrder(double amount, double price)
     request->setRawHeader("Content-Type", "application/x-www-form-urlencoded");
 
     // Connecte le signal Finished du networkManaget au Slot lireJsonFinished
-    connect(networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(interpreterOrderBook(QNetworkReply*)));
+    connect(networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(interpreterCrap(QNetworkReply*)));
 
     // Lance la requete pour obtenir la réponse
     networkManager->post(*request, jsonString);
@@ -167,7 +167,7 @@ void Quadriga::sellOrder(double amount, double price)
     request->setRawHeader("Content-Type", "application/x-www-form-urlencoded");
 
     // Connecte le signal Finished du networkManaget au Slot lireJsonFinished
-    connect(networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(interpreterOrderBook(QNetworkReply*)));
+    connect(networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(interpreterCrap(QNetworkReply*)));
 
     // Lance la requete pour obtenir la réponse
     networkManager->post(*request, jsonString);
@@ -206,6 +206,61 @@ void Quadriga::interpreterLoadBalance(QNetworkReply* reply)
 }
 
 void Quadriga::interpreterOrderBook(QNetworkReply* reply)
+{
+
+    // Gestion des erreurs
+    if (errorRequete(reply))
+        return;
+
+    // Laleur de reply->readAll() se vide apres usage
+    QString reponse = reply->readAll();
+
+    // Crée un object Json avec la réponse obtenure
+    QJsonDocument jsonDocument = QJsonDocument::fromJson(reponse.toUtf8());
+
+    QJsonObject jsonObject = jsonDocument.object();
+
+    qDebug() << jsonObject.keys();
+
+    QJsonArray asks = jsonObject["asks"].toArray();
+    deleteOrderBook(&m_asks);
+    foreach (const QJsonValue & value, asks)
+    {
+        OrderBookElement* now = new OrderBookElement;
+        now->nbBtc = value.toArray()[1].toString().replace(',','.').toDouble();
+        now->prixVente = value.toArray()[0].toString().replace(',','.').toDouble();
+
+        m_asks.append(now);
+    }
+
+    QJsonArray bids = jsonObject["bids"].toArray();
+    deleteOrderBook(&m_bids);
+    foreach (const QJsonValue & value, bids)
+    {
+        OrderBookElement* now = new OrderBookElement;
+        now->nbBtc = value.toArray()[1].toString().replace(',','.').toDouble();
+        now->prixVente = value.toArray()[0].toString().replace(',','.').toDouble();
+
+        m_bids.append(now);
+    }
+
+    foreach (OrderBookElement *solo, m_bids)
+    {
+        qDebug() << "bids - btc : "  << solo->nbBtc;
+        qDebug() << "bids - price : "  << solo->prixVente;
+    }
+
+    foreach (OrderBookElement *solo, m_asks)
+    {
+        qDebug() << "bids - btc : "  << solo->nbBtc;
+        qDebug() << "bids - price : "  << solo->prixVente;
+    }
+
+    delete reply;
+
+}
+
+void Quadriga::interpreterCrap(QNetworkReply* reply)
 {
 
     // Gestion des erreurs
