@@ -23,6 +23,7 @@ struct orders{
     QString order_id;
     double amount;
     double price;
+    QString type;
 };
 
 class BTCexchange : public QObject
@@ -52,9 +53,9 @@ public:
 protected:
     QByteArray *hmacSignature(QByteArray *message, QCryptographicHash::Algorithm method, bool secretKeyIsBase64 = false);
     bool errorRequete(QNetworkReply* reply);
+    virtual bool interpreterOrders(QNetworkRequest* request, QString type, double *price, double *amount, QByteArray *jsonString);
     QString orderBookAddr;
-    QList<orders> m_orderBuy;
-    QList<orders> m_orderSell;
+    QList<orders> m_orders;
     QList<OrderBookElement> m_asks;
     QList<OrderBookElement> m_bids;
     QString apiKey;
@@ -71,6 +72,9 @@ protected:
     double m_balance_fiatHold;
     double m_balance_btc;
     double m_balance_btcHold;
+
+    QString typeBuy;
+    QString typeSell;
 
 private :
 

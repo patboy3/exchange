@@ -75,20 +75,14 @@ bool CoinBase::buyOrder(double amount, double price)
             ", \"type\": \"market\""
             " ,\"side\": \"buy\"}";
     }
-
+    // Url de la requete
 
     QString urlPath = "/orders";
     QNetworkRequest request(QUrl(m_apiUrl + urlPath));
 
     signerHeaders(&request, QString(QString::number(QDateTime::currentMSecsSinceEpoch() / 1000)), QString("POST"), &urlPath, &jsonString);
 
-    QNetworkAccessManager *m_qnam = new QNetworkAccessManager();
-    connect(m_qnam, SIGNAL(finished(QNetworkReply*)),
-                     this, SLOT(interpreterCrap(QNetworkReply*)));
-
-    m_qnam->post(request, jsonString);
-
-    return true;
+    return interpreterOrders(&request, typeBuy, &price, &amount, &jsonString);
 }
 
 bool CoinBase::sellOrder(double amount, double price)
@@ -109,20 +103,14 @@ bool CoinBase::sellOrder(double amount, double price)
             ", \"type\": \"market\""
             " ,\"side\": \"sell\"}";
     }
-
+    // Url de la requete
 
     QString urlPath = "/orders";
     QNetworkRequest request(QUrl(m_apiUrl + urlPath));
 
     signerHeaders(&request, QString(QString::number(QDateTime::currentMSecsSinceEpoch() / 1000)), QString("POST"), &urlPath, &jsonString);
 
-    QNetworkAccessManager *m_qnam = new QNetworkAccessManager();
-    connect(m_qnam, SIGNAL(finished(QNetworkReply*)),
-                     this, SLOT(interpreterCrap(QNetworkReply*)));
-
-    m_qnam->post(request, jsonString);
-
-    return true;
+    return interpreterOrders(&request, typeSell, &price, &amount, &jsonString);
 }
 
 void CoinBase::cancelOrder(QString orderID)

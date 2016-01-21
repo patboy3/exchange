@@ -8,6 +8,8 @@ BTCexchange::BTCexchange(QString currency, QString liveApiKey, QString liveSecre
     m_balance_fiatHold = 0;
     m_balance_btc = 0;
     m_balance_btcHold = 0;
+    typeBuy = "buy";
+    typeSell = "sell";
 
     apiKey = liveApiKey;
     secretKey = liveSecretKey;
@@ -35,6 +37,59 @@ QByteArray* BTCexchange::hmacSignature(QByteArray *message, QCryptographicHash::
     return new QByteArray(code.result());
 }
 
+bool BTCexchange::interpreterOrders(QNetworkRequest* request, QString type, double *price, double *amount, QByteArray *jsonString)
+{
+    QEventLoop eventLoop;
+
+        // "quit()" the event-loop, when the network request "finished()"
+        QNetworkAccessManager mgr;
+        QObject::connect(&mgr, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
+
+        QNetworkReply *reply = mgr.post(*request, *jsonString);
+        eventLoop.exec(); // blocks stack until "finished()" has been called
+
+
+        if (errorRequete(reply))
+        {
+            delete reply;
+            return false;
+        }
+        else
+        {
+            if (price != 0)
+            {
+                QJsonDocument jsonDocument = QJsonDocument::fromJson(reply->readAll());
+                QJsonObject jsonObject = jsonDocument.object();
+
+                orders current;
+                current.amount = *amount;
+                current.price = *price;
+                current.order_id = jsonObject.value("id").toString();
+                current.type = type;
+
+                m_orders.append(current);
+            }
+            else
+            {
+                //trade direct .. faudrait le noté !
+
+            }
+
+            delete reply;
+        }
+
+        foreach (orders solo, m_orders)
+        {
+            if (solo.type == type)
+            {
+                qDebug() << type << " - id : "  << solo.order_id;
+                qDebug() << type << " - price : "  << solo.price;
+                qDebug() << type << " - amount : "  << solo.amount;
+            }
+        }
+
+        return true;
+}
 
 QString* BTCexchange::get_apiKey()
 {

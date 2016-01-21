@@ -121,33 +121,7 @@ void Quadriga::viewOpenOrder()
 
 bool Quadriga::buyOrder(double amount, double price)
 {
-    /*signature *sign = new signature;
-    getSignature(sign);
-
-    QNetworkAccessManager *networkManager = new QNetworkAccessManager();
-    QNetworkRequest *request = new QNetworkRequest();
-
-    QByteArray jsonString;
-
-    if (price != 0)
-        jsonString = "key="+apiKey.toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"&amount="+QString::number(amount).toLatin1()+"&price="+QString::number(price).toLatin1()+"&book=btc_" + currentCurrency.toLower().toLatin1();
-    else
-        jsonString = "key="+apiKey.toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"&amount="+QString::number(amount).toLatin1()+"&book=btc_" + currentCurrency.toLower().toLatin1();
-
-    // Url de la requete
-    request->setUrl(QUrl(m_apiUrl + "/buy"));
-    request->setRawHeader("Content-Type", "application/x-www-form-urlencoded");
-
-    // Connecte le signal Finished du networkManaget au Slot lireJsonFinished
-    connect(networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(interpreterCrap(QNetworkReply*)));
-
-    // Lance la requete pour obtenir la réponse
-    networkManager->post(*request, jsonString);
-
-    delete sign;
-
-    return true;*/
-
+    /*
     QEventLoop eventLoop;
 
     // "quit()" the event-loop, when the network request "finished()"
@@ -179,6 +153,7 @@ bool Quadriga::buyOrder(double amount, double price)
     if (errorRequete(reply))
     {
         delete reply;
+        delete request;
         return false;
     }
     else
@@ -192,8 +167,9 @@ bool Quadriga::buyOrder(double amount, double price)
             current.amount = amount;
             current.price = price;
             current.order_id = jsonObject.value("id").toString();
+            current.type = typeBuy;
 
-            m_orderBuy.append(current);
+            m_orders.append(current);
         }
         else
         {
@@ -201,27 +177,25 @@ bool Quadriga::buyOrder(double amount, double price)
 
         }
 
+        delete request;
         delete reply;
     }
 
-    foreach (orders solo, m_orderBuy)
+    foreach (orders solo, m_orders)
     {
-        qDebug() << "buy - id : "  << solo.order_id;
-        qDebug() << "buy - price : "  << solo.price;
-        qDebug() << "buy - amount : "  << solo.amount;
+        if (solo.type == typeBuy)
+        {
+            qDebug() << "buy - id : "  << solo.order_id;
+            qDebug() << "buy - price : "  << solo.price;
+            qDebug() << "buy - amount : "  << solo.amount;
+        }
     }
 
-    return true;
-}
+    return true;*/
 
-bool Quadriga::sellOrder(double amount, double price)
-{
-    /*
+
     signature *sign = new signature;
     getSignature(sign);
-
-    QNetworkAccessManager *networkManager = new QNetworkAccessManager();
-    QNetworkRequest *request = new QNetworkRequest();
 
     QByteArray jsonString;
 
@@ -231,102 +205,34 @@ bool Quadriga::sellOrder(double amount, double price)
         jsonString = "key="+apiKey.toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"&amount="+QString::number(amount).toLatin1()+"&book=btc_" + currentCurrency.toLower().toLatin1();
 
     // Url de la requete
-    request->setUrl(QUrl(m_apiUrl + "/sell"));
-    request->setRawHeader("Content-Type", "application/x-www-form-urlencoded");
+    QNetworkRequest request(QUrl(m_apiUrl + "/buy"));
+    request.setRawHeader("Content-Type", "application/x-www-form-urlencoded");
 
-    // Connecte le signal Finished du networkManaget au Slot lireJsonFinished
-    connect(networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(interpreterOrders(QNetworkReply*)));
-
-    // Lance la requete pour obtenir la réponse
-    networkManager->post(*request, jsonString);
-
-    delete sign;*/
-
-    // create custom temporary event loop on stack
-        QEventLoop eventLoop;
-
-        // "quit()" the event-loop, when the network request "finished()"
-        QNetworkAccessManager mgr;
-        QObject::connect(&mgr, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
-
-        // the HTTP request
-
-        signature *sign = new signature;
-        getSignature(sign);
-
-        QNetworkRequest *request = new QNetworkRequest();
-
-        QByteArray jsonString;
-
-        if (price != 0)
-            jsonString = "key="+apiKey.toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"&amount="+QString::number(amount).toLatin1()+"&price="+QString::number(price).toLatin1()+"&book=btc_" + currentCurrency.toLower().toLatin1();
-        else
-            jsonString = "key="+apiKey.toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"&amount="+QString::number(amount).toLatin1()+"&book=btc_" + currentCurrency.toLower().toLatin1();
-
-        // Url de la requete
-        request->setUrl(QUrl(m_apiUrl + "/sell"));
-        request->setRawHeader("Content-Type", "application/x-www-form-urlencoded");
-
-        QNetworkReply *reply = mgr.post(*request, jsonString);
-        eventLoop.exec(); // blocks stack until "finished()" has been called
-
-
-        if (errorRequete(reply))
-        {
-            delete reply;
-            return false;
-        }
-        else
-        {
-            if (price != 0)
-            {
-                QJsonDocument jsonDocument = QJsonDocument::fromJson(reply->readAll());
-                QJsonObject jsonObject = jsonDocument.object();
-
-                orders current;
-                current.amount = amount;
-                current.price = price;
-                current.order_id = jsonObject.value("id").toString();
-
-                m_orderSell.append(current);
-            }
-            else
-            {
-                //trade direct .. faudrait le noté !
-
-            }
-
-            delete reply;
-        }
-
-        foreach (orders solo, m_orderSell)
-        {
-            qDebug() << "sell - id : "  << solo.order_id;
-            qDebug() << "sell - price : "  << solo.price;
-            qDebug() << "sell - amount : "  << solo.amount;
-        }
-
-        return true;
+    delete sign;
+    return interpreterOrders(&request, typeBuy, &price, &amount, &jsonString);
 }
 
-void Quadriga::interpreterOrders(QNetworkReply* reply, double *amount)
+bool Quadriga::sellOrder(double amount, double price)
 {
-    // Gestion des erreurs
-    if (errorRequete(reply))
-        return;
+    signature *sign = new signature;
+    getSignature(sign);
 
-    // Laleur de reply->readAll() se vide apres usage
-    QString reponse = reply->readAll();
+    QByteArray jsonString;
 
-    // Crée un object Json avec la réponse obtenure
-    QJsonDocument jsonDocument = QJsonDocument::fromJson(reponse.toUtf8());
-    QJsonObject jsonObject = jsonDocument.object();
+    if (price != 0)
+        jsonString = "key="+apiKey.toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"&amount="+QString::number(amount).toLatin1()+"&price="+QString::number(price).toLatin1()+"&book=btc_" + currentCurrency.toLower().toLatin1();
+    else
+        jsonString = "key="+apiKey.toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"&amount="+QString::number(amount).toLatin1()+"&book=btc_" + currentCurrency.toLower().toLatin1();
 
-    qDebug() << reponse;
-    qDebug() << amount;
-    delete reply;
+    // Url de la requete
 
+    QNetworkRequest request(QUrl(m_apiUrl + "/sell"));
+    request.setRawHeader("Content-Type", "application/x-www-form-urlencoded");
+
+    delete sign;
+    return interpreterOrders(&request, typeSell, &price, &amount, &jsonString);
 }
+
 
 void Quadriga::interpreterLoadBalance(QNetworkReply* reply)
 {
