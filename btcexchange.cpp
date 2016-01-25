@@ -196,6 +196,7 @@ QList<orders>* BTCexchange::interpreterLookOrders(QNetworkRequest* request, QByt
         //faut comparer aik le m_orders et renvoyer si yen une une de retirer
 
         QList<orders> *executedOrders = new QList<orders>;
+
         for (int i=0; i<m_orders.count();i++)
         {
             bool present(false);
@@ -214,6 +215,9 @@ QList<orders>* BTCexchange::interpreterLookOrders(QNetworkRequest* request, QByt
                 now.order_id = m_orders[i].order_id;
 
                 executedOrders->append(now);
+
+                m_orders.removeAt(i);
+                i--;
             }
 
         }
