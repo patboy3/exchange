@@ -113,8 +113,9 @@ bool CoinBase::sellOrder(double amount, double price)
     return interpreterOrders(&request, typeSell, &price, &amount, &jsonString);
 }
 
-void CoinBase::cancelOrder(QString orderID)
+bool CoinBase::cancelOrder(QString orderID)
 {
+    /*
     QString urlPath = "/orders/" + orderID;
     QNetworkRequest request(QUrl(m_apiUrl + urlPath));
 
@@ -127,6 +128,16 @@ void CoinBase::cancelOrder(QString orderID)
                      this, SLOT(interpreterCrap(QNetworkReply*)));
 
     m_qnam->deleteResource(request);
+    */
+
+    QString urlPath = "/orders/" + orderID;
+    QNetworkRequest request(QUrl(m_apiUrl + urlPath));
+
+    QByteArray jsonString = "";
+
+    signerHeaders(&request, QString(QString::number(QDateTime::currentMSecsSinceEpoch() / 1000)), QString("DELETE"), &urlPath, &jsonString);
+
+    return interpreterCancelOrders(&request, &jsonString, &orderID, QNetworkAccessManager::DeleteOperation);
 }
 
 void CoinBase::lookOrder(QString orderID)

@@ -12,7 +12,7 @@ public:
     void loadBalance();
     bool buyOrder(double amount, double price = 0);
     bool sellOrder(double amount, double price = 0);
-    void cancelOrder(QString orderID);
+    bool cancelOrder(QString orderID);
     void viewOpenOrder();
     void lookOrder(QString orderID);
 

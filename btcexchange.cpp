@@ -37,6 +37,64 @@ QByteArray* BTCexchange::hmacSignature(QByteArray *message, QCryptographicHash::
     return new QByteArray(code.result());
 }
 
+bool BTCexchange::interpreterCancelOrders(QNetworkRequest* request, QByteArray *jsonString, QString *id_Orders, QNetworkAccessManager::Operation operation)
+{
+    QEventLoop eventLoop;
+
+        // "quit()" the event-loop, when the network request "finished()"
+        QNetworkAccessManager mgr;
+        QObject::connect(&mgr, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
+
+        QNetworkReply *reply;
+        if (operation == QNetworkAccessManager::PostOperation)
+            reply = mgr.post(*request, *jsonString);
+        else if (operation == QNetworkAccessManager::DeleteOperation)
+            reply = mgr.deleteResource(*request);
+
+        eventLoop.exec(); // blocks stack until "finished()" has been called
+
+
+        if (errorRequete(reply))
+        {
+            qDebug() << false;
+            delete reply;
+            return false;
+        }
+        else
+        {
+            QString resultat = reply->readAll();
+
+            if (resultat != "OK" && resultat != "\"true\"")
+            {
+                qDebug() << false;
+                delete reply;
+                return false;
+            }
+
+            qDebug() << true;
+            //faut le deleter de la list
+            for (int i=0; i<m_orders.count(); i++)
+            {
+                if (m_orders[i].order_id == *id_Orders)
+                {
+                    m_orders.removeAt(i);
+                    i--;
+                }
+            }
+
+            delete reply;
+        }
+
+        foreach (orders solo, m_orders)
+        {
+            qDebug() << "cancel" << solo.type << " - id : "  << solo.order_id;
+            qDebug() << "cancel" << solo.type << " - price : "  << solo.price;
+            qDebug() << "cancel" << solo.type << " - amount : "  << solo.amount;
+        }
+
+        return true;
+}
+
 bool BTCexchange::interpreterOrders(QNetworkRequest* request, QString type, double *price, double *amount, QByteArray *jsonString)
 {
     QEventLoop eventLoop;
@@ -89,6 +147,11 @@ bool BTCexchange::interpreterOrders(QNetworkRequest* request, QString type, doub
         }
 
         return true;
+}
+
+QList<orders>* BTCexchange::get_orders()
+{
+    return &m_orders;
 }
 
 QString* BTCexchange::get_apiKey()
