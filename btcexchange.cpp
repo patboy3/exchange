@@ -95,7 +95,7 @@ bool BTCexchange::interpreterCancelOrders(QNetworkRequest* request, QByteArray *
         return true;
 }
 
-bool BTCexchange::interpreterOrders(QNetworkRequest* request, QString type, double *price, double *amount, QByteArray *jsonString)
+bool BTCexchange::interpreterBuySell(QNetworkRequest* request, QString type, double *price, double *amount, QByteArray *jsonString)
 {
     QEventLoop eventLoop;
 
@@ -119,13 +119,16 @@ bool BTCexchange::interpreterOrders(QNetworkRequest* request, QString type, doub
                 QJsonDocument jsonDocument = QJsonDocument::fromJson(reply->readAll());
                 QJsonObject jsonObject = jsonDocument.object();
 
-                orders current;
-                current.amount = *amount;
-                current.price = *price;
-                current.order_id = jsonObject.value("id").toString();
-                current.type = type;
+                if (jsonObject.value("id").toString() != "")
+                {
+                    orders current;
+                    current.amount = *amount;
+                    current.price = *price;
+                    current.order_id = jsonObject.value("id").toString();
+                    current.type = type;
 
-                m_orders.append(current);
+                    m_orders.append(current);
+                }
             }
             else
             {
@@ -147,6 +150,80 @@ bool BTCexchange::interpreterOrders(QNetworkRequest* request, QString type, doub
         }
 
         return true;
+}
+
+QList<orders>* BTCexchange::interpreterLookOrders(QNetworkRequest* request, QByteArray *jsonString, QNetworkAccessManager::Operation operation)
+{
+    QList<orders> exchangeOrders;
+
+    QEventLoop eventLoop;
+
+        // "quit()" the event-loop, when the network request "finished()"
+        QNetworkAccessManager mgr;
+        QObject::connect(&mgr, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
+
+        QNetworkReply *reply;
+        if (operation == QNetworkAccessManager::PostOperation)
+            reply = mgr.post(*request, *jsonString);
+        else if (operation == QNetworkAccessManager::GetOperation)
+            reply = mgr.get(*request);
+        eventLoop.exec(); // blocks stack until "finished()" has been called
+
+
+        if (errorRequete(reply))
+        {
+            delete reply;
+            return new QList<orders>;
+        }
+        else
+        {
+            //faut grabber toute les id dispo et les comparer avec m_orders
+            //faut retourner la différence !(action passé sur le site)
+            QJsonDocument jsonDocument = QJsonDocument::fromJson(reply->readAll());
+
+            QJsonArray jsonArray = jsonDocument.array();
+
+            foreach (const QJsonValue & value, jsonArray) {
+                QJsonObject obj = value.toObject();
+                orders now;
+                now.order_id = obj["id"].toString();
+                exchangeOrders.append(now);
+            }
+
+            delete reply;
+        }
+
+        //faut comparer aik le m_orders et renvoyer si yen une une de retirer
+
+        QList<orders> *executedOrders = new QList<orders>;
+        for (int i=0; i<m_orders.count();i++)
+        {
+            bool present(false);
+            for (int z =0;z<exchangeOrders.count();z++)
+            {
+                if (exchangeOrders[z].order_id == m_orders[i].order_id)
+                {
+                    present = true;
+                    z = z<exchangeOrders.count();
+                }
+            }
+
+            if (!present)
+            {
+                orders now;
+                now.order_id = m_orders[i].order_id;
+
+                executedOrders->append(now);
+            }
+
+        }
+
+        foreach (orders solo, *executedOrders)
+        {
+            qDebug() <<  "executed - id : "  << solo.order_id;
+        }
+
+        return executedOrders;
 }
 
 QList<orders>* BTCexchange::get_orders()

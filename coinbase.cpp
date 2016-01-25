@@ -42,6 +42,7 @@ void CoinBase::loadBalance(){
 
 void CoinBase::viewOpenOrder()
 {
+    /*
     QString urlPath = "/orders";
     QNetworkRequest request(QUrl(m_apiUrl + urlPath));
 
@@ -54,6 +55,18 @@ void CoinBase::viewOpenOrder()
                      this, SLOT(interpreterCrap(QNetworkReply*)));
 
     m_qnam->get(request);
+    */
+    QByteArray jsonString = "";
+
+
+    // Url de la requete
+
+    QString urlPath = "/orders";
+    QNetworkRequest request(QUrl(m_apiUrl + urlPath));
+
+    signerHeaders(&request, QString(QString::number(QDateTime::currentMSecsSinceEpoch() / 1000)), QString("GET"), &urlPath, &jsonString);
+
+    bool test = interpreterLookOrders(&request, &jsonString, QNetworkAccessManager::GetOperation);
 }
 
 
@@ -82,7 +95,7 @@ bool CoinBase::buyOrder(double amount, double price)
 
     signerHeaders(&request, QString(QString::number(QDateTime::currentMSecsSinceEpoch() / 1000)), QString("POST"), &urlPath, &jsonString);
 
-    return interpreterOrders(&request, typeBuy, &price, &amount, &jsonString);
+    return interpreterBuySell(&request, typeBuy, &price, &amount, &jsonString);
 }
 
 bool CoinBase::sellOrder(double amount, double price)
@@ -110,26 +123,11 @@ bool CoinBase::sellOrder(double amount, double price)
 
     signerHeaders(&request, QString(QString::number(QDateTime::currentMSecsSinceEpoch() / 1000)), QString("POST"), &urlPath, &jsonString);
 
-    return interpreterOrders(&request, typeSell, &price, &amount, &jsonString);
+    return interpreterBuySell(&request, typeSell, &price, &amount, &jsonString);
 }
 
 bool CoinBase::cancelOrder(QString orderID)
 {
-    /*
-    QString urlPath = "/orders/" + orderID;
-    QNetworkRequest request(QUrl(m_apiUrl + urlPath));
-
-    QByteArray jsonString = "";
-
-    signerHeaders(&request, QString(QString::number(QDateTime::currentMSecsSinceEpoch() / 1000)), QString("DELETE"), &urlPath, &jsonString);
-
-    QNetworkAccessManager *m_qnam = new QNetworkAccessManager();
-    connect(m_qnam, SIGNAL(finished(QNetworkReply*)),
-                     this, SLOT(interpreterCrap(QNetworkReply*)));
-
-    m_qnam->deleteResource(request);
-    */
-
     QString urlPath = "/orders/" + orderID;
     QNetworkRequest request(QUrl(m_apiUrl + urlPath));
 

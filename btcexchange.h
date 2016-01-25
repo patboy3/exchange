@@ -54,8 +54,9 @@ public:
 protected:
     QByteArray *hmacSignature(QByteArray *message, QCryptographicHash::Algorithm method, bool secretKeyIsBase64 = false);
     bool errorRequete(QNetworkReply* reply);
-    virtual bool interpreterOrders(QNetworkRequest* request, QString type, double *price, double *amount, QByteArray *jsonString);
+    virtual bool interpreterBuySell(QNetworkRequest* request, QString type, double *price, double *amount, QByteArray *jsonString);
     virtual bool interpreterCancelOrders(QNetworkRequest* request, QByteArray *jsonString, QString *id_Orders, QNetworkAccessManager::Operation operation);
+    virtual QList<orders>* interpreterLookOrders(QNetworkRequest* request, QByteArray *jsonString, QNetworkAccessManager::Operation operation);
     QString orderBookAddr;
     QList<orders> m_orders;
     QList<OrderBookElement> m_asks;

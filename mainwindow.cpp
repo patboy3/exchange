@@ -71,25 +71,10 @@ void MainWindow::loadSite()
                 //solo->viewOpenOrder();
                 //solo->rafraichirOrderBook();
                 //solo->loadBalance();
-                solo->sellOrder(0.01,800);
+                //solo->sellOrder(0.01,800);
                 //solo->buyOrder(5.545);
                 //solo->cancelOrder("qtw4c0ig2aks95bb969dpnbf4stlmuvcosh1szhua1nj6zvg64uvr5avx3gjycwm");
                 //solo->lookOrder("eedd5065-fdf9-4da1-b23a-6f51b79dc32a");
-            }
-        }
-
-        QThread::sleep(3);
-
-        foreach (BTCexchange* solo, m_sites)
-        {
-            if (*solo->get_apiKey() != "")
-            {
-                QList<orders> *test = solo->get_orders();
-
-                for (int i=0;i< test->count();i++)
-                {
-                    solo->cancelOrder(((orders)(*test)[i]).order_id);
-                }
             }
         }
     }

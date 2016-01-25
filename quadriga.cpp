@@ -74,29 +74,7 @@ void Quadriga::lookOrder(QString orderID)
 }
 
 bool Quadriga::cancelOrder(QString orderID)
-{
-    /*
-    signature *sign = new signature;
-    getSignature(sign);
-
-    QNetworkAccessManager *networkManager = new QNetworkAccessManager();
-    QNetworkRequest *request = new QNetworkRequest();
-
-    QByteArray jsonString = "key="+apiKey.toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"&id="+orderID.toLatin1();
-
-    // Url de la requete
-    request->setUrl(QUrl(m_apiUrl + "/cancel_order"));
-    request->setRawHeader("Content-Type", "application/x-www-form-urlencoded");
-
-    // Connecte le signal Finished du networkManaget au Slot lireJsonFinished
-    connect(networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(interpreterCrap(QNetworkReply*)));
-
-    // Lance la requete pour obtenir la réponse
-    networkManager->post(*request, jsonString);
-
-    delete sign;
-    */
-
+{    
     signature *sign = new signature;
     getSignature(sign);
 
@@ -111,6 +89,7 @@ bool Quadriga::cancelOrder(QString orderID)
 
 void Quadriga::viewOpenOrder()
 {
+    /*
     signature *sign = new signature;
     getSignature(sign);
 
@@ -130,6 +109,20 @@ void Quadriga::viewOpenOrder()
     networkManager->post(*request, jsonString);
 
     delete sign;
+    */
+
+    signature *sign = new signature;
+    getSignature(sign);
+
+    QByteArray jsonString = "key="+apiKey.toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"&book=btc_" + currentCurrency.toLower().toLatin1();
+
+    QNetworkRequest request;
+    // Url de la requete
+    request.setUrl(QUrl(m_apiUrl + "/open_orders"));
+    request.setRawHeader("Content-Type", "application/x-www-form-urlencoded");
+
+    delete sign;
+    bool test = interpreterLookOrders(&request, &jsonString, QNetworkAccessManager::PostOperation);
 }
 
 bool Quadriga::buyOrder(double amount, double price)
@@ -149,7 +142,7 @@ bool Quadriga::buyOrder(double amount, double price)
     request.setRawHeader("Content-Type", "application/x-www-form-urlencoded");
 
     delete sign;
-    return interpreterOrders(&request, typeBuy, &price, &amount, &jsonString);
+    return interpreterBuySell(&request, typeBuy, &price, &amount, &jsonString);
 }
 
 bool Quadriga::sellOrder(double amount, double price)
@@ -170,7 +163,7 @@ bool Quadriga::sellOrder(double amount, double price)
     request.setRawHeader("Content-Type", "application/x-www-form-urlencoded");
 
     delete sign;
-    return interpreterOrders(&request, typeSell, &price, &amount, &jsonString);
+    return interpreterBuySell(&request, typeSell, &price, &amount, &jsonString);
 }
 
 
