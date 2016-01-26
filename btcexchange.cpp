@@ -230,7 +230,7 @@ QList<orders>* BTCexchange::interpreterLookOrders(QNetworkRequest* request, QByt
         return executedOrders;
 }
 
-double BTCexchange::get_averagePrice(double amount, QString type)
+double BTCexchange::get_averagePrice(double amount, QString type, bool includeFees)
 {
     int iteration = 0;
     double currentAmount(0);
@@ -249,8 +249,6 @@ double BTCexchange::get_averagePrice(double amount, QString type)
 
     while (currentAmount < amount && iteration != (*now).count())
     {
-        //faudrait refaire le calcul en prenant en considération le nombre de bitcoin par prix
-
         if (currentAmount + (*now)[iteration].nbBtc < amount)
         {
             spendMoney = spendMoney + ((*now)[iteration].prixVente * (*now)[iteration].nbBtc);
@@ -265,9 +263,21 @@ double BTCexchange::get_averagePrice(double amount, QString type)
         iteration++;
     }
 
-    qDebug() << m_siteName << ": averageprice - " << type << " : " << spendMoney / currentAmount << "(" << currentAmount << " BTC)";
+    double averagePrice(spendMoney / currentAmount);
 
-    return spendMoney / currentAmount;
+    //qDebug() << m_siteName << ": averageprice (nofee) - " << type << " : " << averagePrice << "(" << currentAmount << " BTC)";
+
+    if (includeFees)
+    {
+        if (type == BTCexchange::typeBuy)
+            averagePrice = averagePrice + (m_feeTaker / 100 * averagePrice);
+        else if (type == BTCexchange::typeSell)
+            averagePrice = averagePrice - (m_feeTaker / 100 * averagePrice);
+    }
+
+    qDebug() << m_siteName << ": averageprice - " << type << " : " << averagePrice << "(" << currentAmount << " BTC)";
+
+    return averagePrice;
 }
 
 QList<orders>* BTCexchange::get_orders()

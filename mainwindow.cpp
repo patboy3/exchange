@@ -85,19 +85,31 @@ void MainWindow::calculProfitability()
     {
         if (*solo->get_apiKey() != "")
         {
+            //faudrait partir sa en thread et lui faire attendre que aille toute fini avant le calcul de la profitabilité
             solo->rafraichirOrderBook();
         }
     }
 
     for (int i=0;i<m_sites.count() - 1;i++)
     {
-        m_sites[i]->get_averagePrice(10, BTCexchange::typeBuy);
-        m_sites[i]->get_averagePrice(10, BTCexchange::typeSell);
+        double buyI(m_sites[i]->get_averagePrice(1, BTCexchange::typeBuy, true));
+        double selI(m_sites[i]->get_averagePrice(1, BTCexchange::typeSell, true));
         for (int z = i + 1;z<m_sites.count();z++)
         {
-            //faut comparer pour que sa soit la meme devise
-           m_sites[z]->get_averagePrice(10, BTCexchange::typeBuy);
-           m_sites[z]->get_averagePrice(10, BTCexchange::typeSell);
+            if (*m_sites[i]->get_currentCurrency() == *m_sites[z]->get_currentCurrency())
+            {
+                double buyZ(m_sites[z]->get_averagePrice(1, BTCexchange::typeBuy, true));
+                double selZ(m_sites[z]->get_averagePrice(1, BTCexchange::typeSell, true));
+
+                //calcul des profitabilité
+                //buy sur la i sell sur la z
+                double profitability1((selZ / buyI - 1) * 100);
+                qDebug() << "profitabilité 1 (buy sur la i sell sur la z): " << profitability1;
+
+                //buy sur la z sell sur la i
+                double profitability2((selI / buyZ - 1) * 100);
+                qDebug() << "profitabilité 2 (buy sur la z sell sur la i) : " << profitability2;
+            }
         }
     }
 
