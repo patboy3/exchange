@@ -275,7 +275,7 @@ double BTCexchange::get_averagePrice(double amount, QString type, bool includeFe
             averagePrice = averagePrice - (m_feeTaker / 100 * averagePrice);
     }
 
-    qDebug() << m_siteName << ": averageprice - " << type << " : " << averagePrice << "(" << currentAmount << " BTC)";
+    qDebug() << m_siteName << ": averagePrice - " << type << " : " << averagePrice << "(" << currentAmount << " BTC)";
 
     return averagePrice;
 }

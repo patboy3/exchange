@@ -16,8 +16,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //add les sites ds m_sites
     loadSite(); //load les site ds la db et rempli les balances
-    calculProfitability();
-
 }
 
 
@@ -135,4 +133,9 @@ MainWindow::~MainWindow()
     {
         delete solo;
     }
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    calculProfitability();
 }
