@@ -88,6 +88,8 @@ void MainWindow::calculProfitability()
         }
     }
 
+
+    QList<double> profitability;
     for (int i=0;i<m_sites.count() - 1;i++)
     {
         double buyI(m_sites[i]->get_averagePrice(1, BTCexchange::typeBuy, true));
@@ -101,15 +103,17 @@ void MainWindow::calculProfitability()
 
                 //calcul des profitabilité
                 //buy sur la i sell sur la z
-                double profitability1((selZ / buyI - 1) * 100);
-                qDebug() << "profitabilité 1 (buy sur " << *m_sites[i]->get_sitename() << "_" << *m_sites[i]->get_currentCurrency() << " sell sur " << *m_sites[z]->get_sitename() << "_" << *m_sites[z]->get_currentCurrency() << "): " << profitability1;
+                profitability.append((selZ / buyI - 1) * 100);
+                //double profitability1((selZ / buyI - 1) * 100);
+                qDebug() << QString("profitabilité " + QString::number(profitability.count()) + " (buy sur " + *m_sites[i]->get_sitename() + "_" + *m_sites[i]->get_currentCurrency() + " sell sur " + *m_sites[z]->get_sitename() + "_" + *m_sites[z]->get_currentCurrency() + "): " + QString::number(profitability[profitability.count() - 1]) + "%");
 
                 //buy sur la z sell sur la i
-                double profitability2((selI / buyZ - 1) * 100);
-                qDebug() << "profitabilité 2 (buy sur " << *m_sites[z]->get_sitename() << "_" << *m_sites[z]->get_currentCurrency() << " sell sur " << *m_sites[i]->get_sitename() << "_" << *m_sites[i]->get_currentCurrency() << ") : " << profitability2;
+                //double profitability2((selI / buyZ - 1) * 100);
+                profitability.append((selI / buyZ - 1) * 100);
+                qDebug() << QString("profitabilité " + QString::number(profitability.count()) + " (buy sur " + *m_sites[z]->get_sitename() + "_" + *m_sites[z]->get_currentCurrency() + " sell sur " + *m_sites[i]->get_sitename() + "_" + *m_sites[i]->get_currentCurrency() + ") : " + QString::number(profitability[profitability.count() - 1]) + "%");
             }
         }
-    }
+    }    
 
 }
 
