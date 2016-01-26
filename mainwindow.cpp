@@ -91,13 +91,13 @@ void MainWindow::calculProfitability()
 
     for (int i=0;i<m_sites.count() - 1;i++)
     {
-        m_sites[i]->get_averagePrice(1, BTCexchange::typeBuy);
-        m_sites[i]->get_averagePrice(1, BTCexchange::typeSell);
+        m_sites[i]->get_averagePrice(10, BTCexchange::typeBuy);
+        m_sites[i]->get_averagePrice(10, BTCexchange::typeSell);
         for (int z = i + 1;z<m_sites.count();z++)
         {
             //faut comparer pour que sa soit la meme devise
-           m_sites[z]->get_averagePrice(1, BTCexchange::typeBuy);
-           m_sites[z]->get_averagePrice(1, BTCexchange::typeSell);
+           m_sites[z]->get_averagePrice(10, BTCexchange::typeBuy);
+           m_sites[z]->get_averagePrice(10, BTCexchange::typeSell);
         }
     }
 

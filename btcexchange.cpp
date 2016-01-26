@@ -247,7 +247,7 @@ double BTCexchange::get_averagePrice(double amount, QString type)
         now = &m_bids;
     }
 
-    while (currentAmount < amount && iteration != 15)
+    while (currentAmount < amount && iteration != (*now).count())
     {
         //faudrait refaire le calcul en prenant en considération le nombre de bitcoin par prix
 
@@ -265,7 +265,7 @@ double BTCexchange::get_averagePrice(double amount, QString type)
         iteration++;
     }
 
-    qDebug() << m_siteName << ": averageprice - " << type << " : " << spendMoney / currentAmount;
+    qDebug() << m_siteName << ": averageprice - " << type << " : " << spendMoney / currentAmount << "(" << currentAmount << " BTC)";
 
     return spendMoney / currentAmount;
 }
