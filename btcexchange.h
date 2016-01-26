@@ -38,6 +38,7 @@ public:
     bool rafraichirOrderBook();
     double get_averagePrice(double amount, QString type, bool includeFees = false);
 
+    QString* get_sitename();
     QString* get_currentCurrency();
     QString* get_apiKey();
     double* get_balance_fiat();

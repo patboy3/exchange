@@ -315,6 +315,11 @@ double* BTCexchange::get_balance_btcHold()
     return &m_balance_btcHold;
 }
 
+QString* BTCexchange::get_sitename()
+{
+    return &m_siteName;
+}
+
 bool BTCexchange::errorRequete(QNetworkReply* reply)
 {
     if(reply->error())

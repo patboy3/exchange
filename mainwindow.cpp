@@ -104,11 +104,11 @@ void MainWindow::calculProfitability()
                 //calcul des profitabilité
                 //buy sur la i sell sur la z
                 double profitability1((selZ / buyI - 1) * 100);
-                qDebug() << "profitabilité 1 (buy sur la i sell sur la z): " << profitability1;
+                qDebug() << "profitabilité 1 (buy sur " << *m_sites[i]->get_sitename() << "_" << *m_sites[i]->get_currentCurrency() << " sell sur " << *m_sites[z]->get_sitename() << "_" << *m_sites[z]->get_currentCurrency() << "): " << profitability1;
 
                 //buy sur la z sell sur la i
                 double profitability2((selI / buyZ - 1) * 100);
-                qDebug() << "profitabilité 2 (buy sur la z sell sur la i) : " << profitability2;
+                qDebug() << "profitabilité 2 (buy sur " << *m_sites[z]->get_sitename() << "_" << *m_sites[z]->get_currentCurrency() << " sell sur " << *m_sites[i]->get_sitename() << "_" << *m_sites[i]->get_currentCurrency() << ") : " << profitability2;
             }
         }
     }
