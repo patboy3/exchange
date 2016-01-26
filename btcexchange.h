@@ -32,9 +32,13 @@ class BTCexchange : public QObject
     Q_OBJECT
 
 public:
+    static QString typeBuy;
+    static QString typeSell;
     explicit BTCexchange(QString currency, QString liveApiKey, QString liveSecretKey);
     bool rafraichirOrderBook();
+    double get_averagePrice(double amount, QString type);
 
+    QString* get_currentCurrency();
     QString* get_apiKey();
     double* get_balance_fiat();
     double* get_balance_fiatHold();
@@ -52,8 +56,10 @@ public:
 
     ~BTCexchange();
 protected:
+
     QByteArray *hmacSignature(QByteArray *message, QCryptographicHash::Algorithm method, bool secretKeyIsBase64 = false);
     bool errorRequete(QNetworkReply* reply);
+    virtual bool interpreterOrderBook(QNetworkRequest* request);
     virtual bool interpreterBuySell(QNetworkRequest* request, QString type, double *price, double *amount, QByteArray *jsonString);
     virtual bool interpreterCancelOrders(QNetworkRequest* request, QByteArray *jsonString, QString *id_Orders, QNetworkAccessManager::Operation operation);
     virtual QList<orders>* interpreterLookOrders(QNetworkRequest* request, QByteArray *jsonString, QNetworkAccessManager::Operation operation);
@@ -65,6 +71,7 @@ protected:
     QString secretKey;
     QString currentCurrency;
     QString m_apiUrl;
+    QString m_siteName;
 
     double m_minAmountBTC;
     double m_minAmouterFiat;
@@ -76,13 +83,10 @@ protected:
     double m_balance_btc;
     double m_balance_btcHold;
 
-    QString typeBuy;
-    QString typeSell;
-
 private :
 
 protected slots:
-    virtual void interpreterOrderBook(QNetworkReply* reply);
+
 
 
 public slots :

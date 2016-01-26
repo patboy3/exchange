@@ -5,21 +5,27 @@
 #include <QMainWindow>
 #include <QList>
 #include <QtSql>
+#include <QString>
 
 
 #include "btcexchange.h"
 #include "coinbase.h"
 #include "quadriga.h"
 
+
+
 namespace Ui {
 class MainWindow;
 }
+
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
+
+
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
@@ -32,6 +38,8 @@ private:
                  int                 text_len,   /* length of data stream         */
                  const unsigned char *key,       /* pointer to authentication key */
                  int                 key_len    /* length of authentication key  */, void *digest);
+    void calculProfitability();
+
 public slots:
 
 private slots:

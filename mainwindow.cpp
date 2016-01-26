@@ -2,7 +2,10 @@
 #include "ui_mainwindow.h"
 #include <QtSql>
 
+
 //
+
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -10,86 +13,94 @@ MainWindow::MainWindow(QWidget *parent) :
 {
 
     ui->setupUi(this);
+
     //add les sites ds m_sites
-    loadSite();
+    loadSite(); //load les site ds la db et rempli les balances
+    calculProfitability();
+
 }
+
 
 void MainWindow::loadSite()
 {
 
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName( "./exchange.db");
+    db.open();
 
-    if (!db.open()) {
-        //si connect pas... add les site poru faire seulement un test direct
+    //Si sa connect... rentre les site ds une list de site
 
-        qDebug() << "erreur de connexion :" << db.lastError();
-        BTCexchange *test = new CoinBase("CAD", "SBH5GeIntChyxpax","G1WGo4vRMRleNVEkssfuhs8fDpT3UQ8T","tt");
-        //test->rafraichirOrderBook();
+    //detect si ya des tables
+    bool tabledetection(false);
+    QSqlQuery query;
+    query.exec("select * from SQLite_master;");
 
-        BTCexchange *test2 = new Quadriga("CAD","","",1);
-        //test2->rafraichirOrderBook();
-
-
-    }
-    else
+    while (query.next() && !tabledetection)
     {
-        //Si sa connect... rentre les site ds une list de site
-        qDebug() << "yeahhhhh";
+        //detect si ya déja des table ds la db.. (si la db est pas neuve)
+        tabledetection = true;
+    }
 
-        //detect si ya des tables
-        bool tabledetection(false);
-        QSqlQuery query;
-        query.exec("select * from SQLite_master;");
+    if (!tabledetection) //si db neuve.. créé les tables !
+        generateDB(&query);
 
-        while (query.next() && !tabledetection)
+    query.exec("SELECT sites.sitename, currency.currency, sites.apiKey, sites.secretKey, sites.ident, sites.passphrase FROM exchange left join currency on currency.ID = exchange.ID_Currency left outer join sites on sites.ID = exchange.ID_Sitename;");
+
+    while (query.next()) {
+        if (query.value(0).toString() == "quadriga")
         {
-            //detect si ya déja des table ds la db.. (si la db est pas neuve)
-            tabledetection = true;
+            m_sites.append(new Quadriga(query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toInt()));
         }
-
-        if (!tabledetection) //si db neuve.. créé les tables !
-            generateDB(&query);
-
-        query.exec("SELECT sites.sitename, currency.currency, sites.apiKey, sites.secretKey, sites.ident, sites.passphrase FROM exchange left join currency on currency.ID = exchange.ID_Currency left outer join sites on sites.ID = exchange.ID_Sitename;");
-
-        while (query.next()) {
-            if (query.value(0).toString() == "quadriga")
-            {
-                m_sites.append(new Quadriga(query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toInt()));
-            }
-            else if (query.value(0).toString() == "coinbase")
-            {
-                m_sites.append(new CoinBase(query.value(1).toString(),query.value(2).toString(),query.value(3).toString(), query.value(5).toString()));
-            }
-        }
-
-        foreach (BTCexchange* solo, m_sites)
+        else if (query.value(0).toString() == "coinbase")
         {
-            if (*solo->get_apiKey() != "")
-            {
-                //solo->viewOpenOrder();
-                //solo->rafraichirOrderBook();
-                //solo->loadBalance();
-                solo->sellOrder(0.01,800);
-                solo->sellOrder(0.01,800);
-                //solo->buyOrder(5.545);
-                //solo->cancelOrder("qtw4c0ig2aks95bb969dpnbf4stlmuvcosh1szhua1nj6zvg64uvr5avx3gjycwm");
-                //solo->lookOrder("eedd5065-fdf9-4da1-b23a-6f51b79dc32a");
-            }
-
-
-        }
-        QThread::sleep(15);
-
-        foreach (BTCexchange* solo, m_sites)
-        {
-            if (*solo->get_apiKey() != "")
-            {
-                solo->viewOpenOrder();
-            }
+            m_sites.append(new CoinBase(query.value(1).toString(),query.value(2).toString(),query.value(3).toString(), query.value(5).toString()));
         }
     }
+
+
+    foreach (BTCexchange* solo, m_sites)
+    {
+        if (*solo->get_apiKey() != "")
+        {
+            //solo->viewOpenOrder();
+            //solo->rafraichirOrderBook();
+            solo->loadBalance();
+            //solo->sellOrder(0.01,800);
+            //solo->buyOrder(5.545);
+            //solo->cancelOrder("qtw4c0ig2aks95bb969dpnbf4stlmuvcosh1szhua1nj6zvg64uvr5avx3gjycwm");
+            //solo->lookOrder("eedd5065-fdf9-4da1-b23a-6f51b79dc32a");
+        }
+    }
+
+
+}
+
+void MainWindow::calculProfitability()
+{
+    //faut calculer la profitabilité de chaque site en prenant compte de la currency
+    //1 - 2 . 1 - 3 . 1 - 4 . 2 - 3 . 2 - 4 . 3 - 4
+
+    //faut aller chercher l'order book de toute les site ... et comparer les site entre eux (buy/sell)
+    foreach (BTCexchange* solo, m_sites)
+    {
+        if (*solo->get_apiKey() != "")
+        {
+            solo->rafraichirOrderBook();
+        }
+    }
+
+    for (int i=0;i<m_sites.count() - 1;i++)
+    {
+        m_sites[i]->get_averagePrice(1, BTCexchange::typeBuy);
+        m_sites[i]->get_averagePrice(1, BTCexchange::typeSell);
+        for (int z = i + 1;z<m_sites.count();z++)
+        {
+            //faut comparer pour que sa soit la meme devise
+           m_sites[z]->get_averagePrice(1, BTCexchange::typeBuy);
+           m_sites[z]->get_averagePrice(1, BTCexchange::typeSell);
+        }
+    }
+
 }
 
 void MainWindow::generateDB(QSqlQuery *query)

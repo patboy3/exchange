@@ -6,6 +6,10 @@ CoinBase::CoinBase(QString currency, QString apiKey, QString secretKey, QString 
     m_apiUrl = "https://api.exchange.coinbase.com";
     orderBookAddr = m_apiUrl + "/products/BTC-" + currentCurrency + "/book?level=2";
     m_passphrase = passphrase;
+    m_siteName = "coinbase";
+
+    m_feeMaker = 0.00;
+    m_feeTaker = 0.25;
 }
 
 
@@ -95,7 +99,7 @@ bool CoinBase::buyOrder(double amount, double price)
 
     signerHeaders(&request, QString(QString::number(QDateTime::currentMSecsSinceEpoch() / 1000)), QString("POST"), &urlPath, &jsonString);
 
-    return interpreterBuySell(&request, typeBuy, &price, &amount, &jsonString);
+    return interpreterBuySell(&request, BTCexchange::typeBuy, &price, &amount, &jsonString);
 }
 
 bool CoinBase::sellOrder(double amount, double price)
@@ -123,7 +127,7 @@ bool CoinBase::sellOrder(double amount, double price)
 
     signerHeaders(&request, QString(QString::number(QDateTime::currentMSecsSinceEpoch() / 1000)), QString("POST"), &urlPath, &jsonString);
 
-    return interpreterBuySell(&request, typeSell, &price, &amount, &jsonString);
+    return interpreterBuySell(&request, BTCexchange::typeSell, &price, &amount, &jsonString);
 }
 
 bool CoinBase::cancelOrder(QString orderID)

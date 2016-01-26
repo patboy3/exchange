@@ -1,6 +1,8 @@
 #include "btcexchange.h"
 
 
+QString BTCexchange::typeBuy = "buy";
+QString BTCexchange::typeSell = "sell";
 
 BTCexchange::BTCexchange(QString currency, QString liveApiKey, QString liveSecretKey)
 {
@@ -8,8 +10,6 @@ BTCexchange::BTCexchange(QString currency, QString liveApiKey, QString liveSecre
     m_balance_fiatHold = 0;
     m_balance_btc = 0;
     m_balance_btcHold = 0;
-    typeBuy = "buy";
-    typeSell = "sell";
 
     apiKey = liveApiKey;
     secretKey = liveSecretKey;
@@ -41,58 +41,58 @@ bool BTCexchange::interpreterCancelOrders(QNetworkRequest* request, QByteArray *
 {
     QEventLoop eventLoop;
 
-        // "quit()" the event-loop, when the network request "finished()"
-        QNetworkAccessManager mgr;
-        QObject::connect(&mgr, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
+    // "quit()" the event-loop, when the network request "finished()"
+    QNetworkAccessManager mgr;
+    QObject::connect(&mgr, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
 
-        QNetworkReply *reply;
-        if (operation == QNetworkAccessManager::PostOperation)
-            reply = mgr.post(*request, *jsonString);
-        else if (operation == QNetworkAccessManager::DeleteOperation)
-            reply = mgr.deleteResource(*request);
+    QNetworkReply *reply;
+    if (operation == QNetworkAccessManager::PostOperation)
+        reply = mgr.post(*request, *jsonString);
+    else if (operation == QNetworkAccessManager::DeleteOperation)
+        reply = mgr.deleteResource(*request);
 
-        eventLoop.exec(); // blocks stack until "finished()" has been called
+    eventLoop.exec(); // blocks stack until "finished()" has been called
 
 
-        if (errorRequete(reply))
+    if (errorRequete(reply))
+    {
+        qDebug() << false;
+        delete reply;
+        return false;
+    }
+    else
+    {
+        QString resultat = reply->readAll();
+
+        if (resultat != "OK" && resultat != "\"true\"")
         {
             qDebug() << false;
             delete reply;
             return false;
         }
-        else
+
+        qDebug() << true;
+        //faut le deleter de la list
+        for (int i=0; i<m_orders.count(); i++)
         {
-            QString resultat = reply->readAll();
-
-            if (resultat != "OK" && resultat != "\"true\"")
+            if (m_orders[i].order_id == *id_Orders)
             {
-                qDebug() << false;
-                delete reply;
-                return false;
+                m_orders.removeAt(i);
+                i--;
             }
-
-            qDebug() << true;
-            //faut le deleter de la list
-            for (int i=0; i<m_orders.count(); i++)
-            {
-                if (m_orders[i].order_id == *id_Orders)
-                {
-                    m_orders.removeAt(i);
-                    i--;
-                }
-            }
-
-            delete reply;
         }
 
-        foreach (orders solo, m_orders)
-        {
-            qDebug() << "cancel" << solo.type << " - id : "  << solo.order_id;
-            qDebug() << "cancel" << solo.type << " - price : "  << solo.price;
-            qDebug() << "cancel" << solo.type << " - amount : "  << solo.amount;
-        }
+        delete reply;
+    }
 
-        return true;
+    foreach (orders solo, m_orders)
+    {
+        qDebug() << "cancel" << solo.type << " - id : "  << solo.order_id;
+        qDebug() << "cancel" << solo.type << " - price : "  << solo.price;
+        qDebug() << "cancel" << solo.type << " - amount : "  << solo.amount;
+    }
+
+    return true;
 }
 
 bool BTCexchange::interpreterBuySell(QNetworkRequest* request, QString type, double *price, double *amount, QByteArray *jsonString)
@@ -230,9 +230,54 @@ QList<orders>* BTCexchange::interpreterLookOrders(QNetworkRequest* request, QByt
         return executedOrders;
 }
 
+double BTCexchange::get_averagePrice(double amount, QString type)
+{
+    int iteration = 0;
+    double currentAmount(0);
+    double spendMoney(0);
+
+    QList<OrderBookElement>* now;
+
+    if (type == BTCexchange::typeBuy)
+    {
+        now = &m_asks;
+    }
+    else if (type == BTCexchange::typeSell)
+    {
+        now = &m_bids;
+    }
+
+    while (currentAmount < amount && iteration != 15)
+    {
+        //faudrait refaire le calcul en prenant en considération le nombre de bitcoin par prix
+
+        if (currentAmount + (*now)[iteration].nbBtc < amount)
+        {
+            spendMoney = spendMoney + ((*now)[iteration].prixVente * (*now)[iteration].nbBtc);
+            currentAmount = currentAmount + (*now)[iteration].nbBtc;
+        }
+        else
+        {
+            spendMoney = spendMoney + ((*now)[iteration].prixVente * (amount - currentAmount));
+            currentAmount = currentAmount + (amount - currentAmount);
+        }
+
+        iteration++;
+    }
+
+    qDebug() << m_siteName << ": averageprice - " << type << " : " << spendMoney / currentAmount;
+
+    return spendMoney / currentAmount;
+}
+
 QList<orders>* BTCexchange::get_orders()
 {
     return &m_orders;
+}
+
+QString* BTCexchange::get_currentCurrency()
+{
+    return &currentCurrency;
 }
 
 QString* BTCexchange::get_apiKey()
@@ -275,13 +320,19 @@ bool BTCexchange::errorRequete(QNetworkReply* reply)
     return false;
 }
 
-void BTCexchange::interpreterOrderBook(QNetworkReply* reply)
+bool BTCexchange::interpreterOrderBook(QNetworkRequest* request)
 {
-    // Gestion des erreurs
-    if (errorRequete(reply))
-        return;
+    QEventLoop eventLoop;
 
-    // Laleur de reply->readAll() se vide apres usage
+    // "quit()" the event-loop, when the network request "finished()"
+    QNetworkAccessManager mgr;
+    QObject::connect(&mgr, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
+
+    QNetworkReply *reply = mgr.get(*request);
+
+    eventLoop.exec(); // blocks stack until "finished()" has been called
+
+
     QString reponse = reply->readAll();
 
     // Crée un object Json avec la réponse obtenure
@@ -311,25 +362,28 @@ void BTCexchange::interpreterOrderBook(QNetworkReply* reply)
         m_bids.append(now);
     }
 
+    /*
     foreach (OrderBookElement solo, m_bids)
     {
-        qDebug() << "bids - btc : "  << solo.nbBtc;
-        qDebug() << "bids - price : "  << solo.prixVente;
+        qDebug() << m_siteName << ": bids - btc : "  << solo.nbBtc;
+        qDebug() << m_siteName << ": bids - price : "  << solo.prixVente;
     }
 
     foreach (OrderBookElement solo, m_asks)
     {
-        qDebug() << "asks - btc : "  << solo.nbBtc;
-        qDebug() << "asks - price : "  << solo.prixVente;
-    }
+        qDebug() << m_siteName  << ": asks - btc : "  << solo.nbBtc;
+        qDebug() << m_siteName  << ": asks - price : "  << solo.prixVente;
+    }*/
 
     delete reply;
+    delete request;
 
+    return true;
 }
 
 bool BTCexchange::rafraichirOrderBook()
 {
-
+    /*
     QNetworkAccessManager *networkManager = new QNetworkAccessManager();
     QNetworkRequest *request = new QNetworkRequest();
 
@@ -343,6 +397,12 @@ bool BTCexchange::rafraichirOrderBook()
     networkManager->get(*request);
 
     return false;
+    */
+    QNetworkRequest request;
+    // Url de la requete
+    request.setUrl(QUrl(orderBookAddr));
+
+    return interpreterOrderBook(&request);
 }
 
 BTCexchange::~BTCexchange()

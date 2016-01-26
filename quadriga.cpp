@@ -11,6 +11,10 @@ Quadriga::Quadriga(QString currency, QString liveApiKey, QString liveSecretKey, 
     m_apiUrl = "https://api.quadrigacx.com/v2";
     orderBookAddr = m_apiUrl + "/order_book?book=btc_" + currentCurrency.toLower();
     m_ident = ident;
+    m_siteName = "quadriga";
+
+    m_feeMaker = 0.5;
+    m_feeTaker = 0.5;
 }
 
 void Quadriga::getSignature(signature *sign)
@@ -142,7 +146,7 @@ bool Quadriga::buyOrder(double amount, double price)
     request.setRawHeader("Content-Type", "application/x-www-form-urlencoded");
 
     delete sign;
-    return interpreterBuySell(&request, typeBuy, &price, &amount, &jsonString);
+    return interpreterBuySell(&request, BTCexchange::typeBuy, &price, &amount, &jsonString);
 }
 
 bool Quadriga::sellOrder(double amount, double price)
@@ -163,7 +167,7 @@ bool Quadriga::sellOrder(double amount, double price)
     request.setRawHeader("Content-Type", "application/x-www-form-urlencoded");
 
     delete sign;
-    return interpreterBuySell(&request, typeSell, &price, &amount, &jsonString);
+    return interpreterBuySell(&request, BTCexchange::typeSell, &price, &amount, &jsonString);
 }
 
 

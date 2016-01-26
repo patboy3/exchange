@@ -3,8 +3,6 @@
 
 #include "btcexchange.h"
 
-
-
 struct signature{
     qint64 time;
     QString hmac256;
