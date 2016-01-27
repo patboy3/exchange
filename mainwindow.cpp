@@ -73,7 +73,7 @@ void MainWindow::loadSite()
 
 }
 
-void MainWindow::calculProfitability()
+void MainWindow::calculProfitability(double amount)
 {
     //faut calculer la profitabilité de chaque site en prenant compte de la currency
     //1 - 2 . 1 - 3 . 1 - 4 . 2 - 3 . 2 - 4 . 3 - 4
@@ -88,18 +88,18 @@ void MainWindow::calculProfitability()
         }
     }
 
-
     QList<double> profitability;
     for (int i=0;i<m_sites.count() - 1;i++)
     {
-        double buyI(m_sites[i]->get_averagePrice(1, BTCexchange::typeBuy, true));
-        double selI(m_sites[i]->get_averagePrice(1, BTCexchange::typeSell, true));
+
+        double buyI(m_sites[i]->get_averagePrice(amount, BTCexchange::typeBuy, true));
+        double selI(m_sites[i]->get_averagePrice(amount, BTCexchange::typeSell, true));
         for (int z = i + 1;z<m_sites.count();z++)
         {
             if (*m_sites[i]->get_currentCurrency() == *m_sites[z]->get_currentCurrency())
             {
-                double buyZ(m_sites[z]->get_averagePrice(1, BTCexchange::typeBuy, true));
-                double selZ(m_sites[z]->get_averagePrice(1, BTCexchange::typeSell, true));
+                double buyZ(m_sites[z]->get_averagePrice(amount, BTCexchange::typeBuy, true));
+                double selZ(m_sites[z]->get_averagePrice(amount, BTCexchange::typeSell, true));
 
                 //calcul des profitabilité
                 //buy sur la i sell sur la z
@@ -141,5 +141,5 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_clicked()
 {
-    calculProfitability();
+    calculProfitability(ui->text_amountProfitability->text().replace(',','.').toDouble());
 }
