@@ -12,7 +12,11 @@
 #include "coinbase.h"
 #include "quadriga.h"
 
-
+struct struct_profitability{
+    BTCexchange* buyExchange;
+    BTCexchange* sellExchange;
+    double profitPourcentage;
+};
 
 namespace Ui {
 class MainWindow;

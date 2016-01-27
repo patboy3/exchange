@@ -88,7 +88,8 @@ void MainWindow::calculProfitability(double amount)
         }
     }
 
-    QList<double> profitability;
+    QList<struct_profitability> profitability;
+    //QList<double> profitability;
     for (int i=0;i<m_sites.count() - 1;i++)
     {
 
@@ -103,17 +104,31 @@ void MainWindow::calculProfitability(double amount)
 
                 //calcul des profitabilité
                 //buy sur la i sell sur la z
-                profitability.append((selZ / buyI - 1) * 100);
-                //double profitability1((selZ / buyI - 1) * 100);
-                qDebug() << QString("profitabilité " + QString::number(profitability.count()) + " (buy sur " + *m_sites[i]->get_sitename() + "_" + *m_sites[i]->get_currentCurrency() + " sell sur " + *m_sites[z]->get_sitename() + "_" + *m_sites[z]->get_currentCurrency() + "): " + QString::number(profitability[profitability.count() - 1]) + "%");
+                struct_profitability prof1;
+                prof1.buyExchange = m_sites[i];
+                prof1.sellExchange = m_sites[z];
+                prof1.profitPourcentage = (selZ / buyI - 1) * 100;
+                profitability.append(prof1);
+
+                //profitability.append((selZ / buyI - 1) * 100);
+                //qDebug() << QString("profitabilité " + QString::number(profitability.count()) + " (buy sur " + *m_sites[i]->get_sitename() + "_" + *m_sites[i]->get_currentCurrency() + " sell sur " + *m_sites[z]->get_sitename() + "_" + *m_sites[z]->get_currentCurrency() + "): " + QString::number(profitability[profitability.count() - 1]) + "%");
 
                 //buy sur la z sell sur la i
-                //double profitability2((selI / buyZ - 1) * 100);
-                profitability.append((selI / buyZ - 1) * 100);
-                qDebug() << QString("profitabilité " + QString::number(profitability.count()) + " (buy sur " + *m_sites[z]->get_sitename() + "_" + *m_sites[z]->get_currentCurrency() + " sell sur " + *m_sites[i]->get_sitename() + "_" + *m_sites[i]->get_currentCurrency() + ") : " + QString::number(profitability[profitability.count() - 1]) + "%");
+                //profitability.append((selI / buyZ - 1) * 100);
+                //qDebug() << QString("profitabilité " + QString::number(profitability.count()) + " (buy sur " + *m_sites[z]->get_sitename() + "_" + *m_sites[z]->get_currentCurrency() + " sell sur " + *m_sites[i]->get_sitename() + "_" + *m_sites[i]->get_currentCurrency() + ") : " + QString::number(profitability[profitability.count() - 1]) + "%");
+                struct_profitability prof2;
+                prof2.buyExchange = m_sites[z];
+                prof2.sellExchange = m_sites[i];
+                prof2.profitPourcentage = (selI / buyZ - 1) * 100;
+                profitability.append(prof2);
             }
         }
-    }    
+    }
+
+    for (int i=0;i<profitability.count();i++)
+    {
+        qDebug() << QString("profitabilité " + QString::number(i + 1) + " (buy sur " + *profitability[i].buyExchange->get_sitename() + "_" + *profitability[i].buyExchange->get_sitename() + " sell sur " + *profitability[i].sellExchange->get_sitename() + "_" + *profitability[i].sellExchange->get_sitename() + ") : " + QString::number(profitability[i].profitPourcentage) + "%");
+    }
 
 }
 
