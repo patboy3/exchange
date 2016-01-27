@@ -42,7 +42,7 @@ private:
                  int                 text_len,   /* length of data stream         */
                  const unsigned char *key,       /* pointer to authentication key */
                  int                 key_len    /* length of authentication key  */, void *digest);
-    void calculProfitability(double amount);
+    QList<struct_profitability> *calculProfitability(double amount);
 
 public slots:
 
