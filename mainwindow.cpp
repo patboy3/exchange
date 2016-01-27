@@ -130,6 +130,7 @@ QList<struct_profitability>* MainWindow::calculProfitability(double amount)
         qDebug() << QString("profitabilité " + QString::number(i + 1) + " (buy sur " + *(*profitability)[i].buyExchange->get_sitename() + "_" + *(*profitability)[i].buyExchange->get_sitename() + " sell sur " + *(*profitability)[i].sellExchange->get_sitename() + "_" + *(*profitability)[i].sellExchange->get_sitename() + ") : " + QString::number((*profitability)[i].profitPourcentage) + "%");
     }
 
+    return profitability;
 }
 
 void MainWindow::generateDB(QSqlQuery *query)
@@ -156,5 +157,5 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_clicked()
 {
-    calculProfitability(ui->text_amountProfitability->text().replace(',','.').toDouble());
+    delete calculProfitability(ui->text_amountProfitability->text().replace(',','.').toDouble());
 }
