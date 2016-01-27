@@ -49,6 +49,7 @@ public slots:
 private slots:
 
     void on_pushButton_clicked();
+    void on_text_amountProfitability_returnPressed();
 };
 
 #endif // MAINWINDOW_H
