@@ -1,7 +1,7 @@
 #include "coinbase.h"
 
 
-CoinBase::CoinBase(QString currency, QString apiKey, QString secretKey, QString passphrase) : BTCexchange(currency, apiKey, secretKey)
+CoinBase::CoinBase(QString currency, QString apiKey, QString secretKey, QString passphrase, QSqlQuery *query) : BTCexchange(currency, apiKey, secretKey, query)
 {
     m_apiUrl = "https://api.exchange.coinbase.com";
     orderBookAddr = m_apiUrl + "/products/BTC-" + currentCurrency + "/book?level=2";

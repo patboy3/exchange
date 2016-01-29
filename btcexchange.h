@@ -13,6 +13,7 @@
 #include <iostream>
 #include <QMessageAuthenticationCode>
 #include <QEventLoop>
+#include <QtSql>
 
 struct OrderBookElement{
     double nbBtc;
@@ -34,7 +35,7 @@ class BTCexchange : public QObject
 public:
     static QString typeBuy;
     static QString typeSell;
-    explicit BTCexchange(QString currency, QString liveApiKey, QString liveSecretKey);
+    explicit BTCexchange(QString currency, QString liveApiKey, QString liveSecretKey, QSqlQuery *query);
     bool rafraichirOrderBook();
     double get_averagePrice(double amount, QString type, bool includeFees = false);
 
@@ -61,7 +62,7 @@ protected:
     QByteArray *hmacSignature(QByteArray *message, QCryptographicHash::Algorithm method, bool secretKeyIsBase64 = false);
     bool errorRequete(QNetworkReply* reply);
     virtual bool interpreterOrderBook(QNetworkRequest* request);
-    virtual bool interpreterBuySell(QNetworkRequest* request, QString type, double *price, double *amount, QByteArray *jsonString);
+    virtual int interpreterBuySell(QNetworkRequest* request, QString type, double *price, double *amount, QByteArray *jsonString);
     virtual bool interpreterCancelOrders(QNetworkRequest* request, QByteArray *jsonString, QString *id_Orders, QNetworkAccessManager::Operation operation);
     virtual QList<orders>* interpreterLookOrders(QNetworkRequest* request, QByteArray *jsonString, QNetworkAccessManager::Operation operation);
     QString orderBookAddr;
@@ -83,6 +84,8 @@ protected:
     double m_balance_fiatHold;
     double m_balance_btc;
     double m_balance_btcHold;
+
+    QSqlQuery *m_query;
 
 private :
 

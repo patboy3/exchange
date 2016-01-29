@@ -1,9 +1,10 @@
 #include "trade.h"
 
-Trade::Trade(QList<BTCexchange *> *sites)
+Trade::Trade(QList<BTCexchange *> *sites, QSqlQuery *query)
 {
     m_sites = *sites;
     m_minimumTrade = 0.2;
+    m_query = query;
 }
 
 QList<struct_profitability>* Trade::calculProfitability(double amount)
@@ -121,11 +122,12 @@ void Trade::run()
                 //clear les fonds ds checkFunds si font dispo en hold !
 
                 //launch le trade faut transformer le prix en btc
-                solo.buyExchange->buyOrder(solo.buyAverage * amount);
-                solo.sellExchange->sellOrder(amount);
+                int buyID = solo.buyExchange->buyOrder(solo.buyAverage * amount);
+                int sellID = solo.sellExchange->sellOrder(amount);
 
                 //faut saver le trade ds la db faut retourner les id des transactions !
                 //order id ds buy .. ds sell.. et mettre l'id de buy et sell ds trade
+                m_query->exec("INSERT INTO trade (ID_Buy, ID_Sell) VALUES (" + QString::number(buyID) + ", " + QString::number(sellID) + ");");
             }
         }
 

@@ -8,7 +8,7 @@ class CoinBase : public BTCexchange
     Q_OBJECT
 
 public:
-    explicit CoinBase(QString currency, QString apiKey, QString secretKey, QString passphrase);
+    explicit CoinBase(QString currency, QString apiKey, QString secretKey, QString passphrase, QSqlQuery *query);
     void loadBalance();
     bool buyOrder(double amount, double price = 0);
     bool sellOrder(double amount, double price = 0);

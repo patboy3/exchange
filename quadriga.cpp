@@ -1,12 +1,7 @@
 #include "quadriga.h"
 
-Quadriga::Quadriga() : BTCexchange("", "liveApiKey", "liveSecretKey")
-{
 
-
-}
-
-Quadriga::Quadriga(QString currency, QString liveApiKey, QString liveSecretKey, int ident) : BTCexchange(currency, liveApiKey, liveSecretKey)
+Quadriga::Quadriga(QString currency, QString liveApiKey, QString liveSecretKey, int ident, QSqlQuery *query) : BTCexchange(currency, liveApiKey, liveSecretKey, query)
 {
     m_apiUrl = "https://api.quadrigacx.com/v2";
     orderBookAddr = m_apiUrl + "/order_book?book=btc_" + currentCurrency.toLower();

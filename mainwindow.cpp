@@ -17,7 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //add les sites ds m_sites
     loadSite(); //load les site ds la db et rempli les balances
 
-    m_trade = new Trade(&m_sites);
+    m_trade = new Trade(&m_sites, m_query);
     m_trade->start();
 
 }
@@ -34,28 +34,28 @@ void MainWindow::loadSite()
 
     //detect si ya des tables
     bool tabledetection(false);
-    QSqlQuery query;
-    query.exec("select * from SQLite_master;");
+    m_query = new QSqlQuery;
+    m_query->exec("select * from SQLite_master;");
 
-    while (query.next() && !tabledetection)
+    while (m_query->next() && !tabledetection)
     {
         //detect si ya déja des table ds la db.. (si la db est pas neuve)
         tabledetection = true;
     }
 
     if (!tabledetection) //si db neuve.. créé les tables !
-        generateDB(&query);
+        generateDB(m_query);
 
-    query.exec("SELECT sites.sitename, currency.currency, sites.apiKey, sites.secretKey, sites.ident, sites.passphrase FROM exchange left join currency on currency.ID = exchange.ID_Currency left outer join sites on sites.ID = exchange.ID_Sitename;");
+    m_query->exec("SELECT sites.sitename, currency.currency, sites.apiKey, sites.secretKey, sites.ident, sites.passphrase FROM exchange left join currency on currency.ID = exchange.ID_Currency left outer join sites on sites.ID = exchange.ID_Sitename;");
 
-    while (query.next()) {
-        if (query.value(0).toString() == "quadriga")
+    while (m_query->next()) {
+        if (m_query->value(0).toString() == "quadriga")
         {
-            m_sites.append(new Quadriga(query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toInt()));
+            m_sites.append(new Quadriga(m_query->value(1).toString(),m_query->value(2).toString(),m_query->value(3).toString(),m_query->value(4).toInt(), m_query));
         }
-        else if (query.value(0).toString() == "coinbase")
+        else if (m_query->value(0).toString() == "coinbase")
         {
-            m_sites.append(new CoinBase(query.value(1).toString(),query.value(2).toString(),query.value(3).toString(), query.value(5).toString()));
+            m_sites.append(new CoinBase(m_query->value(1).toString(),m_query->value(2).toString(),m_query->value(3).toString(), m_query->value(5).toString(), m_query));
         }
     }
 
@@ -93,6 +93,7 @@ void MainWindow::generateDB(QSqlQuery *query)
 
 MainWindow::~MainWindow()
 {
+    delete m_query;
     delete m_trade;
     delete ui;
     foreach (BTCexchange* solo, m_sites)
@@ -103,7 +104,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_clicked()
 {
-    Trade profit(&m_sites);
+    Trade profit(&m_sites, m_query);
     delete profit.calculProfitability(ui->text_amountProfitability->text().replace(',','.').toDouble());
     //delete calculProfitability(ui->text_amountProfitability->text().replace(',','.').toDouble());
 }

@@ -38,6 +38,7 @@ private:
                  const unsigned char *key,       /* pointer to authentication key */
                  int                 key_len    /* length of authentication key  */, void *digest);
     Trade *m_trade;
+    QSqlQuery *m_query;
 public slots:
 
 private slots:

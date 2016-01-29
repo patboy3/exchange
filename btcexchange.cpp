@@ -4,7 +4,7 @@
 QString BTCexchange::typeBuy = "buy";
 QString BTCexchange::typeSell = "sell";
 
-BTCexchange::BTCexchange(QString currency, QString liveApiKey, QString liveSecretKey)
+BTCexchange::BTCexchange(QString currency, QString liveApiKey, QString liveSecretKey, QSqlQuery *query)
 {
     m_balance_fiat = 0;
     m_balance_fiatHold = 0;
@@ -14,6 +14,8 @@ BTCexchange::BTCexchange(QString currency, QString liveApiKey, QString liveSecre
     apiKey = liveApiKey;
     secretKey = liveSecretKey;
     currentCurrency = currency;
+
+    m_query = query;
 }
 
 QByteArray* BTCexchange::hmacSignature(QByteArray *message, QCryptographicHash::Algorithm method, bool secretKeyIsBase64)
@@ -100,61 +102,70 @@ bool BTCexchange::interpreterCancelOrders(QNetworkRequest* request, QByteArray *
     return true;
 }
 
-bool BTCexchange::interpreterBuySell(QNetworkRequest* request, QString type, double *price, double *amount, QByteArray *jsonString)
+int BTCexchange::interpreterBuySell(QNetworkRequest* request, QString type, double *price, double *amount, QByteArray *jsonString)
 {
+    int returnID(-1);
     QEventLoop eventLoop;
 
-        // "quit()" the event-loop, when the network request "finished()"
-        QNetworkAccessManager mgr;
-        QObject::connect(&mgr, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
+    // "quit()" the event-loop, when the network request "finished()"
+    QNetworkAccessManager mgr;
+    QObject::connect(&mgr, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
 
-        QNetworkReply *reply = mgr.post(*request, *jsonString);
-        eventLoop.exec(); // blocks stack until "finished()" has been called
+    QNetworkReply *reply = mgr.post(*request, *jsonString);
+    eventLoop.exec(); // blocks stack until "finished()" has been called
 
 
-        if (errorRequete(reply))
+    if (errorRequete(reply))
+    {
+        delete reply;
+        return returnID;
+    }
+    else
+    {
+        QJsonDocument jsonDocument = QJsonDocument::fromJson(reply->readAll());
+        QJsonObject jsonObject = jsonDocument.object();
+
+        if (price != 0)
         {
-            delete reply;
-            return false;
+            if (jsonObject.value("id").toString() != "")
+            {
+                orders current;
+                current.amount = *amount;
+                current.price = *price;
+                current.order_id = jsonObject.value("id").toString();
+                current.type = type;
+
+                m_orders.append(current);
+            }
         }
         else
         {
-            if (price != 0)
-            {
-                QJsonDocument jsonDocument = QJsonDocument::fromJson(reply->readAll());
-                QJsonObject jsonObject = jsonDocument.object();
+            //trade direct .. faudrait le noté !
 
-                if (jsonObject.value("id").toString() != "")
-                {
-                    orders current;
-                    current.amount = *amount;
-                    current.price = *price;
-                    current.order_id = jsonObject.value("id").toString();
-                    current.type = type;
+            //faut metre le id pi le tick tant que y etre
+            m_query->exec("INSERT INTO "+ type +" (OrderId, Tick, Amount, Price) VALUES ('" + jsonObject.value("id").toString() + "', "+ QDateTime::currentDateTime().toMSecsSinceEpoch() / 1000 +", "+*amount+", "+*price+");");
 
-                    m_orders.append(current);
-                }
+            m_query->exec("SELECT ID from " + type + " where OrderID = '" + jsonObject.value("id").toString() + "'");
+
+            while (m_query->next()) {
+                returnID = m_query->value(4).toInt();
             }
-            else
-            {
-                //trade direct .. faudrait le noté !
-
-            }
-
-            delete reply;
         }
 
-        foreach (orders solo, m_orders)
+        delete reply;
+    }
+
+    foreach (orders solo, m_orders)
+    {
+        if (solo.type == type)
         {
-            if (solo.type == type)
-            {
-                qDebug() << type << " - id : "  << solo.order_id;
-                qDebug() << type << " - price : "  << solo.price;
-                qDebug() << type << " - amount : "  << solo.amount;
-            }
+            qDebug() << type << " - id : "  << solo.order_id;
+            qDebug() << type << " - price : "  << solo.price;
+            qDebug() << type << " - amount : "  << solo.amount;
         }
+    }
 
-        return true;
+    return returnID;
 }
 
 QList<orders>* BTCexchange::interpreterLookOrders(QNetworkRequest* request, QByteArray *jsonString, QNetworkAccessManager::Operation operation)

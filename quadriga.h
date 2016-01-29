@@ -13,8 +13,7 @@ class Quadriga : public BTCexchange
     Q_OBJECT
 
 public:
-    explicit Quadriga();
-    explicit Quadriga(QString currency, QString liveApiKey, QString liveSecretKey, int ident);
+    explicit Quadriga(QString currency, QString liveApiKey, QString liveSecretKey, int ident, QSqlQuery *query);
     void loadBalance();
     bool buyOrder(double amount, double price = 0);
     bool sellOrder(double amount, double price = 0);
