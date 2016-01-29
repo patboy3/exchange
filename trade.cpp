@@ -1,10 +1,11 @@
 #include "trade.h"
 
-Trade::Trade(QList<BTCexchange *> *sites, QSqlQuery *query)
+Trade::Trade(QList<BTCexchange *> *sites, QSqlQuery *query, Ui::MainWindow *ui)
 {
     m_sites = *sites;
     m_minimumTrade = 0.2;
     m_query = query;
+    m_ui = ui;
 }
 
 QList<struct_profitability>* Trade::calculProfitability(double amount)
@@ -25,25 +26,32 @@ QList<struct_profitability>* Trade::calculProfitability(double amount)
     QList<struct_profitability> *profitability = new QList<struct_profitability>;
     //QList<double> profitability;
     for (int i=0;i<m_sites.count() - 1;i++)
-    {
+    {        
+        double buyI[2];
+        double selI[2];
 
-        double buyI(m_sites[i]->get_averagePrice(amount, BTCexchange::typeBuy, true));
-        double selI(m_sites[i]->get_averagePrice(amount, BTCexchange::typeSell, true));
+        m_sites[i]->get_averagePrice(amount, BTCexchange::typeBuy, buyI, true);
+        m_sites[i]->get_averagePrice(amount, BTCexchange::typeSell, selI, true);
         for (int z = i + 1;z<m_sites.count();z++)
         {
             if (*m_sites[i]->get_currentCurrency() == *m_sites[z]->get_currentCurrency())
             {
-                double buyZ(m_sites[z]->get_averagePrice(amount, BTCexchange::typeBuy, true));
-                double selZ(m_sites[z]->get_averagePrice(amount, BTCexchange::typeSell, true));
+                double buyZ[2];
+                double selZ[2];
+
+                m_sites[z]->get_averagePrice(amount, BTCexchange::typeBuy, buyZ, true);
+                m_sites[z]->get_averagePrice(amount, BTCexchange::typeSell, selZ, true);
 
                 //calcul des profitabilité
                 //buy sur la i sell sur la z
                 struct_profitability prof1;
+                prof1.buyMax = buyI[1];
                 prof1.buyExchange = m_sites[i];
-                prof1.buyAverage = buyI;
+                prof1.buyAverage = buyI[0];
                 prof1.sellExchange = m_sites[z];
-                prof1.sellAverage = selZ;
-                prof1.profitPourcentage = (selZ / buyI - 1) * 100;
+                prof1.sellAverage = selZ[0];
+                prof1.sellMax = selZ[1];
+                prof1.profitPourcentage = (selZ[0] / buyI[0] - 1) * 100;
                 profitability->append(prof1);
 
                 //profitability.append((selZ / buyI - 1) * 100);
@@ -54,10 +62,12 @@ QList<struct_profitability>* Trade::calculProfitability(double amount)
                 //qDebug() << QString("profitabilité " + QString::number(profitability.count()) + " (buy sur " + *m_sites[z]->get_sitename() + "_" + *m_sites[z]->get_currentCurrency() + " sell sur " + *m_sites[i]->get_sitename() + "_" + *m_sites[i]->get_currentCurrency() + ") : " + QString::number(profitability[profitability.count() - 1]) + "%");
                 struct_profitability prof2;
                 prof2.buyExchange = m_sites[z];
-                prof1.buyAverage = buyZ;
+                prof2.buyMax = buyZ[1];
+                prof2.buyAverage = buyZ[0];
                 prof2.sellExchange = m_sites[i];
-                prof1.sellAverage = selI;
-                prof2.profitPourcentage = (selI / buyZ - 1) * 100;
+                prof2.sellMax = selI[1];
+                prof2.sellAverage = selI[0];
+                prof2.profitPourcentage = (selI[0] / buyZ[0] - 1) * 100;
                 profitability->append(prof2);
             }
         }
@@ -119,16 +129,20 @@ void Trade::run()
         {
             if (solo.profitPourcentage > m_minimumTrade && checkFunds(amount, solo.buyAverage,solo.buyExchange,solo.sellExchange))
             {
+                m_ui->lineEdit_Pos->setText(QString::number(m_ui->lineEdit_Pos->text().toDouble() + 1));
                 //clear les fonds ds checkFunds si font dispo en hold !
 
-                //launch le trade faut transformer le prix en btc
-                int buyID = solo.buyExchange->buyOrder(solo.buyAverage * amount);
-                int sellID = solo.sellExchange->sellOrder(amount);
+                int buyID = solo.buyExchange->buyOrder(amount, solo.buyMax);
+                int sellID = solo.sellExchange->sellOrder(amount, solo.sellMax);
 
                 //faut saver le trade ds la db faut retourner les id des transactions !
                 //order id ds buy .. ds sell.. et mettre l'id de buy et sell ds trade
-                m_query->exec("INSERT INTO trade (ID_Buy, ID_Sell, Profitability) VALUES (" + QString::number(buyID) + ", " + QString::number(sellID) + ", "+ solo.profitPourcentage +");");
+                m_query->exec("INSERT INTO trade (ID_Buy, ID_Sell, Profitability) VALUES (" + QString::number(buyID) + ", " + QString::number(sellID) + ", " + solo.profitPourcentage +");");
             }
+            else if (solo.profitPourcentage > m_minimumTrade)
+                m_ui->LineEdit_fund->setText(QString::number(m_ui->LineEdit_fund->text().toDouble() + 1));
+            else
+                m_ui->lineEdit_Neg->setText(QString::number(m_ui->lineEdit_Neg->text().toDouble() + 1));
         }
 
         QThread::sleep(2);

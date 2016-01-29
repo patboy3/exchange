@@ -246,7 +246,7 @@ QList<orders>* BTCexchange::interpreterLookOrders(QNetworkRequest* request, QByt
         return executedOrders;
 }
 
-double BTCexchange::get_averagePrice(double amount, QString type, bool includeFees)
+void BTCexchange::get_averagePrice(double amount, QString type, double *result, bool includeFees)
 {
     int iteration = 0;
     double currentAmount(0);
@@ -274,6 +274,7 @@ double BTCexchange::get_averagePrice(double amount, QString type, bool includeFe
         {
             spendMoney = spendMoney + ((*now)[iteration].prixVente * (amount - currentAmount));
             currentAmount = currentAmount + (amount - currentAmount);
+            result[1] = (*now)[iteration].prixVente;
         }
 
         iteration++;
@@ -293,7 +294,9 @@ double BTCexchange::get_averagePrice(double amount, QString type, bool includeFe
 
     qDebug() << m_siteName << ": averagePrice - " << type << " : " << averagePrice << "(" << currentAmount << " BTC)";
 
-    return averagePrice;
+
+    result[0] = averagePrice;
+    //return averagePrice;
 }
 
 QList<orders>* BTCexchange::get_orders()

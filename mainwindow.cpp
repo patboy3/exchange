@@ -17,7 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //add les sites ds m_sites
     loadSite(); //load les site ds la db et rempli les balances
 
-    m_trade = new Trade(&m_sites, m_query);
+    m_trade = new Trade(&m_sites, m_query, ui);
     m_trade->start();
 
 }
@@ -104,7 +104,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_clicked()
 {
-    Trade profit(&m_sites, m_query);
+    Trade profit(&m_sites, m_query, ui);
     delete profit.calculProfitability(ui->text_amountProfitability->text().replace(',','.').toDouble());
     //delete calculProfitability(ui->text_amountProfitability->text().replace(',','.').toDouble());
 }

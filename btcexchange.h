@@ -37,7 +37,7 @@ public:
     static QString typeSell;
     explicit BTCexchange(QString currency, QString liveApiKey, QString liveSecretKey, QSqlQuery *query);
     bool rafraichirOrderBook();
-    double get_averagePrice(double amount, QString type, bool includeFees = false);
+    void get_averagePrice(double amount, QString type, double *result, bool includeFees = false);
 
     QString* get_sitename();
     QString* get_currentCurrency();
