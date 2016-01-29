@@ -127,7 +127,7 @@ void Trade::run()
 
                 //faut saver le trade ds la db faut retourner les id des transactions !
                 //order id ds buy .. ds sell.. et mettre l'id de buy et sell ds trade
-                m_query->exec("INSERT INTO trade (ID_Buy, ID_Sell) VALUES (" + QString::number(buyID) + ", " + QString::number(sellID) + ");");
+                m_query->exec("INSERT INTO trade (ID_Buy, ID_Sell, Profitability) VALUES (" + QString::number(buyID) + ", " + QString::number(sellID) + ", "+ solo.profitPourcentage +");");
             }
         }
 
