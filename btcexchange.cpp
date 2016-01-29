@@ -108,10 +108,11 @@ int BTCexchange::interpreterBuySell(QNetworkRequest* request, QString type, doub
     QEventLoop eventLoop;
 
     // "quit()" the event-loop, when the network request "finished()"
-    QNetworkAccessManager mgr;
-    QObject::connect(&mgr, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
+    QNetworkAccessManager mgr;    
 
     QNetworkReply *reply = mgr.post(*request, *jsonString);
+
+    QObject::connect(&mgr, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
     eventLoop.exec(); // blocks stack until "finished()" has been called
 
 
@@ -343,11 +344,9 @@ bool BTCexchange::errorRequete(QNetworkReply* reply)
 {
     if(reply->error())
     {
-        QMessageBox msgBox;
-        msgBox.setText("Erreur lors de la requete : " + reply->errorString());
-        msgBox.exec();
-
-        delete reply;
+        qDebug() << reply->errorString();
+        qDebug() << reply->readAll();
+        //delete reply;
         return true;
     }
 

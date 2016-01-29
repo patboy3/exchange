@@ -14,6 +14,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->setupUi(this);
 
+    m_db = QSqlDatabase::addDatabase("QSQLITE");
+    m_db.setDatabaseName( "./exchange.db");
+    m_db.open();
+
+
     //add les sites ds m_sites
     loadSite(); //load les site ds la db et rempli les balances
 
@@ -26,9 +31,6 @@ MainWindow::MainWindow(QWidget *parent) :
 void MainWindow::loadSite()
 {
 
-    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName( "./exchange.db");
-    db.open();
 
     //Si sa connect... rentre les site ds une list de site
 

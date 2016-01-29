@@ -39,6 +39,7 @@ private:
                  int                 key_len    /* length of authentication key  */, void *digest);
     Trade *m_trade;
     QSqlQuery *m_query;
+    QSqlDatabase m_db;
 public slots:
 
 private slots:
