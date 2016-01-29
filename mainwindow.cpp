@@ -16,6 +16,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //add les sites ds m_sites
     loadSite(); //load les site ds la db et rempli les balances
+
+    m_trade = new Trade(&m_sites);
+    m_trade->start();
+
 }
 
 
@@ -73,66 +77,6 @@ void MainWindow::loadSite()
 
 }
 
-QList<struct_profitability>* MainWindow::calculProfitability(double amount)
-{
-    //faut calculer la profitabilité de chaque site en prenant compte de la currency
-    //1 - 2 . 1 - 3 . 1 - 4 . 2 - 3 . 2 - 4 . 3 - 4
-
-    //faut aller chercher l'order book de toute les site ... et comparer les site entre eux (buy/sell)
-    foreach (BTCexchange* solo, m_sites)
-    {
-        if (*solo->get_apiKey() != "")
-        {
-            //faudrait partir sa en thread et lui faire attendre que aille toute fini avant le calcul de la profitabilité
-            solo->rafraichirOrderBook();
-        }
-    }
-
-    QList<struct_profitability> *profitability = new QList<struct_profitability>;
-    //QList<double> profitability;
-    for (int i=0;i<m_sites.count() - 1;i++)
-    {
-
-        double buyI(m_sites[i]->get_averagePrice(amount, BTCexchange::typeBuy, true));
-        double selI(m_sites[i]->get_averagePrice(amount, BTCexchange::typeSell, true));
-        for (int z = i + 1;z<m_sites.count();z++)
-        {
-            if (*m_sites[i]->get_currentCurrency() == *m_sites[z]->get_currentCurrency())
-            {
-                double buyZ(m_sites[z]->get_averagePrice(amount, BTCexchange::typeBuy, true));
-                double selZ(m_sites[z]->get_averagePrice(amount, BTCexchange::typeSell, true));
-
-                //calcul des profitabilité
-                //buy sur la i sell sur la z
-                struct_profitability prof1;
-                prof1.buyExchange = m_sites[i];
-                prof1.sellExchange = m_sites[z];
-                prof1.profitPourcentage = (selZ / buyI - 1) * 100;
-                profitability->append(prof1);
-
-                //profitability.append((selZ / buyI - 1) * 100);
-                //qDebug() << QString("profitabilité " + QString::number(profitability.count()) + " (buy sur " + *m_sites[i]->get_sitename() + "_" + *m_sites[i]->get_currentCurrency() + " sell sur " + *m_sites[z]->get_sitename() + "_" + *m_sites[z]->get_currentCurrency() + "): " + QString::number(profitability[profitability.count() - 1]) + "%");
-
-                //buy sur la z sell sur la i
-                //profitability.append((selI / buyZ - 1) * 100);
-                //qDebug() << QString("profitabilité " + QString::number(profitability.count()) + " (buy sur " + *m_sites[z]->get_sitename() + "_" + *m_sites[z]->get_currentCurrency() + " sell sur " + *m_sites[i]->get_sitename() + "_" + *m_sites[i]->get_currentCurrency() + ") : " + QString::number(profitability[profitability.count() - 1]) + "%");
-                struct_profitability prof2;
-                prof2.buyExchange = m_sites[z];
-                prof2.sellExchange = m_sites[i];
-                prof2.profitPourcentage = (selI / buyZ - 1) * 100;
-                profitability->append(prof2);
-            }
-        }
-    }
-
-    for (int i=0;i<profitability->count();i++)
-    {
-        qDebug() << QString("profitabilité " + QString::number(i + 1) + " (buy sur " + *(*profitability)[i].buyExchange->get_sitename() + "_" + *(*profitability)[i].buyExchange->get_currentCurrency() + " sell sur " + *(*profitability)[i].sellExchange->get_sitename() + "_" + *(*profitability)[i].sellExchange->get_currentCurrency() + ") : " + QString::number((*profitability)[i].profitPourcentage) + "%");
-    }
-
-    return profitability;
-}
-
 void MainWindow::generateDB(QSqlQuery *query)
 {
     //créé les tables
@@ -148,6 +92,7 @@ void MainWindow::generateDB(QSqlQuery *query)
 
 MainWindow::~MainWindow()
 {
+    delete m_trade;
     delete ui;
     foreach (BTCexchange* solo, m_sites)
     {
@@ -157,7 +102,9 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_clicked()
 {
-    delete calculProfitability(ui->text_amountProfitability->text().replace(',','.').toDouble());
+    Trade profit(&m_sites);
+    delete profit.calculProfitability(ui->text_amountProfitability->text().replace(',','.').toDouble());
+    //delete calculProfitability(ui->text_amountProfitability->text().replace(',','.').toDouble());
 }
 
 void MainWindow::on_text_amountProfitability_returnPressed()

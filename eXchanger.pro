@@ -30,11 +30,13 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     btcexchange.cpp \
     coinbase.cpp \
-    quadriga.cpp
+    quadriga.cpp \
+    trade.cpp
 
 HEADERS  += mainwindow.h \
     btcexchange.h \
     coinbase.h \
-    quadriga.h
+    quadriga.h \
+    trade.h
 
 FORMS    += mainwindow.ui

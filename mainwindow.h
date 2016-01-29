@@ -11,12 +11,7 @@
 #include "btcexchange.h"
 #include "coinbase.h"
 #include "quadriga.h"
-
-struct struct_profitability{
-    BTCexchange* buyExchange;
-    BTCexchange* sellExchange;
-    double profitPourcentage;
-};
+#include "trade.h"
 
 namespace Ui {
 class MainWindow;
@@ -42,12 +37,10 @@ private:
                  int                 text_len,   /* length of data stream         */
                  const unsigned char *key,       /* pointer to authentication key */
                  int                 key_len    /* length of authentication key  */, void *digest);
-    QList<struct_profitability> *calculProfitability(double amount);
-
+    Trade *m_trade;
 public slots:
 
 private slots:
-
     void on_pushButton_clicked();
     void on_text_amountProfitability_returnPressed();
 };
