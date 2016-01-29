@@ -52,7 +52,7 @@ public:
     virtual void loadBalance() = 0;
     virtual bool buyOrder(double amount, double price = 0) = 0; //pour acheter des btc amount en btc... si price = 0... argent en fiat !
     virtual bool sellOrder(double amount, double price = 0) = 0; //Pour vendre des btc amount en btc
-    virtual bool cancelOrder(QString orderID) = 0; //cancel l'order sur l'Exchange et la delete de la list des order présente !
+    virtual bool cancelOrder(QString orderID = "") = 0; //cancel l'order sur l'Exchange et la delete de la list des order présente !
     virtual void lookOrder(QString orderID) = 0;    
 
     ~BTCexchange();

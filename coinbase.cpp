@@ -132,7 +132,13 @@ bool CoinBase::sellOrder(double amount, double price)
 
 bool CoinBase::cancelOrder(QString orderID)
 {
-    QString urlPath = "/orders/" + orderID;
+    QString urlPath;
+
+    if (orderID == "")
+        urlPath = "/orders/";
+    else
+        urlPath = "/orders/" + orderID;
+
     QNetworkRequest request(QUrl(m_apiUrl + urlPath));
 
     QByteArray jsonString = "";

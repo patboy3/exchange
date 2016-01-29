@@ -75,20 +75,40 @@ bool Trade::checkFunds(double amount, double averageBuyPrice, BTCexchange *buy, 
     double fiat = *buy->get_balance_fiat() + *buy->get_balance_fiatHold();
     double btc = *sell->get_balance_btc() + *sell->get_balance_btcHold();
 
+    if (averageBuyPrice * amount < *buy->get_balance_fiat() && amount < *sell->get_balance_btc())
+        return true;
+
     if (fiat < averageBuyPrice * amount || btc < amount)
     {
         qDebug() << "fond insufisant";
         return false;
     }
     else
+    {
+        //faut clearer toute les orders pour pouvoir passé elle !
+        //faudrait s'Arranger pour calculer optimalement pour deleter jsute les order kon veut (pas implenter)
+        QList<orders> *buyOrders = buy->get_orders();
+        QList<orders> *sellOrders = sell->get_orders();
+
+        foreach (orders solo, *buyOrders)
+        {
+            buy->cancelOrder(solo.order_id);
+        }
+
+        foreach (orders solo, *sellOrders)
+        {
+            sell->cancelOrder(solo.order_id);
+        }
+
         return true;
+    }
 }
 
 void Trade::run()
 {
     while (true)
     {
-        //faudrait trouver le bon amount a mettre
+        //faudrait trouver le bon amount a mettre (tout fond dispo ? seuelement une parti ?)
         double amount(0.01);
         QList<struct_profitability> *result = calculProfitability(amount);
 
@@ -98,15 +118,14 @@ void Trade::run()
         {
             if (solo.profitPourcentage > m_minimumTrade && checkFunds(amount, solo.buyAverage,solo.buyExchange,solo.sellExchange))
             {
-                //faut clearer les order placer pour pouvoir utilisé les fonds
+                //clear les fonds ds checkFunds si font dispo en hold !
 
-                //launch le trade
-
-                //faut transformer le prix en btc
+                //launch le trade faut transformer le prix en btc
                 solo.buyExchange->buyOrder(solo.buyAverage * amount);
                 solo.sellExchange->sellOrder(amount);
 
                 //faut saver le trade ds la db faut retourner les id des transactions !
+                //order id ds buy .. ds sell.. et mettre l'id de buy et sell ds trade
             }
         }
 

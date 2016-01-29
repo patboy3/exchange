@@ -73,12 +73,17 @@ bool BTCexchange::interpreterCancelOrders(QNetworkRequest* request, QByteArray *
 
         qDebug() << true;
         //faut le deleter de la list
-        for (int i=0; i<m_orders.count(); i++)
+        if (*id_Orders == "")
+            m_orders.clear();
+        else
         {
-            if (m_orders[i].order_id == *id_Orders)
+            for (int i=0; i<m_orders.count(); i++)
             {
-                m_orders.removeAt(i);
-                i--;
+                if (m_orders[i].order_id == *id_Orders)
+                {
+                    m_orders.removeAt(i);
+                    i--;
+                }
             }
         }
 

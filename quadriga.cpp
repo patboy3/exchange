@@ -77,7 +77,7 @@ void Quadriga::lookOrder(QString orderID)
     delete sign;
 }
 
-bool Quadriga::cancelOrder(QString orderID)
+bool Quadriga::cancelOrder(QString orderID = "")
 {    
     signature *sign = new signature;
     getSignature(sign);
