@@ -44,8 +44,8 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>60</y>
-      <width>160</width>
+      <y>70</y>
+      <width>168</width>
       <height>99</height>
      </rect>
     </property>
@@ -66,13 +66,6 @@
          </property>
          <property name="readOnly">
           <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="test2Label">
-         <property name="text">
-          <string>Pos. profitability</string>
          </property>
         </widget>
        </item>
@@ -103,9 +96,29 @@
          </property>
         </widget>
        </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="test2Label">
+         <property name="text">
+          <string>Pos. profitability</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
     </layout>
+   </widget>
+   <widget class="QPushButton" name="pushButton_refreshBalance">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>40</y>
+      <width>101</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Refresh Balance</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">

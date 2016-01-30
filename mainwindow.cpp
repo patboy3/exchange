@@ -120,3 +120,14 @@ void MainWindow::on_text_amountProfitability_returnPressed()
 {
     ui->pushButton->click();
 }
+
+void MainWindow::on_pushButton_refreshBalance_clicked()
+{
+    foreach (BTCexchange* solo, m_sites)
+    {
+        if (*solo->get_apiKey() != "")
+        {
+            solo->loadBalance();
+        }
+    }
+}

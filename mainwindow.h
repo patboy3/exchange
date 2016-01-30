@@ -45,6 +45,7 @@ public slots:
 private slots:
     void on_pushButton_clicked();
     void on_text_amountProfitability_returnPressed();
+    void on_pushButton_refreshBalance_clicked();
 };
 
 #endif // MAINWINDOW_H
