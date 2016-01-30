@@ -119,6 +119,7 @@ int BTCexchange::interpreterBuySell(QNetworkRequest* request, QString type, doub
     if (errorRequete(reply))
     {
         delete reply;
+        //delete request;
         return returnID;
     }
     else
@@ -153,6 +154,7 @@ int BTCexchange::interpreterBuySell(QNetworkRequest* request, QString type, doub
             }
         }
 
+        //delete request;
         delete reply;
     }
 
@@ -416,26 +418,11 @@ bool BTCexchange::interpreterOrderBook(QNetworkRequest* request)
 
 bool BTCexchange::rafraichirOrderBook()
 {
-    /*
-    QNetworkAccessManager *networkManager = new QNetworkAccessManager();
-    QNetworkRequest *request = new QNetworkRequest();
-
+    QNetworkRequest *request = new QNetworkRequest;
     // Url de la requete
     request->setUrl(QUrl(orderBookAddr));
 
-    // Connecte le signal Finished du networkManaget au Slot lireJsonFinished
-    connect(networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(interpreterOrderBook(QNetworkReply*)));
-
-    // Lance la requete pour obtenir la réponse
-    networkManager->get(*request);
-
-    return false;
-    */
-    QNetworkRequest request;
-    // Url de la requete
-    request.setUrl(QUrl(orderBookAddr));
-
-    return interpreterOrderBook(&request);
+    return interpreterOrderBook(request);
 }
 
 BTCexchange::~BTCexchange()

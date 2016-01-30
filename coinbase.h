@@ -20,6 +20,7 @@ private:
     QByteArray m_secret;
     QString m_passphrase;
     void signerHeaders(QNetworkRequest* requete, QString timeStamp, QString method, QString *requestPath, QByteArray *parameters);
+    void interpreterLoadBalance(QNetworkRequest* request);
 protected:
 
 
@@ -29,7 +30,6 @@ public slots:
 
 private slots :
     void interpreterCrap(QNetworkReply* reply);
-    void interpreterLoadBalance(QNetworkReply* reply);
 
 };
 

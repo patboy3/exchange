@@ -111,6 +111,8 @@ bool Trade::checkFunds(double amount, double averageBuyPrice, BTCexchange *buy, 
             sell->cancelOrder(solo.order_id);
         }
 
+        delete buyOrders;
+        delete sellOrders;
         return true;
     }
 }
@@ -120,7 +122,7 @@ void Trade::run()
     while (true)
     {
         //faudrait trouver le bon amount a mettre (tout fond dispo ? seuelement une parti ?)
-        double amount(0.01);
+        double amount(0.012);
         QList<struct_profitability> *result = calculProfitability(amount);
 
         //si ya une probabilité positive.... faut lunch le buy ! faut checker si ya les fonds avant
@@ -153,6 +155,7 @@ void Trade::run()
                 m_ui->lineEdit_Neg->setText(QString::number(m_ui->lineEdit_Neg->text().toDouble() + 1));
         }
 
+        delete result;
         QThread::sleep(2);
     }
 

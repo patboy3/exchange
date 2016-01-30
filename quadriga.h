@@ -24,7 +24,7 @@ public:
 private:
     int m_ident;
     void getSignature(signature *sign);
-
+    void interpreterLoadBalance(QNetworkRequest* request, QByteArray *jsonString);
 protected:
 
 public slots:
@@ -32,7 +32,7 @@ public slots:
 
 private slots :
     void interpreterCrap(QNetworkReply* reply);
-    void interpreterLoadBalance(QNetworkReply* reply);
+
 };
 
 #endif // QUADRIGA_H
