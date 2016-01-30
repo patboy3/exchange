@@ -143,6 +143,9 @@ void Trade::run()
                 //order id ds buy .. ds sell.. et mettre l'id de buy et sell ds trade
                 m_query->exec("INSERT INTO trade (ID_Buy, ID_Sell, Profitability) VALUES (" + QString::number(buyID) + ", " + QString::number(sellID) + ", " + QString::number(solo.profitPourcentage) + ");");
 
+                //faut retirer les 2 order de leur variable respective !
+
+
                 //updater la balance des 2 sites !
                 solo.buyExchange->loadBalance();
                 solo.sellExchange->loadBalance();
