@@ -144,7 +144,7 @@ int BTCexchange::interpreterBuySell(QNetworkRequest* request, QString type, doub
             //trade direct .. faudrait le noté !
 
             //faut metre le id pi le tick tant que y etre
-            m_query->exec("INSERT INTO "+ type +" (OrderId, Tick, Amount, Price) VALUES ('" + jsonObject.value("id").toString() + "', "+ QDateTime::currentDateTime().toMSecsSinceEpoch() / 1000 +", "+*amount+", "+*price+");");
+            m_query->exec("INSERT INTO "+ type +" (OrderId, Tick, Amount, Price) VALUES ('" + jsonObject.value("id").toString() + "', "+ QString::number(QDateTime::currentDateTime().toMSecsSinceEpoch() / 1000) +", "+QString::number(*amount)+", "+QString::number(*price)+");");
 
             m_query->exec("SELECT ID from " + type + " where OrderID = '" + jsonObject.value("id").toString() + "'");
 

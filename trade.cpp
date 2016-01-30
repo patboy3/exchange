@@ -3,7 +3,7 @@
 Trade::Trade(QList<BTCexchange *> *sites, QSqlQuery *query, Ui::MainWindow *ui)
 {
     m_sites = *sites;
-    m_minimumTrade = 0.01;
+    m_minimumTrade = 0.1;
     m_query = query;
     m_ui = ui;
 }
@@ -132,16 +132,18 @@ void Trade::run()
                 m_ui->lineEdit_Pos->setText(QString::number(m_ui->lineEdit_Pos->text().toDouble() + 1));
                 //clear les fonds ds checkFunds si font dispo en hold !
 
+                //int buyID(1);
+                //int sellID(2);
                 int buyID = solo.buyExchange->buyOrder(amount, solo.buyMax);
                 int sellID = solo.sellExchange->sellOrder(amount, solo.sellMax);
 
                 //faut saver le trade ds la db faut retourner les id des transactions !
                 //order id ds buy .. ds sell.. et mettre l'id de buy et sell ds trade
-                m_query->exec("INSERT INTO trade (ID_Buy, ID_Sell, Profitability) VALUES (" + QString::number(buyID) + ", " + QString::number(sellID) + ", " + solo.profitPourcentage +");");
+                m_query->exec("INSERT INTO trade (ID_Buy, ID_Sell, Profitability) VALUES (" + QString::number(buyID) + ", " + QString::number(sellID) + ", " + QString::number(solo.profitPourcentage) + ");");
 
                 //updater la balance des 2 sites !
-                //solo.buyExchange->loadBalance();
-                //solo.sellExchange->loadBalance();
+                solo.buyExchange->loadBalance();
+                solo.sellExchange->loadBalance();
             }
             else if (solo.profitPourcentage > m_minimumTrade)
             {

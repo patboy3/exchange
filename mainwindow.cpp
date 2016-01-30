@@ -37,7 +37,12 @@ void MainWindow::loadSite()
     //detect si ya des tables
     bool tabledetection(false);
     m_query = new QSqlQuery;
+
+   // m_query->exec("INSERT INTO trade (ID_Buy, ID_Sell, Profitability) VALUES (1, 2, -1.4870);");
+
     m_query->exec("select * from SQLite_master;");
+
+
 
     while (m_query->next() && !tabledetection)
     {
