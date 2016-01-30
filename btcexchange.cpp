@@ -140,18 +140,14 @@ int BTCexchange::interpreterBuySell(QNetworkRequest* request, QString type, doub
                 m_orders.append(current);
             }
         }
-        else
-        {
-            //trade direct .. faudrait le noté !
 
-            //faut metre le id pi le tick tant que y etre
-            m_query->exec("INSERT INTO "+ type +" (OrderId, Tick, Amount, Price) VALUES ('" + jsonObject.value("id").toString() + "', "+ QString::number(QDateTime::currentDateTime().toMSecsSinceEpoch() / 1000) +", "+QString::number(*amount)+", "+QString::number(*price)+");");
+        //faut metre le id pi le tick tant que y etre
+        m_query->exec("INSERT INTO "+ type +" (OrderId, Tick, Amount, Price) VALUES ('" + jsonObject.value("id").toString() + "', "+ QString::number(QDateTime::currentDateTime().toMSecsSinceEpoch() / 1000) +", "+QString::number(*amount)+", "+QString::number(*price)+");");
 
-            m_query->exec("SELECT ID from " + type + " where OrderID = '" + jsonObject.value("id").toString() + "'");
+        m_query->exec("SELECT ID from " + type + " where OrderID = '" + jsonObject.value("id").toString() + "'");
 
-            while (m_query->next()) {
-                returnID = m_query->value(4).toInt();
-            }
+        while (m_query->next()) {
+            returnID = m_query->value(4).toInt();
         }
 
         //delete request;
