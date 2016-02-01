@@ -3,7 +3,7 @@
 Trade::Trade(QList<BTCexchange *> *sites, QSqlQuery *query, Ui::MainWindow *ui)
 {
     m_sites = *sites;
-    m_minimumTrade = 0.1;
+    m_minimumTrade = 0.8;
     m_query = query;
     m_ui = ui;
 }
@@ -96,6 +96,10 @@ bool Trade::checkFunds(double amount, double averageBuyPrice, BTCexchange *buy, 
     }
     else
     {
+        qDebug() << "fond insufisant";
+        return false;
+
+        /* faut jme mettre un truc pour qui detect si sa fait parti dun trade déja senser etre fait.. si oui le laisser la
         //faut clearer toute les orders pour pouvoir passé elle !
         //faudrait s'Arranger pour calculer optimalement pour deleter jsute les order kon veut (pas implenter)
         QList<orders> *buyOrders = buy->get_orders();
@@ -113,7 +117,7 @@ bool Trade::checkFunds(double amount, double averageBuyPrice, BTCexchange *buy, 
 
         delete buyOrders;
         delete sellOrders;
-        return true;
+        return true;*/
     }
 }
 
@@ -144,7 +148,7 @@ void Trade::run()
                 m_query->exec("INSERT INTO trade (ID_Buy, ID_Sell, Profitability) VALUES (" + QString::number(buyID) + ", " + QString::number(sellID) + ", " + QString::number(solo.profitPourcentage) + ");");
 
                 //faut retirer les 2 order de leur variable respective !
-
+                QThread::sleep(1);
 
                 //updater la balance des 2 sites !
                 solo.buyExchange->loadBalance();

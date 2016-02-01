@@ -71,7 +71,7 @@ void CoinBase::viewOpenOrder()
 }
 
 
-bool CoinBase::buyOrder(double amount, double price)
+int CoinBase::buyOrder(double amount, double price)
 {
     QByteArray jsonString;
 
@@ -99,7 +99,7 @@ bool CoinBase::buyOrder(double amount, double price)
     return interpreterBuySell(&request, BTCexchange::typeBuy, &price, &amount, &jsonString);
 }
 
-bool CoinBase::sellOrder(double amount, double price)
+int CoinBase::sellOrder(double amount, double price)
 {
     QByteArray jsonString;
 

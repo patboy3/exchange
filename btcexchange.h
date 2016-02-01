@@ -51,8 +51,8 @@ public:
 
     virtual void viewOpenOrder() = 0;  //sort les openOrders live.. et les comaprer avec notre list pour voir si ya eu des delete ! retourner la différence !
     virtual void loadBalance() = 0;
-    virtual bool buyOrder(double amount, double price = 0) = 0; //pour acheter des btc amount en btc... si price = 0... argent en fiat !
-    virtual bool sellOrder(double amount, double price = 0) = 0; //Pour vendre des btc amount en btc
+    virtual int buyOrder(double amount, double price = 0) = 0; //pour acheter des btc amount en btc... si price = 0... argent en fiat !
+    virtual int sellOrder(double amount, double price = 0) = 0; //Pour vendre des btc amount en btc
     virtual bool cancelOrder(QString orderID = "") = 0; //cancel l'order sur l'Exchange et la delete de la list des order présente !
     virtual void lookOrder(QString orderID) = 0;    
 

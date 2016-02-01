@@ -115,7 +115,7 @@ void Quadriga::viewOpenOrder()
     bool test = interpreterLookOrders(&request, &jsonString, QNetworkAccessManager::PostOperation);
 }
 
-bool Quadriga::buyOrder(double amount, double price)
+int Quadriga::buyOrder(double amount, double price)
 {
     signature *sign = new signature;
     getSignature(sign);
@@ -135,7 +135,7 @@ bool Quadriga::buyOrder(double amount, double price)
     return interpreterBuySell(&request, BTCexchange::typeBuy, &price, &amount, &jsonString);
 }
 
-bool Quadriga::sellOrder(double amount, double price)
+int Quadriga::sellOrder(double amount, double price)
 {
     signature *sign = new signature;
     getSignature(sign);

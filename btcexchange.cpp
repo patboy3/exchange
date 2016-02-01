@@ -147,7 +147,7 @@ int BTCexchange::interpreterBuySell(QNetworkRequest* request, QString type, doub
         m_query->exec("SELECT ID from " + type + " where OrderID = '" + jsonObject.value("id").toString() + "'");
 
         while (m_query->next()) {
-            returnID = m_query->value(4).toInt();
+            returnID = m_query->value(0).toInt();
         }
 
         //delete request;
@@ -353,47 +353,50 @@ bool BTCexchange::errorRequete(QNetworkReply* reply)
 
 bool BTCexchange::interpreterOrderBook(QNetworkRequest* request)
 {
-    QEventLoop eventLoop;
-
-    // "quit()" the event-loop, when the network request "finished()"
-    QNetworkAccessManager mgr;
-    QObject::connect(&mgr, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
-
-    QNetworkReply *reply = mgr.get(*request);
-
-    eventLoop.exec(); // blocks stack until "finished()" has been called
-
-
-    QString reponse = reply->readAll();
-
-    // Crée un object Json avec la réponse obtenure
-    QJsonDocument jsonDocument = QJsonDocument::fromJson(reponse.toUtf8());
-
-    QJsonObject jsonObject = jsonDocument.object();
-
-    QJsonArray asks = jsonObject["asks"].toArray();
-    m_asks.clear();;
-    foreach (const QJsonValue & value, asks)
+    try
     {
-        OrderBookElement now;
-        now.nbBtc = value.toArray()[1].toString().replace(',','.').toDouble();
-        now.prixVente = value.toArray()[0].toString().replace(',','.').toDouble();
 
-        m_asks.append(now);
-    }
+        QEventLoop eventLoop;
 
-    QJsonArray bids = jsonObject["bids"].toArray();
-    m_bids.clear();
-    foreach (const QJsonValue & value, bids)
-    {
-        OrderBookElement now;
-        now.nbBtc = value.toArray()[1].toString().replace(',','.').toDouble();
-        now.prixVente = value.toArray()[0].toString().replace(',','.').toDouble();
+        // "quit()" the event-loop, when the network request "finished()"
+        QNetworkAccessManager mgr;
+        QObject::connect(&mgr, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
 
-        m_bids.append(now);
-    }
+        QNetworkReply *reply = mgr.get(*request);
 
-    /*
+        eventLoop.exec(); // blocks stack until "finished()" has been called
+
+
+        QString reponse = reply->readAll();
+
+        // Crée un object Json avec la réponse obtenure
+        QJsonDocument jsonDocument = QJsonDocument::fromJson(reponse.toUtf8());
+
+        QJsonObject jsonObject = jsonDocument.object();
+
+        QJsonArray asks = jsonObject["asks"].toArray();
+        m_asks.clear();;
+        foreach (const QJsonValue & value, asks)
+        {
+            OrderBookElement now;
+            now.nbBtc = value.toArray()[1].toString().replace(',','.').toDouble();
+            now.prixVente = value.toArray()[0].toString().replace(',','.').toDouble();
+
+            m_asks.append(now);
+        }
+
+        QJsonArray bids = jsonObject["bids"].toArray();
+        m_bids.clear();
+        foreach (const QJsonValue & value, bids)
+        {
+            OrderBookElement now;
+            now.nbBtc = value.toArray()[1].toString().replace(',','.').toDouble();
+            now.prixVente = value.toArray()[0].toString().replace(',','.').toDouble();
+
+            m_bids.append(now);
+        }
+
+        /*
     foreach (OrderBookElement solo, m_bids)
     {
         qDebug() << m_siteName << ": bids - btc : "  << solo.nbBtc;
@@ -406,7 +409,14 @@ bool BTCexchange::interpreterOrderBook(QNetworkRequest* request)
         qDebug() << m_siteName  << ": asks - price : "  << solo.prixVente;
     }*/
 
-    delete reply;
+        delete reply;
+    }
+    catch (std::exception & e)
+    {
+        qDebug() << "erreur interpreter OrderBook";
+    }
+
+
     delete request;
 
     return true;
