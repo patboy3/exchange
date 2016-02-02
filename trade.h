@@ -6,6 +6,7 @@
 #include <QThread>
 #include "ui_mainwindow.h"
 #include "btcexchange.h"
+#include "threadorderbook.h"
 
 struct struct_profitability{
     double buyAverage;

@@ -13,15 +13,34 @@ QList<struct_profitability>* Trade::calculProfitability(double amount)
     //faut calculer la profitabilité de chaque site en prenant compte de la currency
     //1 - 2 . 1 - 3 . 1 - 4 . 2 - 3 . 2 - 4 . 3 - 4
 
+    // Un thread par site pour rafraichir le orderBook
+    ThreadOrderBook* threads = new ThreadOrderBook[m_sites.size()];
+
+    short compteur = 0;
+
     //faut aller chercher l'order book de toute les site ... et comparer les site entre eux (buy/sell)
     foreach (BTCexchange* solo, m_sites)
     {
         if (*solo->get_apiKey() != "")
         {
+            threads[compteur].setSite(solo);
+
+            threads[compteur].start();
+
+            compteur ++;
+
             //faudrait partir sa en thread et lui faire attendre que aille toute fini avant le calcul de la profitabilité
-            solo->rafraichirOrderBook();
+            // solo->rafraichirOrderBook();
         }
     }
+
+
+    // On attend que nos thread ait fini avant de continuer
+    for( compteur-- ; compteur >= 0 ; compteur--)
+        threads[compteur].wait();
+
+
+
 
     QList<struct_profitability> *profitability = new QList<struct_profitability>;
     //QList<double> profitability;

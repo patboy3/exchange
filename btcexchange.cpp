@@ -375,7 +375,9 @@ bool BTCexchange::interpreterOrderBook(QNetworkRequest* request)
         QJsonObject jsonObject = jsonDocument.object();
 
         QJsonArray asks = jsonObject["asks"].toArray();
-        m_asks.clear();;
+        m_asks.clear();
+
+
         foreach (const QJsonValue & value, asks)
         {
             OrderBookElement now;
@@ -387,6 +389,8 @@ bool BTCexchange::interpreterOrderBook(QNetworkRequest* request)
 
         QJsonArray bids = jsonObject["bids"].toArray();
         m_bids.clear();
+
+
         foreach (const QJsonValue & value, bids)
         {
             OrderBookElement now;
@@ -421,6 +425,8 @@ bool BTCexchange::interpreterOrderBook(QNetworkRequest* request)
 
     return true;
 }
+
+
 
 bool BTCexchange::rafraichirOrderBook()
 {
