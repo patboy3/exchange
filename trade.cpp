@@ -41,7 +41,6 @@ QList<struct_profitability>* Trade::calculProfitability(double amount)
 
 
 
-
     QList<struct_profitability> *profitability = new QList<struct_profitability>;
     //QList<double> profitability;
     for (int i=0;i<m_sites.count() - 1;i++)
@@ -97,7 +96,11 @@ QList<struct_profitability>* Trade::calculProfitability(double amount)
         qDebug() << QString("profitabilité " + QString::number(i + 1) + " (buy sur " + *(*profitability)[i].buyExchange->get_sitename() + "_" + *(*profitability)[i].buyExchange->get_currentCurrency() + " sell sur " + *(*profitability)[i].sellExchange->get_sitename() + "_" + *(*profitability)[i].sellExchange->get_currentCurrency() + ") : " + QString::number((*profitability)[i].profitPourcentage) + "%");
     }
 
+
+    delete [] threads;
+
     return profitability;
+
 }
 
 bool Trade::checkFunds(double amount, double averageBuyPrice, BTCexchange *buy, BTCexchange *sell)
