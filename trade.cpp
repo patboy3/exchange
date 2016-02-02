@@ -127,6 +127,7 @@ void Trade::run()
     {
         //faudrait trouver le bon amount a mettre (tout fond dispo ? seuelement une parti ?)
         double amount(0.012);
+
         QList<struct_profitability> *result = calculProfitability(amount);
 
         //si ya une probabilité positive.... faut lunch le buy ! faut checker si ya les fonds avant

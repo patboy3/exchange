@@ -31,12 +31,14 @@ SOURCES += main.cpp\
     btcexchange.cpp \
     coinbase.cpp \
     quadriga.cpp \
-    trade.cpp
+    trade.cpp \
+    theadorderbook.cpp
 
 HEADERS  += mainwindow.h \
     btcexchange.h \
     coinbase.h \
     quadriga.h \
-    trade.h
+    trade.h \
+    theadorderbook.h
 
 FORMS    += mainwindow.ui

@@ -14,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->setupUi(this);
 
+
     m_db = QSqlDatabase::addDatabase("QSQLITE");
     m_db.setDatabaseName( "./exchange.db");
     m_db.open();
@@ -25,6 +26,7 @@ MainWindow::MainWindow(QWidget *parent) :
     m_trade = new Trade(&m_sites, m_query, ui);
     m_trade->start();
 
+
 }
 
 
@@ -35,7 +37,7 @@ void MainWindow::loadSite()
     //Si sa connect... rentre les site ds une list de site
 
     //detect si ya des tables
-    bool tabledetection(false);
+    bool tabledetection = false;
     m_query = new QSqlQuery;
 
    // m_query->exec("INSERT INTO trade (ID_Buy, ID_Sell, Profitability) VALUES (1, 2, -1.4870);");
