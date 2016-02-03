@@ -40,7 +40,11 @@ private:
     Trade *m_trade;
     QSqlQuery *m_query;
     QSqlDatabase m_db;
+
 public slots:
+    void updateNeg();
+    void updatePos();
+    void updateFunds();
 
 private slots:
     void on_pushButton_clicked();

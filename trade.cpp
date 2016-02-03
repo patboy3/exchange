@@ -1,11 +1,10 @@
 #include "trade.h"
 
-Trade::Trade(QList<BTCexchange *> *sites, QSqlQuery *query, Ui::MainWindow *ui)
+Trade::Trade(QList<BTCexchange *> *sites, QSqlQuery *query)
 {
     m_sites = *sites;
     m_minimumTrade = 0.8;
     m_query = query;
-    m_ui = ui;
 }
 
 QList<struct_profitability>* Trade::calculProfitability(double amount)
@@ -42,7 +41,7 @@ QList<struct_profitability>* Trade::calculProfitability(double amount)
 
 
 
-    delete [] threads;
+    delete threads;
 
 
     QList<struct_profitability> *profitability = new QList<struct_profitability>;
@@ -160,7 +159,7 @@ void Trade::run()
         {
             if (solo.profitPourcentage > m_minimumTrade && checkFunds(amount, solo.buyAverage,solo.buyExchange,solo.sellExchange))
             {
-                m_ui->lineEdit_Pos->setText(QString::number(m_ui->lineEdit_Pos->text().toDouble() + 1));
+                emit updatePos();
                 //clear les fonds ds checkFunds si font dispo en hold !
 
                 //int buyID(1);
@@ -181,10 +180,12 @@ void Trade::run()
             }
             else if (solo.profitPourcentage > m_minimumTrade)
             {
-               m_ui->LineEdit_fund->setText(QString::number(m_ui->LineEdit_fund->text().toDouble() + 1));
+                emit updateFunds();
             }
             else
-                m_ui->lineEdit_Neg->setText(QString::number(m_ui->lineEdit_Neg->text().toDouble() + 1));
+            {
+                emit updateNeg();
+            }
         }
 
         delete result;

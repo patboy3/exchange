@@ -23,7 +23,14 @@ MainWindow::MainWindow(QWidget *parent) :
     //add les sites ds m_sites
     loadSite(); //load les site ds la db et rempli les balances
 
-    m_trade = new Trade(&m_sites, m_query, ui);
+    m_trade = new Trade(&m_sites, m_query);
+
+    //Pouvoir updater les textbox a partir de Trade
+    connect(m_trade, SIGNAL(updateNeg()), this, SLOT(updateNeg()));
+    connect(m_trade, SIGNAL(updatePos()), this, SLOT(updatePos()));
+    connect(m_trade, SIGNAL(updateFunds()), this, SLOT(updateFunds()));
+
+    //start Trade
     m_trade->start();
 
 
@@ -113,7 +120,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_clicked()
 {
-    Trade profit(&m_sites, m_query, ui);
+    Trade profit(&m_sites, m_query);
     delete profit.calculProfitability(ui->text_amountProfitability->text().replace(',','.').toDouble());
     //delete calculProfitability(ui->text_amountProfitability->text().replace(',','.').toDouble());
 }
@@ -121,6 +128,21 @@ void MainWindow::on_pushButton_clicked()
 void MainWindow::on_text_amountProfitability_returnPressed()
 {
     ui->pushButton->click();
+}
+
+void MainWindow::updateNeg()
+{
+     ui->lineEdit_Neg->setText(QString::number(ui->lineEdit_Neg->text().toDouble() + 1));
+}
+
+void MainWindow::updatePos()
+{
+     ui->lineEdit_Pos->setText(QString::number(ui->lineEdit_Pos->text().toDouble() + 1));
+}
+
+void MainWindow::updateFunds()
+{
+     ui->LineEdit_fund->setText(QString::number(ui->LineEdit_fund->text().toDouble() + 1));
 }
 
 void MainWindow::on_pushButton_refreshBalance_clicked()
