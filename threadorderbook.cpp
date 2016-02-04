@@ -1,13 +1,5 @@
 #include "threadorderbook.h"
 
-// Je fais ca dans Demain ou apres demain !
-
-
-ThreadOrderBook::ThreadOrderBook()
-{
-
-}
-
 
 ThreadOrderBook::ThreadOrderBook(BTCexchange* site)
 {
@@ -27,7 +19,6 @@ void ThreadOrderBook::run()
 
     else
         emit erreur();
-
 
 }
 

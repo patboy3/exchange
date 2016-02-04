@@ -10,8 +10,7 @@ class ThreadOrderBook : public QThread
     Q_OBJECT
 
 public:
-    ThreadOrderBook(BTCexchange* site);
-    ThreadOrderBook();
+    ThreadOrderBook(BTCexchange* site = 0);
     void setSite(BTCexchange* site);
 
 
