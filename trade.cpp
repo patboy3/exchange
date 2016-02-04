@@ -36,13 +36,9 @@ QList<struct_profitability>* Trade::calculProfitability(double amount)
 
     // On attend que nos thread ait fini avant de continuer
     for( compteur-- ; compteur >= 0 ; compteur--)
-        if(!threads[compteur].isFinished())
             threads[compteur].wait();
 
-
-
-    delete threads;
-
+    delete[] threads;
 
     QList<struct_profitability> *profitability = new QList<struct_profitability>;
     //QList<double> profitability;
