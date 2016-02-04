@@ -23,6 +23,7 @@ win32{
 #LIBS += -L"$$PWD/includes/WIN/openssl/lib" -llibeay32
 }
 
+
 TARGET = eXchanger
 TEMPLATE = app
 
