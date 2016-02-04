@@ -1,8 +1,6 @@
 #ifndef TRADE_H
 #define TRADE_H
 
-#include <QApplication>
-#include <QtGUI>
 #include <QThread>
 #include "btcexchange.h"
 #include "threadorderbook.h"
