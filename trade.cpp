@@ -42,7 +42,7 @@ QList<struct_profitability>* Trade::calculProfitability(double amount)
 
     QList<struct_profitability> *profitability = new QList<struct_profitability>;
 
-    for (int i=0;i<m_sites.count();i++)
+    for (int i=0;i<m_sites.count() - 1;i++)
     {        
         double buyI[2];
         double selI[2];
