@@ -33,13 +33,15 @@ SOURCES += main.cpp\
     coinbase.cpp \
     quadriga.cpp \
     trade.cpp \
-    threadorderbook.cpp
+    threadorderbook.cpp \
+    kraken.cpp
 
 HEADERS  += mainwindow.h \
     btcexchange.h \
     coinbase.h \
     quadriga.h \
     trade.h \
-    threadorderbook.h
+    threadorderbook.h \
+    kraken.h
 
 FORMS    += mainwindow.ui

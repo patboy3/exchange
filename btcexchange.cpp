@@ -291,7 +291,7 @@ void BTCexchange::get_averagePrice(double amount, QString type, double *result, 
             averagePrice = averagePrice - (m_feeTaker / 100 * averagePrice);
     }
 
-    qDebug() << m_siteName << ": averagePrice - " << type << " : " << averagePrice << "(" << currentAmount << " BTC)";
+    qDebug() << m_siteName << get_currentCurrency() << ": averagePrice - " << type << " : " << averagePrice << "(" << currentAmount << " BTC)";
 
 
     result[0] = averagePrice;
@@ -303,9 +303,9 @@ QList<orders>* BTCexchange::get_orders()
     return &m_orders;
 }
 
-QString* BTCexchange::get_currentCurrency()
+QString BTCexchange::get_currentCurrency()
 {
-    return &currentCurrency;
+    return currentCurrency;
 }
 
 QString* BTCexchange::get_apiKey()

@@ -112,7 +112,7 @@ void Quadriga::viewOpenOrder()
     request.setRawHeader("Content-Type", "application/x-www-form-urlencoded");
 
     delete sign;
-    bool test = interpreterLookOrders(&request, &jsonString, QNetworkAccessManager::PostOperation);
+    interpreterLookOrders(&request, &jsonString, QNetworkAccessManager::PostOperation);
 }
 
 int Quadriga::buyOrder(double amount, double price)
@@ -185,8 +185,8 @@ void Quadriga::interpreterLoadBalance(QNetworkRequest* request, QByteArray *json
     qDebug() << "QuadrigaCX";
     qDebug() << "btc" << m_balance_btc;
     qDebug() << "btcHold"  << m_balance_btcHold;
-    qDebug() << "fiat"  << m_balance_fiat;
-    qDebug() << "fiatHold"  << m_balance_fiatHold;
+    qDebug() << currentCurrency.toLatin1().data()  << m_balance_fiat;
+    qDebug() << (currentCurrency + "Hold").toLatin1().data()  << m_balance_fiatHold;
 
 
     delete reply;

@@ -3,7 +3,7 @@
 
 CoinBase::CoinBase(QString currency, QString apiKey, QString secretKey, QString passphrase, QSqlQuery *query) : BTCexchange(currency, apiKey, secretKey, query)
 {
-    m_apiUrl = "https://api.exchange.coinbase.com";
+    m_apiUrl = "https://api-public.sandbox.gdax.com";
     orderBookAddr = m_apiUrl + "/products/BTC-" + currentCurrency + "/book?level=2";
     m_passphrase = passphrase;
     m_siteName = "coinbase";
@@ -67,7 +67,7 @@ void CoinBase::viewOpenOrder()
 
     signerHeaders(&request, QString(QString::number(QDateTime::currentMSecsSinceEpoch() / 1000)), QString("GET"), &urlPath, &jsonString);
 
-    bool test = interpreterLookOrders(&request, &jsonString, QNetworkAccessManager::GetOperation);
+    interpreterLookOrders(&request, &jsonString, QNetworkAccessManager::GetOperation);
 }
 
 

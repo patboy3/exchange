@@ -11,6 +11,7 @@
 #include "btcexchange.h"
 #include "coinbase.h"
 #include "quadriga.h"
+#include "kraken.h"
 #include "trade.h"
 
 namespace Ui {

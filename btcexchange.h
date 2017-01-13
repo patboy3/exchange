@@ -33,14 +33,14 @@ class BTCexchange : public QObject
     Q_OBJECT
 
 public:
+    virtual QString get_currentCurrency();
     static QString typeBuy;
     static QString typeSell;
     explicit BTCexchange(QString currency, QString liveApiKey, QString liveSecretKey, QSqlQuery *query);
     bool rafraichirOrderBook();
     void get_averagePrice(double amount, QString type, double *result, bool includeFees = false);
 
-    QString* get_sitename();
-    QString* get_currentCurrency();
+    QString* get_sitename();    
     QString* get_apiKey();
     double* get_balance_fiat();
     double* get_balance_fiatHold();
@@ -54,7 +54,7 @@ public:
     virtual int buyOrder(double amount, double price = 0) = 0; //pour acheter des btc amount en btc... si price = 0... argent en fiat !
     virtual int sellOrder(double amount, double price = 0) = 0; //Pour vendre des btc amount en btc
     virtual bool cancelOrder(QString orderID = "") = 0; //cancel l'order sur l'Exchange et la delete de la list des order présente !
-    virtual void lookOrder(QString orderID) = 0;    
+    virtual void lookOrder(QString orderID) = 0;
 
     ~BTCexchange();
 protected:

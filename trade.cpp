@@ -3,7 +3,7 @@
 Trade::Trade(QList<BTCexchange *> *sites, QSqlQuery *query)
 {
     m_sites = *sites;
-    m_minimumTrade = 0.8;
+    m_minimumTrade = 0.9;
     m_query = query;
 }
 
@@ -41,8 +41,8 @@ QList<struct_profitability>* Trade::calculProfitability(double amount)
     delete[] threads;
 
     QList<struct_profitability> *profitability = new QList<struct_profitability>;
-    //QList<double> profitability;
-    for (int i=0;i<m_sites.count() - 1;i++)
+
+    for (int i=0;i<m_sites.count();i++)
     {        
         double buyI[2];
         double selI[2];
@@ -51,7 +51,7 @@ QList<struct_profitability>* Trade::calculProfitability(double amount)
         m_sites[i]->get_averagePrice(amount, BTCexchange::typeSell, selI, true);
         for (int z = i + 1;z<m_sites.count();z++)
         {
-            if (*m_sites[i]->get_currentCurrency() == *m_sites[z]->get_currentCurrency())
+            if (m_sites[i]->get_currentCurrency() == m_sites[z]->get_currentCurrency())
             {
                 double buyZ[2];
                 double selZ[2];
@@ -92,7 +92,7 @@ QList<struct_profitability>* Trade::calculProfitability(double amount)
 
     for (int i=0;i<profitability->count();i++)
     {
-        qDebug() << QString("profitabilité " + QString::number(i + 1) + " (buy sur " + *(*profitability)[i].buyExchange->get_sitename() + "_" + *(*profitability)[i].buyExchange->get_currentCurrency() + " sell sur " + *(*profitability)[i].sellExchange->get_sitename() + "_" + *(*profitability)[i].sellExchange->get_currentCurrency() + ") : " + QString::number((*profitability)[i].profitPourcentage) + "%");
+        qDebug() << QString("profitabilité " + QString::number(i + 1) + " (buy sur " + *(*profitability)[i].buyExchange->get_sitename() + "_" + (*profitability)[i].buyExchange->get_currentCurrency() + " sell sur " + *(*profitability)[i].sellExchange->get_sitename() + "_" + (*profitability)[i].sellExchange->get_currentCurrency() + ") : " + QString::number((*profitability)[i].profitPourcentage) + "%");
     }
 
 
