@@ -4,7 +4,7 @@
 Quadriga::Quadriga(QString currency, QString liveApiKey, QString liveSecretKey, int ident, QSqlQuery *query) : BTCexchange(currency, liveApiKey, liveSecretKey, query)
 {
     m_apiUrl = "https://api.quadrigacx.com/v2";
-    orderBookAddr = m_apiUrl + "/order_book?book=btc_" + currentCurrency.toLower();
+    orderBookAddr = m_apiUrl + "/order_book?book=btc_" + currentCurrencyMinor.toLower();
     m_ident = ident;
     m_siteName = "quadriga";
 
@@ -104,7 +104,7 @@ void Quadriga::viewOpenOrder()
     signature *sign = new signature;
     getSignature(sign);
 
-    QByteArray jsonString = "key="+apiKey.toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"&book=btc_" + currentCurrency.toLower().toLatin1();
+    QByteArray jsonString = "key="+apiKey.toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"&book=btc_" + currentCurrencyMinor.toLower().toLatin1();
 
     QNetworkRequest request;
     // Url de la requete
@@ -123,9 +123,9 @@ int Quadriga::buyOrder(double amount, double price)
     QByteArray jsonString;
 
     if (price != 0)
-        jsonString = "key="+apiKey.toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"&amount="+QString::number(amount).toLatin1()+"&price="+QString::number(price).toLatin1()+"&book=btc_" + currentCurrency.toLower().toLatin1();
+        jsonString = "key="+apiKey.toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"&amount="+QString::number(amount).toLatin1()+"&price="+QString::number(price).toLatin1()+"&book=btc_" + currentCurrencyMinor.toLower().toLatin1();
     else
-        jsonString = "key="+apiKey.toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"&amount="+QString::number(amount).toLatin1()+"&book=btc_" + currentCurrency.toLower().toLatin1();
+        jsonString = "key="+apiKey.toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"&amount="+QString::number(amount).toLatin1()+"&book=btc_" + currentCurrencyMinor.toLower().toLatin1();
 
     // Url de la requete
     QNetworkRequest request(QUrl(m_apiUrl + "/buy"));
@@ -143,9 +143,9 @@ int Quadriga::sellOrder(double amount, double price)
     QByteArray jsonString;
 
     if (price != 0)
-        jsonString = "key="+apiKey.toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"&amount="+QString::number(amount).toLatin1()+"&price="+QString::number(price).toLatin1()+"&book=btc_" + currentCurrency.toLower().toLatin1();
+        jsonString = "key="+apiKey.toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"&amount="+QString::number(amount).toLatin1()+"&price="+QString::number(price).toLatin1()+"&book=btc_" + currentCurrencyMinor.toLower().toLatin1();
     else
-        jsonString = "key="+apiKey.toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"&amount="+QString::number(amount).toLatin1()+"&book=btc_" + currentCurrency.toLower().toLatin1();
+        jsonString = "key="+apiKey.toLatin1()+"&nonce="+QString::number(sign->time).toLatin1() +"&signature="+sign->hmac256.toLatin1()+"&amount="+QString::number(amount).toLatin1()+"&book=btc_" + currentCurrencyMinor.toLower().toLatin1();
 
     // Url de la requete
 
@@ -178,15 +178,15 @@ void Quadriga::interpreterLoadBalance(QNetworkRequest* request, QByteArray *json
     QJsonObject jsonObject = jsonDocument.object();
     m_balance_btc = jsonObject.value("btc_available").toString().replace(',','.').toDouble();
     m_balance_btcHold = jsonObject.value("btc_reserved").toString().replace(',','.').toDouble();
-    m_balance_fiat = jsonObject.value(currentCurrency.toLower() + "_available").toString().replace(',','.').toDouble();
-    m_balance_fiatHold = jsonObject.value(currentCurrency.toLower() + "_reserved").toString().replace(',','.').toDouble();
+    m_balance_fiat = jsonObject.value(currentCurrencyMinor.toLower() + "_available").toString().replace(',','.').toDouble();
+    m_balance_fiatHold = jsonObject.value(currentCurrencyMinor.toLower() + "_reserved").toString().replace(',','.').toDouble();
 
 
     qDebug() << "QuadrigaCX";
     qDebug() << "btc" << m_balance_btc;
     qDebug() << "btcHold"  << m_balance_btcHold;
-    qDebug() << currentCurrency.toLatin1().data()  << m_balance_fiat;
-    qDebug() << (currentCurrency + "Hold").toLatin1().data()  << m_balance_fiatHold;
+    qDebug() << currentCurrencyMinor.toLatin1().data()  << m_balance_fiat;
+    qDebug() << (currentCurrencyMinor + "Hold").toLatin1().data()  << m_balance_fiatHold;
 
 
     delete reply;

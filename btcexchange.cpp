@@ -4,7 +4,7 @@
 QString BTCexchange::typeBuy = "buy";
 QString BTCexchange::typeSell = "sell";
 
-BTCexchange::BTCexchange(QString currency, QString liveApiKey, QString liveSecretKey, QSqlQuery *query)
+BTCexchange::BTCexchange(QString currencyMinor, QString liveApiKey, QString liveSecretKey, QSqlQuery *query)
 {
     m_balance_fiat = 0;
     m_balance_fiatHold = 0;
@@ -13,7 +13,7 @@ BTCexchange::BTCexchange(QString currency, QString liveApiKey, QString liveSecre
 
     apiKey = liveApiKey;
     secretKey = liveSecretKey;
-    currentCurrency = currency;
+    currentCurrencyMinor = currencyMinor;
 
     m_query = query;
 }
@@ -291,7 +291,7 @@ void BTCexchange::get_averagePrice(double amount, QString type, double *result, 
             averagePrice = averagePrice - (m_feeTaker / 100 * averagePrice);
     }
 
-    qDebug() << m_siteName << get_currentCurrency() << ": averagePrice - " << type << " : " << averagePrice << "(" << currentAmount << " BTC)";
+    qDebug() << m_siteName << get_currentCurrencyMinor() << ": averagePrice - " << type << " : " << averagePrice << "(" << currentAmount << " BTC)";
 
 
     result[0] = averagePrice;
@@ -303,9 +303,9 @@ QList<orders>* BTCexchange::get_orders()
     return &m_orders;
 }
 
-QString BTCexchange::get_currentCurrency()
+QString BTCexchange::get_currentCurrencyMinor()
 {
-    return currentCurrency;
+    return currentCurrencyMinor;
 }
 
 QString* BTCexchange::get_apiKey()

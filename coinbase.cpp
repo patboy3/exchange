@@ -4,7 +4,7 @@
 CoinBase::CoinBase(QString currency, QString apiKey, QString secretKey, QString passphrase, QSqlQuery *query) : BTCexchange(currency, apiKey, secretKey, query)
 {
     m_apiUrl = "https://api-public.sandbox.gdax.com";
-    orderBookAddr = m_apiUrl + "/products/BTC-" + currentCurrency + "/book?level=2";
+    orderBookAddr = m_apiUrl + "/products/BTC-" + currentCurrencyMinor + "/book?level=2";
     m_passphrase = passphrase;
     m_siteName = "coinbase";
 
@@ -77,14 +77,14 @@ int CoinBase::buyOrder(double amount, double price)
 
     if (price != 0)
     {
-        jsonString = "{\"product_id\": \"BTC-"+currentCurrency.toLatin1()+"\""
+        jsonString = "{\"product_id\": \"BTC-"+currentCurrencyMinor.toLatin1()+"\""
             ", \"size\": " + QString::number(amount).toLatin1() + ""
             ", \"price\": " + QString::number(price).toLatin1() + ""
             " ,\"side\": \"buy\"}";
     }
     else
     {
-        jsonString = "{\"product_id\": \"BTC-"+currentCurrency.toLatin1()+"\""
+        jsonString = "{\"product_id\": \"BTC-"+currentCurrencyMinor.toLatin1()+"\""
             ", \"funds\": " + QString::number(amount).toLatin1() + ""
             ", \"type\": \"market\""
             " ,\"side\": \"buy\"}";
@@ -105,14 +105,14 @@ int CoinBase::sellOrder(double amount, double price)
 
     if (price != 0)
     {
-        jsonString = "{\"product_id\": \"BTC-"+currentCurrency.toLatin1()+"\""
+        jsonString = "{\"product_id\": \"BTC-"+currentCurrencyMinor.toLatin1()+"\""
             ", \"size\": " + QString::number(amount).toLatin1() + ""
             ", \"price\": " + QString::number(price).toLatin1() + ""
             " ,\"side\": \"sell\"}";
     }
     else
     {
-        jsonString = "{\"product_id\": \"BTC-"+currentCurrency.toLatin1()+"\""
+        jsonString = "{\"product_id\": \"BTC-"+currentCurrencyMinor.toLatin1()+"\""
             ", \"size\": " + QString::number(amount).toLatin1() + ""
             ", \"type\": \"market\""
             " ,\"side\": \"sell\"}";
@@ -185,7 +185,7 @@ void CoinBase::interpreterLoadBalance(QNetworkRequest* request)
     {
        QJsonObject json_obj = value.toObject();
 
-       if (json_obj["currency"].toString() == currentCurrency)
+       if (json_obj["currency"].toString() == currentCurrencyMinor)
        {
            m_balance_fiat = json_obj["available"].toString().replace(',','.').toDouble();
            m_balance_fiatHold = json_obj["hold"].toString().replace(',','.').toDouble();

@@ -3,13 +3,13 @@
 
 Poloniex::Poloniex(QString currency, QString apiKey, QString secretKey, QString passphrase, QSqlQuery *query) : BTCexchange(currency, apiKey, secretKey, query)
 {
-    currentCurrency = currencyNameModification();
+    currentCurrencyMinor = currencyNameModification();
 
     m_apiUrl = "https://poloniex.com/";
-    if (currentCurrency.contains("USD"))
-        orderBookAddr = m_apiUrl + "public?command=returnOrderBook&currencyPair=" + currentCurrency + "_BTC&depth=10";
+    if (currentCurrencyMinor.contains("USD"))
+        orderBookAddr = m_apiUrl + "public?command=returnOrderBook&currencyPair=" + currentCurrencyMinor + "_BTC&depth=10";
     else
-        orderBookAddr = m_apiUrl + "public?command=returnOrderBook&currencyPair=BTC_" + currentCurrency + "&depth=10";
+        orderBookAddr = m_apiUrl + "public?command=returnOrderBook&currencyPair=BTC_" + currentCurrencyMinor + "&depth=10";
     m_passphrase = passphrase;
     m_siteName = "poloniex";
 
@@ -18,7 +18,7 @@ Poloniex::Poloniex(QString currency, QString apiKey, QString secretKey, QString 
 
 }
 
-QString Poloniex::get_currentCurrency()
+QString Poloniex::get_currentCurrencyMinor()
 {
     return currencyNameModification(true);
 }
@@ -27,37 +27,30 @@ QString Poloniex::currencyNameModification(bool remove)
 {
     if (!remove)
     {
-        if (currentCurrency.contains("USD"))
-            return currentCurrency + "T";
+        if (currentCurrencyMinor.contains("USD"))
+            return currentCurrencyMinor + "T";
         else
-            return currentCurrency;
+            return currentCurrencyMinor;
     }
     else
     {
-        if (currentCurrency.contains("USD"))
-            return currentCurrency.mid(0, currentCurrency.size() - 1);
+        if (currentCurrencyMinor.contains("USD"))
+            return currentCurrencyMinor.mid(0, currentCurrencyMinor.size() - 1);
         else
-            return currentCurrency;
+            return currentCurrencyMinor;
     }
 }
 
 
 void Poloniex::signerHeaders(QNetworkRequest *requete, QString timeStamp, QString *requestPath, QByteArray *postData){
 
-    //nonce + les postData
-    QByteArray chaine = timeStamp.toLatin1() + *postData;
-
-    //Hash en sha256
-    QByteArray hash = QCryptographicHash::hash(chaine, QCryptographicHash::Sha256);
-
-    //ajouter le path au hash
-    QByteArray message =  (*requestPath).toUtf8() + hash;
+    QByteArray message =  *postData;
 
     requete->setRawHeader("content-type", "application/x-www-form-urlencoded");
-    requete->setRawHeader("API-Key", apiKey.toLatin1());
+    requete->setRawHeader("Key", apiKey.toLatin1());
 
-    //HMAC256 (path + hash) avec secret key decoded... on remet en base64
-    requete->setRawHeader("API-Sign", (*hmacSignature(&message,QCryptographicHash::Sha512,true)).toBase64());
+    //HMAC512 (postdata) avec secret key decoded... on remet en hex
+    requete->setRawHeader("Sign", (*hmacSignature(&message,QCryptographicHash::Sha512,false)).toHex());
 }
 
 void Poloniex::loadBalance(){
@@ -67,11 +60,11 @@ void Poloniex::loadBalance(){
 
     qint64 nonce = QDateTime::currentMSecsSinceEpoch();
 
-    QString urlPath = "/0/private/Balance";
+    QString urlPath = "tradingApi";
 
     QNetworkRequest request(QUrl(m_apiUrl + urlPath));
 
-    QByteArray postData = "nonce="+QString::number(nonce).toLatin1();
+    QByteArray postData = "command=returnBalances&nonce="+QString::number(nonce).toLatin1();
 
     signerHeaders(&request, QString(QString::number(nonce)), &urlPath, &postData);
 
@@ -130,7 +123,7 @@ void Poloniex::interpreterLoadBalance(QNetworkRequest* request, QByteArray *post
     QJsonObject premierPalier = jsonObject["result"].toObject();
 
     m_balance_btc = premierPalier["XXBT"].toString().replace(',','.').toDouble();
-    m_balance_fiat = premierPalier[currentCurrency].toString().replace(',','.').toDouble();
+    m_balance_fiat = premierPalier[currentCurrencyMinor].toString().replace(',','.').toDouble();
 
     /*
     foreach (const QJsonValue &value, json_array)

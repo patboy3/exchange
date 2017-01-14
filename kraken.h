@@ -15,7 +15,7 @@ public:
     bool cancelOrder(QString orderID);
     void viewOpenOrder();
     void lookOrder(QString orderID);
-    QString get_currentCurrency();
+    QString get_currentCurrencyMinor();
 
 private:
     QByteArray m_secret;

@@ -4,10 +4,10 @@
 Kraken::Kraken(QString currency, QString apiKey, QString secretKey, QString passphrase, QSqlQuery *query) : BTCexchange(currency, apiKey, secretKey, query)
 {
 
-    currentCurrency = currencyNameModification();
+    currentCurrencyMinor = currencyNameModification();
 
     m_apiUrl = "https://api.kraken.com";
-    if (currentCurrency[0] == 'Z')
+    if (currentCurrencyMinor[0] == 'Z')
         orderBookAddr = m_apiUrl + "/0/public/Depth?pair=XBT" + currencyNameModification(true) + "&count=10";
     else
         orderBookAddr = m_apiUrl + "/0/public/Depth?pair=" + currencyNameModification(true) + "XBT&count=10";
@@ -19,7 +19,7 @@ Kraken::Kraken(QString currency, QString apiKey, QString secretKey, QString pass
 
 }
 
-QString Kraken::get_currentCurrency()
+QString Kraken::get_currentCurrencyMinor()
 {
     return currencyNameModification(true);
 }
@@ -28,15 +28,15 @@ QString Kraken::currencyNameModification(bool remove)
 {
     if (!remove)
     {
-        if (currentCurrency == "CAD" || currentCurrency == "USD")
+        if (currentCurrencyMinor == "CAD" || currentCurrencyMinor == "USD")
         {
-            return "Z" + currentCurrency;
+            return "Z" + currentCurrencyMinor;
         }
         else
-            return "X" + currentCurrency;
+            return "X" + currentCurrencyMinor;
     }
     else
-        return currentCurrency.mid(1);
+        return currentCurrencyMinor.mid(1);
 }
 
 void Kraken::signerHeaders(QNetworkRequest *requete, QString timeStamp, QString *requestPath, QByteArray *postData){
@@ -128,10 +128,10 @@ bool Kraken::interpreterOrderBook(QNetworkRequest* request)
 
         QJsonObject premierPalier = jsonObject["result"].toObject();
         QJsonObject deuxiemePalier;
-        if (currentCurrency[0] == 'Z')
-            deuxiemePalier= premierPalier["XXBT" + currentCurrency].toObject();
+        if (currentCurrencyMinor[0] == 'Z')
+            deuxiemePalier= premierPalier["XXBT" + currentCurrencyMinor].toObject();
         else
-            deuxiemePalier= premierPalier[currentCurrency +"XXBT"].toObject();
+            deuxiemePalier= premierPalier[currentCurrencyMinor +"XXBT"].toObject();
 
         QJsonArray asks = deuxiemePalier["asks"].toArray();
 
@@ -210,7 +210,7 @@ void Kraken::interpreterLoadBalance(QNetworkRequest* request, QByteArray *postDa
     QJsonObject premierPalier = jsonObject["result"].toObject();
 
     m_balance_btc = premierPalier["XXBT"].toString().replace(',','.').toDouble();
-    m_balance_fiat = premierPalier[currentCurrency].toString().replace(',','.').toDouble();
+    m_balance_fiat = premierPalier[currentCurrencyMinor].toString().replace(',','.').toDouble();
 
     /*
     foreach (const QJsonValue &value, json_array)

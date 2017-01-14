@@ -51,7 +51,7 @@ QList<struct_profitability>* Trade::calculProfitability(double amount)
         m_sites[i]->get_averagePrice(amount, BTCexchange::typeSell, selI, true);
         for (int z = i + 1;z<m_sites.count();z++)
         {
-            if (m_sites[i]->get_currentCurrency() == m_sites[z]->get_currentCurrency())
+            if (m_sites[i]->get_currentCurrencyMinor() == m_sites[z]->get_currentCurrencyMinor())
             {
                 double buyZ[2];
                 double selZ[2];
@@ -72,11 +72,11 @@ QList<struct_profitability>* Trade::calculProfitability(double amount)
                 profitability->append(prof1);
 
                 //profitability.append((selZ / buyI - 1) * 100);
-                //qDebug() << QString("profitabilité " + QString::number(profitability.count()) + " (buy sur " + *m_sites[i]->get_sitename() + "_" + *m_sites[i]->get_currentCurrency() + " sell sur " + *m_sites[z]->get_sitename() + "_" + *m_sites[z]->get_currentCurrency() + "): " + QString::number(profitability[profitability.count() - 1]) + "%");
+                //qDebug() << QString("profitabilité " + QString::number(profitability.count()) + " (buy sur " + *m_sites[i]->get_sitename() + "_" + *m_sites[i]->get_currentCurrencyMinor() + " sell sur " + *m_sites[z]->get_sitename() + "_" + *m_sites[z]->get_currentCurrencyMinor() + "): " + QString::number(profitability[profitability.count() - 1]) + "%");
 
                 //buy sur la z sell sur la i
                 //profitability.append((selI / buyZ - 1) * 100);
-                //qDebug() << QString("profitabilité " + QString::number(profitability.count()) + " (buy sur " + *m_sites[z]->get_sitename() + "_" + *m_sites[z]->get_currentCurrency() + " sell sur " + *m_sites[i]->get_sitename() + "_" + *m_sites[i]->get_currentCurrency() + ") : " + QString::number(profitability[profitability.count() - 1]) + "%");
+                //qDebug() << QString("profitabilité " + QString::number(profitability.count()) + " (buy sur " + *m_sites[z]->get_sitename() + "_" + *m_sites[z]->get_currentCurrencyMinor() + " sell sur " + *m_sites[i]->get_sitename() + "_" + *m_sites[i]->get_currentCurrencyMinor() + ") : " + QString::number(profitability[profitability.count() - 1]) + "%");
                 struct_profitability prof2;
                 prof2.buyExchange = m_sites[z];
                 prof2.buyMax = buyZ[1];
@@ -92,7 +92,7 @@ QList<struct_profitability>* Trade::calculProfitability(double amount)
 
     for (int i=0;i<profitability->count();i++)
     {
-        qDebug() << QString("profitabilité " + QString::number(i + 1) + " (buy sur " + *(*profitability)[i].buyExchange->get_sitename() + "_" + (*profitability)[i].buyExchange->get_currentCurrency() + " sell sur " + *(*profitability)[i].sellExchange->get_sitename() + "_" + (*profitability)[i].sellExchange->get_currentCurrency() + ") : " + QString::number((*profitability)[i].profitPourcentage) + "%");
+        qDebug() << QString("profitabilité " + QString::number(i + 1) + " (buy sur " + *(*profitability)[i].buyExchange->get_sitename() + "_" + (*profitability)[i].buyExchange->get_currentCurrencyMinor() + " sell sur " + *(*profitability)[i].sellExchange->get_sitename() + "_" + (*profitability)[i].sellExchange->get_currentCurrencyMinor() + ") : " + QString::number((*profitability)[i].profitPourcentage) + "%");
     }
 
 

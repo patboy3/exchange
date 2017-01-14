@@ -33,7 +33,7 @@ class BTCexchange : public QObject
     Q_OBJECT
 
 public:
-    virtual QString get_currentCurrency();
+    virtual QString get_currentCurrencyMinor();
     static QString typeBuy;
     static QString typeSell;
     explicit BTCexchange(QString currency, QString liveApiKey, QString liveSecretKey, QSqlQuery *query);
@@ -71,7 +71,7 @@ protected:
     QList<OrderBookElement> m_bids;
     QString apiKey;
     QString secretKey;
-    QString currentCurrency;
+    QString currentCurrencyMinor;
     QString m_apiUrl;
     QString m_siteName;
 
