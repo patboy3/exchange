@@ -69,7 +69,6 @@ void Poloniex::loadBalance(){
     signerHeaders(&request, QString(QString::number(nonce)), &urlPath, &postData);
 
     interpreterLoadBalance(&request, &postData);
-
 }
 
 
@@ -119,28 +118,9 @@ void Poloniex::interpreterLoadBalance(QNetworkRequest* request, QByteArray *post
 
     QJsonObject jsonObject = jsonDocument.object();
 
+    m_balance_btc = jsonObject["BTC"].toString().replace(',','.').toDouble();
+    m_balance_fiat = jsonObject[currentCurrencyMinor].toString().replace(',','.').toDouble();
 
-    QJsonObject premierPalier = jsonObject["result"].toObject();
-
-    m_balance_btc = premierPalier["XXBT"].toString().replace(',','.').toDouble();
-    m_balance_fiat = premierPalier[currentCurrencyMinor].toString().replace(',','.').toDouble();
-
-    /*
-    foreach (const QJsonValue &value, json_array)
-    {
-       QJsonObject json_obj = value.toObject();
-
-       if (json_obj["currency"].toString() == currentCurrency)
-       {
-           m_balance_fiat = json_obj["available"].toString().replace(',','.').toDouble();
-           m_balance_fiatHold = json_obj["hold"].toString().replace(',','.').toDouble();
-        }
-        else if (json_obj["currency"].toString() == "XXBT")
-        {
-           m_balance_btc = json_obj["available"].toString().replace(',','.').toDouble();
-           m_balance_btcHold = json_obj["hold"].toString().replace(',','.').toDouble();
-        }
-    }*/
 
     qDebug() << "Poloniex";
     qDebug() << "btc" << m_balance_btc;
