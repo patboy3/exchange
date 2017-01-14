@@ -381,7 +381,12 @@ bool BTCexchange::interpreterOrderBook(QNetworkRequest* request)
         foreach (const QJsonValue & value, asks)
         {
             OrderBookElement now;
-            now.nbBtc = value.toArray()[1].toString().replace(',','.').toDouble();
+
+            if (value.toArray()[1].toString().replace(',','.').toDouble() != 0)
+                now.nbBtc = value.toArray()[1].toString().replace(',','.').toDouble();
+            else
+                now.nbBtc = value.toArray()[1].toDouble();
+
             now.prixVente = value.toArray()[0].toString().replace(',','.').toDouble();
 
             m_asks.append(now);
@@ -394,7 +399,12 @@ bool BTCexchange::interpreterOrderBook(QNetworkRequest* request)
         foreach (const QJsonValue & value, bids)
         {
             OrderBookElement now;
-            now.nbBtc = value.toArray()[1].toString().replace(',','.').toDouble();
+
+            if (value.toArray()[1].toString().replace(',','.').toDouble() != 0)
+                now.nbBtc = value.toArray()[1].toString().replace(',','.').toDouble();
+            else
+                now.nbBtc = value.toArray()[1].toDouble();
+
             now.prixVente = value.toArray()[0].toString().replace(',','.').toDouble();
 
             m_bids.append(now);

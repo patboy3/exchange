@@ -132,6 +132,7 @@ bool Kraken::interpreterOrderBook(QNetworkRequest* request)
             deuxiemePalier= premierPalier["XXBT" + currentCurrency].toObject();
         else
             deuxiemePalier= premierPalier[currentCurrency +"XXBT"].toObject();
+
         QJsonArray asks = deuxiemePalier["asks"].toArray();
 
         m_asks.clear();

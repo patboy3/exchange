@@ -77,6 +77,10 @@ void MainWindow::loadSite()
         {
             m_sites.append(new Kraken(m_query->value(1).toString(),m_query->value(2).toString(),m_query->value(3).toString(), m_query->value(5).toString(), m_query));
         }
+        else if (m_query->value(0).toString() == "poloniex")
+        {
+            m_sites.append(new Poloniex(m_query->value(1).toString(),m_query->value(2).toString(),m_query->value(3).toString(), m_query->value(5).toString(), m_query));
+        }
     }
 
 

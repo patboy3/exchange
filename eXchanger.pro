@@ -34,7 +34,8 @@ SOURCES += main.cpp\
     quadriga.cpp \
     trade.cpp \
     threadorderbook.cpp \
-    kraken.cpp
+    kraken.cpp \
+    poloniex.cpp
 
 HEADERS  += mainwindow.h \
     btcexchange.h \
@@ -42,6 +43,7 @@ HEADERS  += mainwindow.h \
     quadriga.h \
     trade.h \
     threadorderbook.h \
-    kraken.h
+    kraken.h \
+    poloniex.h
 
 FORMS    += mainwindow.ui

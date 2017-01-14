@@ -12,6 +12,7 @@
 #include "coinbase.h"
 #include "quadriga.h"
 #include "kraken.h"
+#include "poloniex.h"
 #include "trade.h"
 
 namespace Ui {
