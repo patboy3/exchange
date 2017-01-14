@@ -15,12 +15,14 @@ public:
     bool cancelOrder(QString orderID);
     void viewOpenOrder();
     void lookOrder(QString orderID);
+    QString get_currentCurrency();
 
 private:
     QByteArray m_secret;
     QString m_passphrase;
     void signerHeaders(QNetworkRequest* requete, QString timeStamp, QString *requestPath, QByteArray *postData);
     void interpreterLoadBalance(QNetworkRequest* request, QByteArray *postData);
+    QString currencyNameModification(bool remove = false);
 protected:
 
 

@@ -3,8 +3,13 @@
 
 Poloniex::Poloniex(QString currency, QString apiKey, QString secretKey, QString passphrase, QSqlQuery *query) : BTCexchange(currency, apiKey, secretKey, query)
 {
+    currentCurrency = currencyNameModification();
+
     m_apiUrl = "https://poloniex.com/";
-    orderBookAddr = m_apiUrl + "public?command=returnOrderBook&currencyPair=BTC_" + currentCurrency + "&depth=10";
+    if (currentCurrency.contains("USD"))
+        orderBookAddr = m_apiUrl + "public?command=returnOrderBook&currencyPair=" + currentCurrency + "_BTC&depth=10";
+    else
+        orderBookAddr = m_apiUrl + "public?command=returnOrderBook&currencyPair=BTC_" + currentCurrency + "&depth=10";
     m_passphrase = passphrase;
     m_siteName = "poloniex";
 
@@ -12,6 +17,30 @@ Poloniex::Poloniex(QString currency, QString apiKey, QString secretKey, QString 
     m_feeTaker = 0.25;
 
 }
+
+QString Poloniex::get_currentCurrency()
+{
+    return currencyNameModification(true);
+}
+
+QString Poloniex::currencyNameModification(bool remove)
+{
+    if (!remove)
+    {
+        if (currentCurrency.contains("USD"))
+            return currentCurrency + "T";
+        else
+            return currentCurrency;
+    }
+    else
+    {
+        if (currentCurrency.contains("USD"))
+            return currentCurrency.mid(0, currentCurrency.size() - 1);
+        else
+            return currentCurrency;
+    }
+}
+
 
 void Poloniex::signerHeaders(QNetworkRequest *requete, QString timeStamp, QString *requestPath, QByteArray *postData){
 
@@ -123,8 +152,8 @@ void Poloniex::interpreterLoadBalance(QNetworkRequest* request, QByteArray *post
     qDebug() << "Poloniex";
     qDebug() << "btc" << m_balance_btc;
     qDebug() << "btcHold"  << m_balance_btcHold;
-    qDebug() << currentCurrency.toLatin1().data() << m_balance_fiat;
-    qDebug() << (currentCurrency + "Hold").toLatin1().data()  << m_balance_fiatHold;
+    qDebug() << currencyNameModification(true).toLatin1().data() << m_balance_fiat;
+    qDebug() << (currencyNameModification(true) + "Hold").toLatin1().data()  << m_balance_fiatHold;
 
 
     delete reply;
