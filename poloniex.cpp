@@ -215,7 +215,6 @@ QList<orders>* Poloniex::interpreterLookOrders(QNetworkRequest* request, QByteAr
 
             delete reply;
             return &exchangeOrders;
-            //sry just a test
         }
 }
 
