@@ -22,6 +22,8 @@ private:
     QString m_passphrase;
     void signerHeaders(QNetworkRequest* requete, QString timeStamp, QString *requestPath, QByteArray *postData);
     void interpreterLoadBalance(QNetworkRequest* request, QByteArray *postData);
+    int interpreterBuySell(QNetworkRequest* request, QString type, double *price, double *amount, QByteArray *jsonString);
+    QList<orders>* interpreterLookOrders(QNetworkRequest* request, QByteArray *jsonString, QNetworkAccessManager::Operation operation);
     QString currencyNameModification(bool remove = false);
 protected:
 

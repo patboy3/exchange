@@ -66,7 +66,9 @@ bool BTCexchange::interpreterCancelOrders(QNetworkRequest* request, QByteArray *
     {
         QString resultat = reply->readAll();
 
-        if (resultat != "OK" && resultat != "\"true\"")
+        QJsonObject jsonObject = QJsonDocument::fromJson(resultat.toLatin1()).object();
+
+        if (resultat != "OK" && resultat != "\"true\"" && jsonObject.value("success").toInt() != 1)
         {
             qDebug() << false;
             delete reply;
@@ -410,7 +412,7 @@ bool BTCexchange::interpreterOrderBook(QNetworkRequest* request)
             m_bids.append(now);
         }
 
-        /*
+
     foreach (OrderBookElement solo, m_bids)
     {
         qDebug() << m_siteName << ": bids - btc : "  << solo.nbBtc;
@@ -421,7 +423,7 @@ bool BTCexchange::interpreterOrderBook(QNetworkRequest* request)
     {
         qDebug() << m_siteName  << ": asks - btc : "  << solo.nbBtc;
         qDebug() << m_siteName  << ": asks - price : "  << solo.prixVente;
-    }*/
+    }
 
         delete reply;
     }

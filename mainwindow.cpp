@@ -31,9 +31,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(m_trade, SIGNAL(updateFunds()), this, SLOT(updateFunds()));
 
     //start Trade
-    m_trade->start();
-
-
+    //Check les probabilitées
+    //m_trade->start();
 }
 
 
@@ -67,15 +66,15 @@ void MainWindow::loadSite()
     while (m_query->next()) {
         if (m_query->value(0).toString() == "quadriga")
         {
-            m_sites.append(new Quadriga(m_query->value(1).toString(),m_query->value(2).toString(),m_query->value(3).toString(),m_query->value(4).toInt(), m_query));
+            //m_sites.append(new Quadriga(m_query->value(1).toString(),m_query->value(2).toString(),m_query->value(3).toString(),m_query->value(4).toInt(), m_query));
         }
         else if (m_query->value(0).toString() == "coinbase")
         {
-            m_sites.append(new CoinBase(m_query->value(1).toString(),m_query->value(2).toString(),m_query->value(3).toString(), m_query->value(5).toString(), m_query));
+            //m_sites.append(new CoinBase(m_query->value(1).toString(),m_query->value(2).toString(),m_query->value(3).toString(), m_query->value(5).toString(), m_query));
         }
         else if (m_query->value(0).toString() == "kraken")
         {
-            m_sites.append(new Kraken(m_query->value(1).toString(),m_query->value(2).toString(),m_query->value(3).toString(), m_query->value(5).toString(), m_query));
+            //m_sites.append(new Kraken(m_query->value(1).toString(),m_query->value(2).toString(),m_query->value(3).toString(), m_query->value(5).toString(), m_query));
         }
         else if (m_query->value(0).toString() == "poloniex")
         {
@@ -91,10 +90,10 @@ void MainWindow::loadSite()
             //solo->viewOpenOrder();
             //solo->rafraichirOrderBook();
             solo->loadBalance();
-            //solo->sellOrder(0.01,800);
-            //solo->buyOrder(5.545);
-            //solo->cancelOrder("qtw4c0ig2aks95bb969dpnbf4stlmuvcosh1szhua1nj6zvg64uvr5avx3gjycwm");
-            //solo->lookOrder("eedd5065-fdf9-4da1-b23a-6f51b79dc32a");
+            //solo->sellOrder(0.45,0.02);
+            //solo->buyOrder(0.24,0.010);
+            //solo->cancelOrder("120033296664");
+            //solo->lookOrder("120033296664");
             //solo->cancelOrder();
         }
     }
@@ -110,9 +109,9 @@ void MainWindow::generateDB(QSqlQuery *query)
     query->exec("CREATE TABLE `sites` ( `ID`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, `sitename`	TEXT NOT NULL, apiKey VARCHAR(255) DEFAULT NULL, secretKey VARCHAR(255) DEFAULT NULL, `ident`	INTEGER, `passphrase`	TEXT);");
 
     //add 3 currency de bases
-    query->exec("INSERT INTO sites (sitename) VALUES ('quadriga'), ('coinbase');");
-    query->exec("INSERT INTO currency (currency) VALUES ('CAD'), ('USD'), ('EURO');");
-    query->exec("INSERT INTO exchange (ID_Currency, ID_Sitename) VALUES ( (SELECT ID from currency WHERE currency='CAD'),     (SELECT ID from sites WHERE sitename='coinbase') ), ( (SELECT ID from currency WHERE currency='CAD'),     (SELECT ID from sites WHERE sitename='quadriga') );");
+    query->exec("INSERT INTO sites (sitename) VALUES ('quadriga'), ('kraken'), ('poloniex');");
+    query->exec("INSERT INTO currency (currency) VALUES ('CAD'), ('USD'), ('EURO'), ('XMR');");
+    query->exec("INSERT INTO exchange (ID_Currency, ID_Sitename) VALUES ( (SELECT ID from currency WHERE currency='CAD'),     (SELECT ID from sites WHERE sitename='kraken') ), ( (SELECT ID from currency WHERE currency='CAD'),     (SELECT ID from sites WHERE sitename='quadriga') ), ( (SELECT ID from currency WHERE currency='USD'),     (SELECT ID from sites WHERE sitename='quadriga') ), ( (SELECT ID from currency WHERE currency='USD'),     (SELECT ID from sites WHERE sitename='poloniex')), ( (SELECT ID from currency WHERE currency='USD'),     (SELECT ID from sites WHERE sitename='kraken') ), ( (SELECT ID from currency WHERE currency='XMR'),     (SELECT ID from sites WHERE sitename='poloniex') ), ( (SELECT ID from currency WHERE currency='XMR'),     (SELECT ID from sites WHERE sitename='kraken') );");
 }
 
 MainWindow::~MainWindow()

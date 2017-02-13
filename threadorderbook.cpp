@@ -13,12 +13,10 @@ void ThreadOrderBook::setSite(BTCexchange* site)
 
 void ThreadOrderBook::run()
 {
-
     if(site->rafraichirOrderBook())
         emit reussi();
 
     else
         emit erreur();
-
 }
 
