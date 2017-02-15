@@ -74,11 +74,11 @@ void MainWindow::loadSite()
         }
         else if (m_query->value(0).toString() == "kraken")
         {
-            //m_sites.append(new Kraken(m_query->value(1).toString(),m_query->value(2).toString(),m_query->value(3).toString(), m_query->value(5).toString(), m_query));
+            m_sites.append(new Kraken(m_query->value(1).toString(),m_query->value(2).toString(),m_query->value(3).toString(), m_query->value(5).toString(), m_query));
         }
         else if (m_query->value(0).toString() == "poloniex")
         {
-            m_sites.append(new Poloniex(m_query->value(1).toString(),m_query->value(2).toString(),m_query->value(3).toString(), m_query->value(5).toString(), m_query));
+            //m_sites.append(new Poloniex(m_query->value(1).toString(),m_query->value(2).toString(),m_query->value(3).toString(), m_query->value(5).toString(), m_query));
         }
     }
 
@@ -89,10 +89,10 @@ void MainWindow::loadSite()
         {
             //solo->viewOpenOrder();
             //solo->rafraichirOrderBook();
-            solo->loadBalance();
-            //solo->sellOrder(0.45,0.02);
+            //solo->loadBalance();
+            solo->sellOrder(0.24,0.02);
             //solo->buyOrder(0.24,0.010);
-            //solo->cancelOrder("120033296664");
+            //solo->cancelOrder("ODULRG-AJOLB-ZU2XRN");
             //solo->lookOrder("120033296664");
             //solo->cancelOrder();
         }

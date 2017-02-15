@@ -23,7 +23,8 @@ private:
     void signerHeaders(QNetworkRequest* requete, QString timeStamp, QString *requestPath, QByteArray *postData);
     void interpreterLoadBalance(QNetworkRequest* request, QByteArray *postData);
     bool interpreterOrderBook(QNetworkRequest* request);
-    QString currencyNameModification(bool remove = false);
+    int interpreterBuySell(QNetworkRequest* request, QString type, double *price, double *amount, QByteArray *jsonString);
+    QString currencyNameModification(QString currency, bool remove = false);
 protected:
 
 
